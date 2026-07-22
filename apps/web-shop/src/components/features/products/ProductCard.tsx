@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,43 +12,38 @@ interface ProductCardProps {
   product: Product;
 }
 
-const FALLBACK_IMAGES: Record<string, string> = {
-  "Classic Ube Halaya": "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80",
-  "Ube Crinkle Cookies": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80",
-  "Chunky Ube Jam": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80",
-  "Assorted Ube Box": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80",
-  "Ube Halaya w/ Cheese": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=800&q=80",
-  "Golden Ube Tarts": "https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=800&q=80",
-  "Ube Macapuno Mix": "https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=800&q=80",
-  "Creamy Ube Pastillas": "https://images.unsplash.com/photo-1582293041079-7814c2f12063?auto=format&fit=crop&w=800&q=80",
+const CATEGORY_NAMES: Record<number | string, string> = {
+  0: "Jams",
+  1: "Pastries",
+  2: "GiftSets",
+  3: "Sweets",
+  Jams: "Jams",
+  Pastries: "Pastries",
+  GiftSets: "GiftSets",
+  Sweets: "Sweets",
 };
 
-const DEFAULT_FALLBACK = "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80";
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80";
 
 export function ProductCard({ product }: ProductCardProps) {
-  const initialImg = product.images?.[0] || FALLBACK_IMAGES[product.name] || DEFAULT_FALLBACK;
-  const [imgSrc, setImgSrc] = useState(initialImg);
+  const primaryImage = product.images?.[0] || DEFAULT_IMAGE;
+  const categoryLabel = CATEGORY_NAMES[product.category] || "Artisanal";
 
   return (
     <Link href={`/products/${product.id}`} className="group block h-full">
       <Card className="product-card-hover group flex flex-col h-full bg-surface-container-lowest border border-outline-variant/50 rounded-xl overflow-hidden shadow-none hover:shadow-xl transition-all duration-300">
         <div className="relative aspect-square bg-surface-container overflow-hidden">
           <Image
-            src={imgSrc}
+            src={primaryImage}
             alt={product.name}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            onError={() => {
-              const fallback = FALLBACK_IMAGES[product.name] || DEFAULT_FALLBACK;
-              if (imgSrc !== fallback) {
-                setImgSrc(fallback);
-              }
-            }}
+            unoptimized={primaryImage.startsWith("http")}
           />
           <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
             <Badge className="bg-primary text-white font-label-sm text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border-none">
-              {product.category}
+              {categoryLabel}
             </Badge>
           </div>
           {product.stock <= 0 && (

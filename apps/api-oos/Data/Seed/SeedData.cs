@@ -24,8 +24,8 @@ public static class SeedData
                 Price = 350.00m,
                 Images = new List<string>
                 {
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuA7S0hOC0LULqO91-rl539U8hW6W8YHNgRkNwcNfsgOHFk75mKV-zXuYzOIVF2BDosdkZN-PHcVhTfU6PyMFa5Nj1pf5jbyxZfv3AUDc3u1-WL7fHPnf0ODhU4ipqdk8pJ-bXdgWL1kqAlCHHGsM7-4jLb6KcAzH1gLCCayCa0JdQUzCcnAkSobG9ZLLQ5p0KqjhDUf0KBdzzt4m1F8BynKNZA4N4IMUnxIOHjp95T93CjkRtivTN-5",
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuC3yUXftAsduQpns2VFfZxyzvRH7rKVfhtSfudiZW7x1YCElWFE9-yBEDV8urc7FXWioId055_fiZcvRz5cz61v9zhXwAzweB9gJAY7qJIpEFT042outaY86L37VA6oWfKpB-6vrx6TLOKPvgSO9s8dmeUmiI1eDueMM207mLrp_H_osedrtv25zhNZVzJ_vrL6wEgMQ1XQnQNe1Zc1pqrFfEM5QWg12cMRSMOMkr8Wxduh8ksRTzDU"
+                    "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80"
                 },
                 Stock = 50,
                 Category = ProductCategory.Jams,
@@ -40,7 +40,7 @@ public static class SeedData
                 Price = 220.00m,
                 Images = new List<string>
                 {
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuCvYorp5_W1eCA7NZlj3bK5QcB3G4nbw1xHSAVwVBYzkiqHYGC_fwAjqleHTM_EfxiOf9YFNIN_8RulAN4rvk6uNLHb0zZlCH7nveUb-pFa2s4a2SAq5-2qQATFGGVyPa0LUGtxjwBBDT5nnNBjqiDPQ28DNjFYI2DXA_-esTTzQpKtVEdGCkimjOGhgkTd69b3shvjS9uV7f5kW4F4ieMObtJG6xXWis-x5lzvXuSWpps59XgzJVqf"
+                    "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80"
                 },
                 Stock = 80,
                 Category = ProductCategory.Pastries,
@@ -55,7 +55,7 @@ public static class SeedData
                 Price = 380.00m,
                 Images = new List<string>
                 {
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuATshMwg4eB2EKVsRyXIdZylqZRucr8U_2Q1p4P9EOwIErxhI9EWt4z9R0ZvjQ5Z_JiuqlYIqEmDY5kVeEaJBp4Y2IQkBiSaDdU86fAJ9WiK2QVTCtsGIFog5CXea1zjI_ugxLwLiMCBMbRqG07imMOzkilpAtLUkiRPjC3vF8BiIDfRc-xkJj8_WmcjtX5Ktj3NwkbNoYCqMtIbbKe53UWRwH4NNCdi_2dPQlPhZ2_mV8cIDVzRLWJ"
+                    "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80"
                 },
                 Stock = 35,
                 Category = ProductCategory.Jams,
@@ -70,7 +70,7 @@ public static class SeedData
                 Price = 550.00m,
                 Images = new List<string>
                 {
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBXOac8vhhCxugS9pCZo1OZ0WnhWtRYXCuhpZBD6Khg-aSBcB6PNwX1HzgdfzCDwZVtmOITzPMci7shnMuxnfs4wLfHWZS2p7j14VWd0HGgLJFP2idebnrGdvzF4F-WLYgdlg3ehhu2Rp-PHZ9pz7uvCktFZhiQ7mOm7C4aDFe8VCOCsMbwlIw2FH-YIX906Y31UgBRiOHZrXdEuKZqtlc-Iv-HwvqkOOjPuqn5eBOmPwe7RwfeC7f3"
+                    "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80"
                 },
                 Stock = 20,
                 Category = ProductCategory.GiftSets,
@@ -85,7 +85,7 @@ public static class SeedData
                 Price = 375.00m,
                 Images = new List<string>
                 {
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBUJCDWh1tUyA4w-xprhHKWdagHC2O0pKk0a3Xl2bDyDsb2liRxSzcrwLhf5Jja1H8DBz_onNjS5xS0jiwnLf9gWUGf49nxKMQ8GvgLpjlNtS8hWNBuPAF08LEwXktDN4dpkpaRjxvA3xEqnOgzwj2ORadAYsD_MK07CxWTkNrr8TnLvmMijYNbgxDzNmX9x34lNVPhnqvajyOyxY8kKoNliacmrY1zkfp9Tq435MqXPviOZcE4dVXS"
+                    "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=800&q=80"
                 },
                 Stock = 40,
                 Category = ProductCategory.Jams,
@@ -100,7 +100,7 @@ public static class SeedData
                 Price = 280.00m,
                 Images = new List<string>
                 {
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuAL_dXnXusHqi-bysqmxbpt81Uc7oKx5I7f_H7hs75ZprnCBHRA-EMSmdHpeGI1qelU172WGVjA1SXAn5vuvHE66IVuQKTky6phu6hD7Ho9CzjascHumBL6orptvT7AbKVwyOm-THbcchSEdkJW5CYZRq13OiY7qPSRzBmXhX0E3phIQRQp88_e2mswpEJxu7RSIoZDmDBawal5glhmHxqovzXWDy8ov6QFPlA0dVsV8FQy-ng7qVaY"
+                    "https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=800&q=80"
                 },
                 Stock = 60,
                 Category = ProductCategory.Pastries,
@@ -115,7 +115,7 @@ public static class SeedData
                 Price = 365.00m,
                 Images = new List<string>
                 {
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuCF21Q3w514zZ2zwUwNl2N0noQow9WDneEJstbXLkrDY79hQYQdNgcBv9gQhCm2zOYT54b1SMiE61gZfg5_JEZRupwIvfCMblHHC6er0jMYVBu3cydLKuKVStFQieUTQ7_9nFzsBTi_m4NMZ3z0Mk2Q7Hd6Rh2HjWYtdU6I8sq_tzoMeRIO9aEVXYXoLeSapYTfevIa_kIal590HJQ4Qy8-MZbxgachkebguUp-Cn2C51SkQAY0IjGy"
+                    "https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=800&q=80"
                 },
                 Stock = 45,
                 Category = ProductCategory.Jams,
@@ -130,7 +130,7 @@ public static class SeedData
                 Price = 180.00m,
                 Images = new List<string>
                 {
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuChCwb0gUpb9yEVEt_Rb9AQV375kgfxtC19pBmAoiP6MmC4EDK5dqPZd5S3fzyxIzgstytcUHiPBSYfNTeCQvofKH85M7TDC1TG1lT6L8xAmKuWK6JfzMqG6v5DwRzd3sUN4pms5N806jkGuvYapOIlyEcfVQbEFuvBix4N4TnsCls-OM6wj58gF-ulFTD_68gQtrYl4jU5HOQbUAX12-W5ymsgpgcQV3T1lL0tTmuPeYkukiaFkFj2"
+                    "https://images.unsplash.com/photo-1582293041079-7814c2f12063?auto=format&fit=crop&w=800&q=80"
                 },
                 Stock = 90,
                 Category = ProductCategory.Sweets,

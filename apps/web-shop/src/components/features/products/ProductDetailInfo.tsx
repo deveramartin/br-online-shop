@@ -10,12 +10,24 @@ interface ProductDetailInfoProps {
   product: Product;
 }
 
+const CATEGORY_NAMES: Record<number | string, string> = {
+  0: "Jams",
+  1: "Pastries",
+  2: "GiftSets",
+  3: "Sweets",
+  Jams: "Jams",
+  Pastries: "Pastries",
+  GiftSets: "GiftSets",
+  Sweets: "Sweets",
+};
+
 export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
 
   const inStock = product.stock > 0;
+  const categoryLabel = CATEGORY_NAMES[product.category] || "Artisanal";
 
   const handleAddToCart = () => {
     if (!inStock) return;
@@ -28,7 +40,7 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
       {/* Badges matching .design-ref */}
       <div className="flex items-center gap-2">
         <Badge variant="secondary" className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-          {product.category}
+          {categoryLabel}
         </Badge>
         <Badge variant="secondary" className="bg-primary/10 text-primary border-none text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
           Artisanal

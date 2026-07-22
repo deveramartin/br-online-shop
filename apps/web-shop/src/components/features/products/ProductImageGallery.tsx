@@ -18,34 +18,25 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
       : [DEFAULT_GALLERY_FALLBACK];
 
   const [selectedImage, setSelectedImage] = useState(imageList[0]);
-  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
-
-  const handleImageError = (imgUrl: string) => {
-    setFailedImages((prev) => ({ ...prev, [imgUrl]: true }));
-    if (selectedImage === imgUrl) {
-      setSelectedImage(DEFAULT_GALLERY_FALLBACK);
-    }
-  };
 
   return (
     <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-4 gap-4">
       {/* Main Feature Image */}
       <div className="md:col-span-4 rounded-xl overflow-hidden shadow-sm border border-outline-variant/30 relative aspect-[4/3] bg-surface-container">
         <Image
-          src={failedImages[selectedImage] ? DEFAULT_GALLERY_FALLBACK : selectedImage}
+          src={selectedImage}
           alt={name}
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 60vw"
           className="w-full h-full object-cover"
-          onError={() => handleImageError(selectedImage)}
+          unoptimized={selectedImage.startsWith("http")}
         />
       </div>
 
       {/* Thumbnails grid */}
       {imageList.map((img, idx) => {
         const isSelected = selectedImage === img;
-        const currentSrc = failedImages[img] ? DEFAULT_GALLERY_FALLBACK : img;
 
         return (
           <button
@@ -60,12 +51,12 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
             )}
           >
             <Image
-              src={currentSrc}
+              src={img}
               alt={`${name} preview ${idx + 1}`}
               fill
               sizes="200px"
               className="w-full h-full object-cover"
-              onError={() => handleImageError(img)}
+              unoptimized={img.startsWith("http")}
             />
           </button>
         );
