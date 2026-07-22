@@ -15,7 +15,8 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
   /repo-root
     /apps
       /api-oos          → .NET Web API solution
-      /web-shop          → Next.js frontend app + Typescript (use the current oos/ frontend app and convert it to this Next.js app)
+      /web-shop         → Next.js frontend app (online shop)
+      /web-oos          → Next.js frontend app (order & operations system)
     /packages
       /shared-types → shared TypeScript types/interfaces (e.g., DTOs mirrored from backend)
       /ui           → (optional, P2) shared shadcn/ui component wrappers if ever split into multiple frontends

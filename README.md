@@ -7,7 +7,8 @@ Monorepo containing the .NET Web API backend (`apps/api-oos`) and Next.js fronte
 br-online-shop/
 ├── apps/
 │   ├── api-oos/          → .NET Web API solution (enforces dotnet-structure skill)
-│   └── web-shop/         → Next.js 16 + React 19 + Tailwind v4 (enforces web-nextjs-structure skill)
+│   ├── web-shop/         → Next.js 16 + React 19 + Tailwind v4 (online shop)
+│   └── web-oos/          → Next.js 16 + React 19 + Tailwind v4 (order & ops system)
 ├── packages/
 │   ├── shared-types/     → Shared TypeScript types / DTO contracts
 │   └── config/           → Shared tsconfig & base configs
@@ -42,7 +43,8 @@ docker-compose up -d
 ```
 
 ### 4. Run Development Servers
-- Frontend: `pnpm dev:web`
+- Frontend (Shop): `pnpm dev:web`
+- Frontend (OOS): `pnpm dev:oos`
 - Backend: `dotnet run` inside `apps/api-oos`
 
 ## Verification & Tooling

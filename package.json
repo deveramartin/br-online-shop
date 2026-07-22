@@ -5,6 +5,7 @@
   "packageManager": "pnpm@9.15.4",
   "scripts": {
     "dev:web": "turbo run dev --filter=web-shop",
+    "dev:oos": "turbo run dev --filter=web-oos",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
