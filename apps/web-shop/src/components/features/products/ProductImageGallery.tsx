@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 interface ProductImageGalleryProps {
@@ -27,18 +28,33 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
   ];
 
   const [selectedImage, setSelectedImage] = useState(primaryImg);
+  const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({
+    [primaryImg]: true,
+  });
+
+  const handleImageLoad = (src: string) => {
+    setLoadingMap((prev) => ({ ...prev, [src]: false }));
+  };
 
   return (
-    <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-4 gap-4 animate-page-enter">
       {/* Main Feature Image (Bento 4 cols) */}
-      <div className="md:col-span-4 rounded-xl overflow-hidden shadow-sm border border-outline-variant/30 relative aspect-[4/3] bg-surface-container">
+      <div className="md:col-span-4 rounded-2xl overflow-hidden shadow-sm border border-border/70 relative aspect-[4/3] bg-surface-low">
+        {loadingMap[selectedImage] !== false && (
+          <Skeleton className="absolute inset-0 w-full h-full rounded-2xl" />
+        )}
         <Image
+          key={selectedImage}
           src={selectedImage}
           alt={name}
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 60vw"
-          className="w-full h-full object-cover"
+          className={cn(
+            "w-full h-full object-cover transition-all duration-500",
+            loadingMap[selectedImage] !== false ? "opacity-0 scale-95" : "opacity-100 scale-100"
+          )}
+          onLoad={() => handleImageLoad(selectedImage)}
           unoptimized={selectedImage.startsWith("http")}
         />
       </div>
@@ -47,7 +63,7 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
       <button
         onClick={() => setSelectedImage(imageList[0])}
         className={cn(
-          "hidden md:block md:col-span-1 rounded-xl overflow-hidden border border-outline-variant/30 relative aspect-square text-left focus:outline-none transition-all",
+          "hidden md:block md:col-span-1 rounded-xl overflow-hidden border border-border/70 relative aspect-square text-left focus:outline-none transition-all bg-surface-low",
           selectedImage === imageList[0] ? "ring-2 ring-primary border-primary scale-[1.02]" : "hover:border-primary/50 opacity-90"
         )}
       >
@@ -65,7 +81,7 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
       <button
         onClick={() => setSelectedImage(imageList[1])}
         className={cn(
-          "hidden md:block md:col-span-1 rounded-xl overflow-hidden border border-outline-variant/30 relative aspect-square text-left focus:outline-none transition-all",
+          "hidden md:block md:col-span-1 rounded-xl overflow-hidden border border-border/70 relative aspect-square text-left focus:outline-none transition-all bg-surface-low",
           selectedImage === imageList[1] ? "ring-2 ring-primary border-primary scale-[1.02]" : "hover:border-primary/50 opacity-90"
         )}
       >
@@ -83,7 +99,7 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
       <button
         onClick={() => setSelectedImage(imageList[2])}
         className={cn(
-          "hidden md:block md:col-span-2 rounded-xl overflow-hidden border border-outline-variant/30 relative aspect-[2/1] text-left focus:outline-none transition-all group",
+          "hidden md:block md:col-span-2 rounded-xl overflow-hidden border border-border/70 relative aspect-[2/1] text-left focus:outline-none transition-all group bg-surface-low",
           selectedImage === imageList[2] ? "ring-2 ring-primary border-primary scale-[1.02]" : "hover:border-primary/50 opacity-90"
         )}
       >
