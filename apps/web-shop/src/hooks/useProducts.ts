@@ -10,13 +10,17 @@ export function useProducts(initialParams?: ProductQueryParams) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const category = params.category;
+  const search = params.search;
+  const sort = params.sort;
+  const page = params.page;
+  const pageSize = params.pageSize;
+
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
-    setError(null);
 
     productsApi
-      .getProducts(params)
+      .getProducts({ category, search, sort, page, pageSize })
       .then((res) => {
         if (isMounted) {
           setData(res);
@@ -33,7 +37,7 @@ export function useProducts(initialParams?: ProductQueryParams) {
     return () => {
       isMounted = false;
     };
-  }, [params.category, params.search, params.sort, params.page, params.pageSize]);
+  }, [category, search, sort, page, pageSize]);
 
   return {
     products: data?.data ?? [],

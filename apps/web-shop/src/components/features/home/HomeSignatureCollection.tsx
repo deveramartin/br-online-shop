@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronRight, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -66,9 +67,11 @@ function ProductCard({ product }: { product: ProductItem }) {
               {product.badge.text}
             </span>
           )}
-          <img
+          <Image
             src={product.image}
             alt={product.name}
+            fill
+            unoptimized
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>

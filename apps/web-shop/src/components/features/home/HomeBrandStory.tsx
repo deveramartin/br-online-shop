@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Leaf, Award } from "lucide-react";
 
 export function HomeBrandStory() {
@@ -7,9 +8,11 @@ export function HomeBrandStory() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div className="relative group">
             <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl border-4 border-white relative bg-[var(--surface-container)]">
-              <img
+              <Image
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-PA8YCI9FmMO0lDQcIyEfOW_y4uUy8pOnx8EmU-6UZETDfn7Tw-v7RaHdf8kaM3Ka4fGKhQSvVdlvQbvEIa0IXs3Dc5b-mOd8x6zYu_Y77_mjN9mQYLsDSsj5W4_6Rx-EFm_mzrSwpFNDDnj7Ns8s6kCM95G5op1W7K4jqjLYOxwnOpmMXx8xlH9Z30brTtqzn64GqGW8C9f7zVNgQyPGemAKPc3B7yqflaJ2aDype26Jq5Vl_9UG"
                 alt="Traditional Heritage Ube Cooking"
+                fill
+                unoptimized
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             </div>

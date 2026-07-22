@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ShoppingBag, Search, User, Menu, X, ChevronRight } from "lucide-react";
@@ -15,9 +16,11 @@ export function Header() {
   const isAuthenticated = status === "authenticated";
 
   // Close mobile menu when route changes
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setMobileMenuOpen(false);
-  }, [pathname]);
+  }
 
   // Lock body scroll when mobile menu is active
   useEffect(() => {
@@ -44,9 +47,11 @@ export function Header() {
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <img
+          <Image
             src="/logo.jpeg"
             alt="Bren Raphael's Ube Jam & Halaya Logo"
+            width={40}
+            height={40}
             className="w-10 h-10 rounded-full object-cover shadow-sm transition-transform group-hover:scale-105"
           />
           <div>
@@ -120,9 +125,11 @@ export function Header() {
             {/* Sidebar Header */}
             <div className="p-6 border-b border-border/70 flex items-center justify-between bg-surface-low">
               <div className="flex items-center gap-3">
-                <img
+                <Image
                   src="/logo.jpeg"
                   alt="Logo"
+                  width={36}
+                  height={36}
                   className="w-9 h-9 rounded-full object-cover shadow-sm"
                 />
                 <div>

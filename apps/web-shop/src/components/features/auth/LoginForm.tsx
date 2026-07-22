@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -56,9 +57,11 @@ export function LoginForm() {
     <section className="w-full max-w-md">
       <Card className="border border-border/70 shadow-xl rounded-2xl bg-surface-card overflow-hidden">
         <CardHeader className="flex flex-col items-center text-center">
-          <img
+          <Image
             src="/logo.jpeg"
             alt="Bren Raphael's Logo"
+            width={64}
+            height={64}
             className="w-16 h-16 rounded-full object-cover shadow-sm mb-4"
           />
           <CardTitle className="text-3xl font-bold text-[var(--primary)] mb-2">Bren Raphael&apos;s</CardTitle>

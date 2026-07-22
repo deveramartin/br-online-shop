@@ -12,3 +12,6 @@
 - The backlogs.md in docs/specs/ is the main source of truth for implementation.
 - After each implementation, check the boxes in the markdown file docs/specs/backlogs.md and mark done for tasks that are implemented.
 - For each epic, you change the branch you are in. Then if we finish the epic, we do git status, commit, then PR to main.
+
+## Pull Request
+- Always use the PULL_REQUEST_TEMPLATE.md in .github/ for pull request template.

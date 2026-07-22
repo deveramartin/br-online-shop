@@ -32,6 +32,8 @@ export function useProfilePage() {
   const [profileSuccessMessage, setProfileSuccessMessage] = useState<string | null>(null);
   const [profileErrorMessage, setProfileErrorMessage] = useState<string | null>(null);
 
+  const resetForm = profileForm.reset;
+
   useEffect(() => {
     if (!token) return;
 
@@ -46,7 +48,7 @@ export function useProfilePage() {
         if (isMounted) {
           setUser(meData);
           setAddresses(addrData);
-          profileForm.reset({
+          resetForm({
             fullName: meData.fullName,
             phoneNumber: meData.phoneNumber || "",
           });
@@ -62,7 +64,7 @@ export function useProfilePage() {
     return () => {
       isMounted = false;
     };
-  }, [token, profileForm.reset]);
+  }, [token, resetForm]);
 
   const onProfileSubmit = async (data: ProfileFormData) => {
     setProfileSuccessMessage(null);

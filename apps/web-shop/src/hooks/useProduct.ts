@@ -9,11 +9,16 @@ export function useProduct(id: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [prevId, setPrevId] = useState(id);
+  if (prevId !== id) {
+    setPrevId(id);
+    setLoading(true);
+    setError(null);
+  }
+
   useEffect(() => {
     if (!id) return;
     let isMounted = true;
-    setLoading(true);
-    setError(null);
 
     productsApi
       .getProduct(id)
