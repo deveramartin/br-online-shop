@@ -54,7 +54,7 @@ export function LoginForm() {
 
   return (
     <section className="w-full max-w-md">
-      <Card className="shadow-sm">
+      <Card className="border border-border/70 shadow-xl rounded-2xl bg-surface-card overflow-hidden">
         <CardHeader className="flex flex-col items-center text-center">
           <img
             src="/logo.jpeg"
