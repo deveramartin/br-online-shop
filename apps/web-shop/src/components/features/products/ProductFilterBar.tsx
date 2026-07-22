@@ -1,6 +1,13 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ProductCategory, type ProductQueryParams } from "@/types/product";
 
 interface ProductFilterBarProps {
@@ -27,10 +34,10 @@ export function ProductFilterBar({ params, onChange }: ProductFilterBarProps) {
     });
   };
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSortChange = (value: string) => {
     onChange({
       ...params,
-      sort: e.target.value || undefined,
+      sort: value === "featured" ? undefined : value,
       page: 1,
     });
   };
@@ -77,16 +84,17 @@ export function ProductFilterBar({ params, onChange }: ProductFilterBarProps) {
           </svg>
         </div>
 
-        <select
-          value={params.sort || ""}
-          onChange={handleSortChange}
-          className="px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        >
-          <option value="">Sort: Featured</option>
-          <option value="price_asc">Price: Low to High</option>
-          <option value="price_desc">Price: High to Low</option>
-          <option value="name_asc">Name: A-Z</option>
-        </select>
+        <Select value={params.sort || "featured"} onValueChange={handleSortChange}>
+          <SelectTrigger className="w-[180px] text-sm">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="featured">Sort: Featured</SelectItem>
+            <SelectItem value="price_asc">Price: Low to High</SelectItem>
+            <SelectItem value="price_desc">Price: High to Low</SelectItem>
+            <SelectItem value="name_asc">Name: A-Z</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );
