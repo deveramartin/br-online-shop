@@ -39,18 +39,18 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   return (
     <div className="lg:col-span-5 space-y-stack-md sticky top-32">
       <div>
-        {/* Badges matching .design-ref/product_detail */}
+        {/* Badges matching .design-ref */}
         <div className="flex gap-2 mb-2">
-          <Badge className="bg-secondary/15 text-secondary hover:bg-secondary/20 border-none px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">
+          <Badge className="bg-secondary/15 text-secondary hover:bg-secondary/20 border-none px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest font-semibold">
             {categoryLabel}
           </Badge>
-          <Badge className="bg-primary/15 text-primary hover:bg-primary/20 border-none px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">
+          <Badge className="bg-primary/15 text-primary hover:bg-primary/20 border-none px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest font-semibold">
             Artisanal
           </Badge>
         </div>
 
         {/* Title matching .design-ref */}
-        <h1 className="font-h1-mobile md:font-h1 text-h1-mobile md:text-h1 text-on-surface mb-2 font-extrabold">
+        <h1 className="font-h1-mobile md:font-h1 text-h1-mobile md:text-h1 text-on-surface mb-2 font-extrabold text-3xl sm:text-4xl">
           {product.name}
         </h1>
 
@@ -70,7 +70,7 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
         </div>
       </div>
 
-      <div className="h-px bg-border/70 w-full my-4"></div>
+      <div className="h-px bg-outline-variant/30 w-full my-4"></div>
 
       {/* Description */}
       <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
@@ -81,11 +81,11 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
       <div className="space-y-4 pt-4">
         <div className="flex items-center gap-4">
           <span className="font-label-md text-label-md text-on-surface-variant font-medium">Quantity:</span>
-          <div className="flex items-center border border-border rounded-xl overflow-hidden h-12 bg-surface-card">
+          <div className="flex items-center border border-outline-variant rounded-lg overflow-hidden h-12 bg-surface-container-lowest">
             <button
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               disabled={quantity <= 1 || !inStock}
-              className="px-4 hover:bg-surface-low transition-colors text-primary border-r border-border disabled:opacity-40"
+              className="px-4 hover:bg-surface-container-low transition-colors text-primary border-r border-outline-variant disabled:opacity-40"
             >
               <Minus className="w-4 h-4" />
             </button>
@@ -98,7 +98,7 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
             <button
               onClick={() => setQuantity((q) => Math.min(product.stock, q + 1))}
               disabled={quantity >= product.stock || !inStock}
-              className="px-4 hover:bg-surface-low transition-colors text-primary border-l border-border disabled:opacity-40"
+              className="px-4 hover:bg-surface-container-low transition-colors text-primary border-l border-outline-variant disabled:opacity-40"
             >
               <Plus className="w-4 h-4" />
             </button>
@@ -134,17 +134,17 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
 
       {/* Info Cards matching .design-ref */}
       <div className="grid grid-cols-2 gap-4 mt-8">
-        <div className="p-4 rounded-2xl border border-border/70 bg-surface-card flex items-center gap-3">
+        <div className="p-4 rounded-xl border border-outline-variant/30 bg-surface-container-lowest flex items-center gap-3">
           <Truck className="w-8 h-8 text-secondary shrink-0" />
           <div>
-            <p className="font-label-md text-label-md font-bold text-foreground">Fast Delivery</p>
+            <p className="font-label-md text-label-md font-bold text-on-surface">Fast Delivery</p>
             <p className="text-[12px] text-on-surface-variant">Metro Manila 24h</p>
           </div>
         </div>
-        <div className="p-4 rounded-2xl border border-border/70 bg-surface-card flex items-center gap-3">
+        <div className="p-4 rounded-xl border border-outline-variant/30 bg-surface-container-lowest flex items-center gap-3">
           <Leaf className="w-8 h-8 text-secondary shrink-0" />
           <div>
-            <p className="font-label-md text-label-md font-bold text-foreground">Organic</p>
+            <p className="font-label-md text-label-md font-bold text-on-surface">Organic</p>
             <p className="text-[12px] text-on-surface-variant">No Preservatives</p>
           </div>
         </div>
@@ -152,7 +152,7 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
 
       {/* Accordions matching .design-ref */}
       <div className="pt-8 space-y-2">
-        <div className="border-b border-border/70 pb-4">
+        <div className="border-b border-outline-variant/30 pb-4">
           <button
             onClick={() => setOpenHeritage(!openHeritage)}
             className="w-full flex justify-between items-center text-left"
@@ -167,7 +167,7 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
           )}
         </div>
 
-        <div className="border-b border-border/70 pb-4 pt-2">
+        <div className="border-b border-outline-variant/30 pb-4 pt-2">
           <button
             onClick={() => setOpenIngredients(!openIngredients)}
             className="w-full flex justify-between items-center text-left"
