@@ -13,7 +13,7 @@ export function HomeHeroSection() {
           </div>
 
           <h1 className="text-4xl md:text-6xl font-extrabold text-[var(--foreground)] tracking-tight leading-[1.1]">
-            Handcrafted <span className="text-[var(--primary)] font-serif italic">Artisanal</span> Ube Jam &amp; Halaya
+            Handcrafted <span className="text-[var(--primary)] font-serif italic">Artisanal</span>&nbsp;Ube Jam &amp; Halaya
           </h1>
 
           <p className="text-base md:text-lg text-[var(--muted)] max-w-xl leading-relaxed">
