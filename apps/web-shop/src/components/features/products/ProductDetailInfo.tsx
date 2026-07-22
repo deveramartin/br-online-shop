@@ -127,13 +127,8 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
             {wishlisted ? "Wishlisted" : "Wishlist"}
           </button>
         </div>
-
-        {added && (
-          <p className="text-xs text-primary font-semibold text-center sm:text-left pt-1">
-            Item added! (Full cart drawer coming in Epic 4)
-          </p>
-        )}
       </div>
+
 
       {/* Info Cards */}
       <div className="grid grid-cols-2 gap-4 pt-4">
