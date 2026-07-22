@@ -17,10 +17,10 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={`/products/${product.id}`} className="group block h-full">
-      <Card className="h-full overflow-hidden border border-neutral-200/70 dark:border-neutral-800 bg-white dark:bg-neutral-900 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-purple-300 dark:hover:border-purple-800 flex flex-col justify-between">
+      <Card className="h-full overflow-hidden border border-border/70 bg-surface-card transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-secondary-container flex flex-col justify-between">
         <div>
           {/* Image & Badges */}
-          <div className="relative aspect-square w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+          <div className="relative aspect-square w-full overflow-hidden bg-surface-container">
             <Image
               src={primaryImage}
               alt={product.name}
@@ -29,7 +29,7 @@ export function ProductCard({ product }: ProductCardProps) {
               className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-              <Badge className="bg-[#451077] hover:bg-[#5d2d8f] text-white text-[11px] uppercase tracking-wider px-2.5 py-0.5 font-semibold shadow-sm">
+              <Badge variant="default" className="text-[11px] uppercase tracking-wider px-2.5 py-0.5 font-semibold shadow-sm">
                 {product.category}
               </Badge>
             </div>
@@ -43,26 +43,26 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
 
           <CardContent className="p-5 space-y-2">
-            <h3 className="font-bold text-lg text-neutral-900 dark:text-neutral-100 group-hover:text-[#451077] dark:group-hover:text-purple-400 transition-colors line-clamp-1">
+            <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
               {product.name}
             </h3>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 leading-relaxed">
+            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
               {product.description}
             </p>
           </CardContent>
         </div>
 
-        <CardFooter className="px-5 pb-5 pt-2 flex items-center justify-between border-t border-neutral-100 dark:border-neutral-800/60 mt-auto">
+        <CardFooter className="px-5 pb-5 pt-2 flex items-center justify-between border-t border-border/50 mt-auto">
           <div>
-            <span className="text-xs text-neutral-400 font-medium block">Price</span>
-            <span className="text-xl font-extrabold text-[#451077] dark:text-purple-300">
+            <span className="text-xs text-muted-foreground font-medium block">Price</span>
+            <span className="text-xl font-extrabold text-primary">
               ₱{product.price.toFixed(2)}
             </span>
           </div>
 
           <Button
             size="icon"
-            className="rounded-full bg-[#451077] hover:bg-[#5d2d8f] text-white shadow-md transition-transform active:scale-95"
+            className="rounded-full bg-primary hover:bg-primary-dark text-primary-foreground shadow-md transition-transform active:scale-95"
             aria-label="View Product"
           >
             <ShoppingBag className="w-4 h-4" />

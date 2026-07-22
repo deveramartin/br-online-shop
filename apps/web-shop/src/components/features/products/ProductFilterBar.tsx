@@ -44,7 +44,7 @@ export function ProductFilterBar({ params, onChange }: ProductFilterBarProps) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between bg-white dark:bg-neutral-900 p-4 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm">
+    <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between bg-surface-card p-4 rounded-2xl border border-border shadow-sm">
       {/* Category Pills */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
         {categories.map((cat) => {
@@ -55,8 +55,8 @@ export function ProductFilterBar({ params, onChange }: ProductFilterBarProps) {
               onClick={() => handleCategoryClick(cat)}
               className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
                 isActive
-                  ? "bg-[#451077] text-white shadow-md shadow-purple-900/20"
-                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                  ? "bg-primary text-primary-foreground shadow-md shadow-purple-950/10"
+                  : "bg-surface-low text-muted font-medium hover:bg-surface-container"
               }`}
             >
               {cat}
@@ -73,16 +73,16 @@ export function ProductFilterBar({ params, onChange }: ProductFilterBarProps) {
             placeholder="Search catalog..."
             value={params.search || ""}
             onChange={handleSearchChange}
-            className="pl-9 text-sm rounded-xl border-neutral-200 dark:border-neutral-800 focus-visible:ring-[#451077]"
+            className="pl-9 text-sm rounded-xl border-border focus-visible:ring-primary"
           />
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         </div>
 
         <Select value={params.sort || "featured"} onValueChange={handleSortChange}>
-          <SelectTrigger className="w-[180px] text-sm rounded-xl border-neutral-200 dark:border-neutral-800">
+          <SelectTrigger className="w-[180px] text-sm rounded-xl border-border">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
-          <SelectContent className="rounded-xl">
+          <SelectContent className="rounded-xl border-border bg-surface-card">
             <SelectItem value="featured">Sort: Featured</SelectItem>
             <SelectItem value="price_asc">Price: Low to High</SelectItem>
             <SelectItem value="price_desc">Price: High to Low</SelectItem>
