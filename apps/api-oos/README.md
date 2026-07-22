@@ -1,6 +1,6 @@
 # API OOS (.NET Web API Backend)
 
-ASP.NET Core Web API backend for the `br-online-shop` monorepo.
+ASP.NET Core Web API backend for the `br-online-shop` monorepo built with .NET 10.
 
 ## Project Structure (enforced by `dotnet-structure` skill)
 ```
@@ -22,7 +22,32 @@ apps/api-oos/
 ├── Repositories/           → Data access implementations
 ├── Services/               → Business logic implementations
 ├── Validators/             → FluentValidation validators
-└── tests/                  → xUnit / NUnit tests mirroring source tree
+└── tests/                  → xUnit tests mirroring source tree
 ```
 
-> Note: Detailed ASP.NET Core project scaffolding will be completed in **EPIC 1**.
+## Running the API Locally
+```bash
+cd apps/api-oos
+dotnet run
+```
+- API Base URL: `https://localhost:5001/api`
+- Swagger UI: `https://localhost:5001/swagger`
+
+## Database Migrations (Entity Framework Core)
+
+Ensure EF Core CLI tool is installed:
+```bash
+dotnet tool install --global dotnet-ef
+```
+
+### Adding a New Migration
+```bash
+cd apps/api-oos
+dotnet ef migrations add <MigrationName> --output-dir Data/Migrations
+```
+
+### Updating the Local Database
+```bash
+cd apps/api-oos
+dotnet ef database update
+```
