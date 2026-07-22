@@ -18,9 +18,9 @@ export function ProductDetailPage({ id }: ProductDetailPageProps) {
 
   if (loading) {
     return (
-      <main className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
         <Skeleton className="h-6 w-48 rounded-lg" />
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           <Skeleton className="lg:col-span-7 w-full aspect-[4/3] rounded-2xl" />
           <div className="lg:col-span-5 space-y-4">
             <Skeleton className="h-6 w-24 rounded-full" />
@@ -36,12 +36,12 @@ export function ProductDetailPage({ id }: ProductDetailPageProps) {
 
   if (error || !product) {
     return (
-      <main className="max-w-container-max mx-auto min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
-        <h2 className="font-h2 text-h2 text-on-surface font-extrabold text-2xl">Product Not Found</h2>
-        <p className="mt-2 text-on-surface-variant font-body-md max-w-md text-muted-foreground">
+      <main className="max-w-7xl mx-auto min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+        <h2 className="text-2xl font-extrabold text-foreground">Product Not Found</h2>
+        <p className="mt-2 text-sm text-muted font-medium max-w-md">
           {error || "The requested product could not be located."}
         </p>
-        <Button asChild className="mt-6 bg-primary text-white font-label-md rounded-full px-6">
+        <Button asChild className="mt-6 bg-primary text-white font-bold rounded-full px-6">
           <Link href="/products">&larr; Return to Shop</Link>
         </Button>
       </main>
@@ -49,25 +49,25 @@ export function ProductDetailPage({ id }: ProductDetailPageProps) {
   }
 
   return (
-    <main className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg">
-      {/* Breadcrumbs matching .design-ref/product_detail */}
-      <nav className="mb-stack-md flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider mb-6">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+      {/* Breadcrumbs */}
+      <nav className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted font-semibold">
         <Link href="/products" className="hover:text-primary transition-colors">
           Shop
         </Link>
         <ChevronRight className="w-3.5 h-3.5" />
         <span className="hover:text-primary transition-colors cursor-pointer">{product.category}</span>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <span className="text-on-surface font-semibold">{product.name}</span>
+        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+        <span className="text-foreground font-bold">{product.name}</span>
       </nav>
 
-      {/* Main Grid Section matching .design-ref/product_detail */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-gutter lg:items-start">
+      {/* Main Grid Section */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         <ProductImageGallery images={product.images} name={product.name} />
         <ProductDetailInfo product={product} />
       </section>
 
-      {/* Related Products Section matching .design-ref/product_detail */}
+      {/* Related Products Section */}
       <RelatedProducts category={product.category} currentProductId={product.id} />
     </main>
   );
