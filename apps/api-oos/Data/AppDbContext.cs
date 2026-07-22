@@ -1,6 +1,8 @@
 namespace ApiOos.Data;
 
+using ApiOos.Enums;
 using ApiOos.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext

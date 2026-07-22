@@ -3,8 +3,10 @@ namespace ApiOos.Tests.Controllers;
 using ApiOos.Controllers;
 using ApiOos.DTOs.Requests;
 using ApiOos.DTOs.Responses;
+using ApiOos.Enums;
 using ApiOos.Interfaces.Services;
 using ApiOos.Models;
+
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;

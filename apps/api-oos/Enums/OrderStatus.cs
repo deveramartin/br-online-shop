@@ -1,4 +1,4 @@
-namespace ApiOos.Models;
+namespace ApiOos.Enums;
 
 public enum OrderStatus
 {

@@ -1,5 +1,7 @@
 namespace ApiOos.DTOs.Requests.Orders;
 
+using ApiOos.Enums;
+
 public class ShippingAddressRequest
 {
     public string RecipientName { get; set; } = string.Empty;
@@ -13,5 +15,5 @@ public class ShippingAddressRequest
 public class CreateOrderRequest
 {
     public ShippingAddressRequest ShippingAddress { get; set; } = null!;
-    public ApiOos.Models.PaymentMethod PaymentMethod { get; set; } = ApiOos.Models.PaymentMethod.CashOnDelivery;
+    public PaymentMethod PaymentMethod { get; set; } = PaymentMethod.CashOnDelivery;
 }

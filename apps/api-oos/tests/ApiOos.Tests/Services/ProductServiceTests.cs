@@ -2,9 +2,11 @@ namespace ApiOos.Tests.Services;
 
 using ApiOos.DTOs.Requests;
 using ApiOos.DTOs.Responses;
+using ApiOos.Enums;
 using ApiOos.Interfaces.Repositories;
 using ApiOos.Models;
 using ApiOos.Services;
+
 using FluentAssertions;
 using Xunit;
 

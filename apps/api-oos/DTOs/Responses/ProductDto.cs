@@ -1,6 +1,8 @@
 namespace ApiOos.DTOs.Responses;
 
+using ApiOos.Enums;
 using ApiOos.Models;
+
 
 public record ProductDto(
     Guid Id,
