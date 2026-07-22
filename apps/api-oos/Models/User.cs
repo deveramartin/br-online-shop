@@ -17,4 +17,7 @@ public class User
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<Address> Addresses { get; set; } = new List<Address>();
+    public Cart? Cart { get; set; }
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }
+

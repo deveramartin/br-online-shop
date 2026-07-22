@@ -26,10 +26,15 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ApiOos.Helpers.JwtTokenHelper>();
         services.AddScoped<ApiOos.Interfaces.Repositories.IUserRepository, ApiOos.Repositories.UserRepository>();
         services.AddScoped<ApiOos.Interfaces.Repositories.IProductRepository, ApiOos.Repositories.ProductRepository>();
+        services.AddScoped<ApiOos.Interfaces.Repositories.ICartRepository, ApiOos.Repositories.CartRepository>();
+        services.AddScoped<ApiOos.Interfaces.Repositories.IOrderRepository, ApiOos.Repositories.OrderRepository>();
         services.AddScoped<ApiOos.Interfaces.Services.IAuthService, ApiOos.Services.AuthService>();
         services.AddScoped<ApiOos.Interfaces.Services.IUserService, ApiOos.Services.UserService>();
         services.AddScoped<ApiOos.Interfaces.Services.IProductService, ApiOos.Services.ProductService>();
+        services.AddScoped<ApiOos.Interfaces.Services.ICartService, ApiOos.Services.CartService>();
+        services.AddScoped<ApiOos.Interfaces.Services.IOrderService, ApiOos.Services.OrderService>();
         return services;
+
     }
 
     public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
