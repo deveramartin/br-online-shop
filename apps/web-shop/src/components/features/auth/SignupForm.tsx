@@ -6,8 +6,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { registerSchema, type RegisterFormData } from "@/lib/validators/auth";
+import { Eye, EyeOff } from "lucide-react";
+import { signupSchema, type SignupFormData } from "@/lib/validators/auth";
 import { authApi } from "@/lib/api/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,9 +18,11 @@ export function SignupForm() {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const form = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       fullName: "",
       email: "",
@@ -30,7 +32,7 @@ export function SignupForm() {
     },
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (data: SignupFormData) => {
     setIsLoading(true);
     setServerError(null);
 
@@ -41,24 +43,16 @@ export function SignupForm() {
         password: data.password,
       });
 
-      const result = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        router.push("/signin");
-      } else {
-        router.push("/");
-        router.refresh();
-      }
+      router.push("/signin?registered=true");
     } catch (err: unknown) {
-      const apiErr = err as { status?: number; data?: { detail?: string } };
-      if (apiErr?.status === 409) {
-        setServerError("This email address is already registered. Please sign in instead.");
+      const apiErr = err as { data?: { detail?: string; errors?: Record<string, string[]> } };
+      if (apiErr?.data?.detail) {
+        setServerError(apiErr.data.detail);
+      } else if (apiErr?.data?.errors) {
+        const firstErrorKey = Object.keys(apiErr.data.errors)[0];
+        setServerError(apiErr.data.errors[firstErrorKey][0]);
       } else {
-        setServerError(apiErr?.data?.detail || "Failed to create account. Please check your details and try again.");
+        setServerError("Registration failed. Please check your information and try again.");
       }
     } finally {
       setIsLoading(false);
@@ -76,15 +70,15 @@ export function SignupForm() {
             height={64}
             className="w-16 h-16 rounded-full object-cover shadow-sm mb-4"
           />
-          <CardTitle className="text-3xl font-bold text-[var(--primary)] mb-2">Bren Raphael&apos;s</CardTitle>
-          <CardDescription className="text-sm text-[var(--muted)]">
-            Join our family and experience traditional Filipino sweets.
+          <CardTitle className="text-3xl font-bold text-primary mb-2">Bren Raphael&apos;s</CardTitle>
+          <CardDescription className="text-sm text-muted">
+            Create an account to track orders and save your details.
           </CardDescription>
         </CardHeader>
 
         <CardContent>
           {serverError && (
-            <div className="mb-6 p-4 rounded-lg bg-[var(--error-container)] text-[var(--on-error-container)] text-sm">
+            <div className="mb-6 p-4 rounded-lg bg-error-container text-on-error-container text-sm">
               {serverError}
             </div>
           )}
@@ -127,7 +121,23 @@ export function SignupForm() {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input id="signup-password" type="password" placeholder="••••••••" {...field} />
+                        <div className="relative">
+                          <Input
+                            id="signup-password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            className="pr-10"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-1"
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                          >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -141,7 +151,23 @@ export function SignupForm() {
                     <FormItem>
                       <FormLabel>Confirm Password</FormLabel>
                       <FormControl>
-                        <Input id="signup-confirm" type="password" placeholder="••••••••" {...field} />
+                        <div className="relative">
+                          <Input
+                            id="signup-confirm"
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            className="pr-10"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-1"
+                            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                          >
+                            {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -160,20 +186,19 @@ export function SignupForm() {
                         type="checkbox"
                         checked={field.value}
                         onChange={field.onChange}
-                        className="mt-1 w-4 h-4 rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer"
+                        className="mt-1 w-4 h-4 rounded border-border text-primary focus:ring-primary cursor-pointer"
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">
-                      <FormLabel htmlFor="terms" className="text-xs text-[var(--muted)] leading-tight cursor-pointer">
+                      <FormLabel className="text-xs font-normal text-muted cursor-pointer">
                         I agree to the{" "}
-                        <Link href="/terms" className="text-[var(--primary)] hover:underline">
+                        <Link href="/terms" className="text-primary underline">
                           Terms of Service
                         </Link>{" "}
                         and{" "}
-                        <Link href="/privacy" className="text-[var(--primary)] hover:underline">
+                        <Link href="/privacy" className="text-primary underline">
                           Privacy Policy
                         </Link>
-                        .
                       </FormLabel>
                       <FormMessage />
                     </div>
@@ -184,7 +209,7 @@ export function SignupForm() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] shadow-md mt-4 cursor-pointer"
+                className="w-full bg-primary text-white hover:bg-primary-dark shadow-md mt-4 cursor-pointer"
               >
                 {isLoading ? "Creating Account..." : "Create Account"}
               </Button>
@@ -192,10 +217,10 @@ export function SignupForm() {
           </Form>
         </CardContent>
 
-        <CardFooter className="justify-center border-t pt-6">
-          <p className="text-sm text-[var(--muted)]">
+        <CardFooter className="justify-center border-t border-border/50 pt-6">
+          <p className="text-sm text-muted">
             Already have an account?{" "}
-            <Link href="/signin" className="text-[var(--primary)] font-semibold hover:underline">
+            <Link href="/signin" className="text-primary font-semibold hover:underline">
               Log in
             </Link>
           </p>

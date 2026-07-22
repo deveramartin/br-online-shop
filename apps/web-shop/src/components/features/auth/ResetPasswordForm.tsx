@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
 import { resetPasswordSchema, type ResetPasswordFormData } from "@/lib/validators/auth";
 import { authApi } from "@/lib/api/api-client";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,8 @@ export function ResetPasswordForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -54,25 +57,25 @@ export function ResetPasswordForm() {
     <section className="w-full max-w-md">
       <Card className="border border-border/70 shadow-xl rounded-2xl bg-surface-card overflow-hidden">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-[var(--primary)] mb-2">Set New Password</CardTitle>
-          <CardDescription className="text-sm text-[var(--muted)]">
+          <CardTitle className="text-3xl font-bold text-primary mb-2">Set New Password</CardTitle>
+          <CardDescription className="text-sm text-muted">
             Please enter a new password for your account.
           </CardDescription>
         </CardHeader>
 
         <CardContent>
           {serverError && (
-            <div className="mb-6 p-4 rounded-lg bg-[var(--error-container)] text-[var(--on-error-container)] text-sm">
+            <div className="mb-6 p-4 rounded-lg bg-error-container text-on-error-container text-sm">
               {serverError}
             </div>
           )}
 
           {isSuccess ? (
             <div className="text-center space-y-4">
-              <div className="p-4 rounded-lg bg-[var(--surface-container)] text-[var(--primary)] text-sm font-medium">
+              <div className="p-4 rounded-lg bg-surface-container text-primary text-sm font-medium">
                 Password has been reset successfully! Redirecting you to sign in...
               </div>
-              <Link href="/signin" className="inline-block mt-4 text-sm font-semibold text-[var(--primary)] hover:underline">
+              <Link href="/signin" className="inline-block mt-4 text-sm font-semibold text-primary hover:underline">
                 Click here if not redirected automatically
               </Link>
             </div>
@@ -86,7 +89,23 @@ export function ResetPasswordForm() {
                     <FormItem>
                       <FormLabel>New Password</FormLabel>
                       <FormControl>
-                        <Input id="reset-password" type="password" placeholder="••••••••" {...field} />
+                        <div className="relative">
+                          <Input
+                            id="reset-password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            className="pr-10"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-1"
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                          >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -100,7 +119,23 @@ export function ResetPasswordForm() {
                     <FormItem>
                       <FormLabel>Confirm New Password</FormLabel>
                       <FormControl>
-                        <Input id="reset-confirm" type="password" placeholder="••••••••" {...field} />
+                        <div className="relative">
+                          <Input
+                            id="reset-confirm"
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            className="pr-10"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-1"
+                            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                          >
+                            {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -110,7 +145,7 @@ export function ResetPasswordForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] shadow-md mt-4 cursor-pointer"
+                  className="w-full bg-primary text-white hover:bg-primary-dark shadow-md mt-4 cursor-pointer"
                 >
                   {isLoading ? "Resetting Password..." : "Update Password"}
                 </Button>
