@@ -7,7 +7,7 @@ import { ProductDetailInfo } from "./ProductDetailInfo";
 import { RelatedProducts } from "./RelatedProducts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, ArrowLeft } from "lucide-react";
+import { ChevronRight, ArrowLeft, Loader2 } from "lucide-react";
 
 interface ProductDetailPageProps {
   id: string;
@@ -19,6 +19,15 @@ export function ProductDetailPage({ id }: ProductDetailPageProps) {
   if (loading) {
     return (
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        <div className="flex flex-col items-center justify-center space-y-3 py-6">
+          <div className="p-3 rounded-full bg-primary/5 border border-primary/10">
+            <Loader2 className="w-8 h-8 text-primary animate-spin" />
+          </div>
+          <p className="text-xs font-bold text-primary uppercase tracking-wider animate-pulse">
+            Loading Details...
+          </p>
+        </div>
+
         <Skeleton className="h-10 w-36 rounded-full" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           <Skeleton className="lg:col-span-7 w-full aspect-[4/3] rounded-2xl" />
