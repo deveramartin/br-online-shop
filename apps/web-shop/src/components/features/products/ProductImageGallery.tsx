@@ -51,7 +51,7 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
           priority
           sizes="(max-width: 1024px) 100vw, 60vw"
           className={cn(
-            "w-full h-full object-cover transition-all duration-500",
+            "w-full h-full object-cover transition-all duration-700",
             loadingMap[selectedImage] !== false ? "opacity-0 scale-95" : "opacity-100 scale-100"
           )}
           onLoad={() => handleImageLoad(selectedImage)}

@@ -78,7 +78,7 @@
 @keyframes pageEnter {
   0% {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(16px);
   }
   100% {
     opacity: 1;
@@ -87,7 +87,7 @@
 }
 
 .animate-page-enter {
-  animation: pageEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: pageEnter 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 body {
