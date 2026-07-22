@@ -1,6 +1,7 @@
 using ApiOos.Extensions;
 using ApiOos.Helpers;
 using ApiOos.Middleware;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 EnvLoader.Load();
@@ -45,5 +46,12 @@ app.UseCors("DefaultCorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApiOos.Data.AppDbContext>();
+    await dbContext.Database.EnsureCreatedAsync();
+    await ApiOos.Data.Seed.SeedData.InitializeAsync(dbContext);
+}
 
 app.Run();

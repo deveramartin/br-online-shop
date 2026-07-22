@@ -157,11 +157,11 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 **3.1 Product data model**
 
-- [ ] Backend: Product entity (id, name, description, price, images[], stock, category, SKU, active status)
-- [ ] Backend: Database seed script for 4–10 initial products
-- [ ] Backend: `GET /api/products` — list all products (with pagination-ready structure even if small)
-- [ ] Backend: `GET /api/products/{id}` — single product detail
-- [ ] Backend: (P1) `GET /api/products?category=&sort=&search=` — filter/sort/search support
+- [x] Backend: Product entity (id, name, description, price, images[], stock, category, SKU, active status)
+- [x] Backend: Database seed script for 4–10 initial products
+- [x] Backend: `GET /api/products` — list all products (with pagination-ready structure even if small)
+- [x] Backend: `GET /api/products/{id}` — single product detail
+- [x] Backend: (P1) `GET /api/products?category=&sort=&search=` — filter/sort/search support
 
 **3.2 Landing page**
 
@@ -172,17 +172,17 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 **3.3 Product catalog page**
 
-- [ ] Frontend: Product grid page using shadcn Card components
-- [ ] Frontend: (P1) Sort/filter UI bar
-- [ ] Frontend: Loading skeletons (shadcn Skeleton) while fetching
+- [x] Frontend: Product grid page using shadcn Card components
+- [x] Frontend: (P1) Sort/filter UI bar
+- [x] Frontend: Loading skeletons (shadcn Skeleton) while fetching
 
 **3.4 Product detail page**
 
-- [ ] Frontend: Image gallery component (carousel or thumbnail switcher)
-- [ ] Frontend: Quantity selector
-- [ ] Frontend: Add to Cart button with stock validation
-- [ ] Frontend: Related products section
-- [ ] Backend: Stock/inventory check endpoint before add-to-cart confirmation
+- [x] Frontend: Image gallery component (carousel or thumbnail switcher)
+- [x] Frontend: Quantity selector
+- [x] Frontend: Add to Cart button with stock validation
+- [x] Frontend: Related products section
+- [x] Backend: Stock/inventory check endpoint before add-to-cart confirmation
 
 ---
 
