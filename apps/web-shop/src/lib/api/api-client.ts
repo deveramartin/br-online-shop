@@ -114,3 +114,22 @@ export const userApi = {
     apiClient.delete(`/users/me/addresses/${id}`, { token }),
 };
 
+import type { PagedResult, Product, ProductQueryParams } from "@/types/product";
+
+export const productsApi = {
+  getProducts: (params?: ProductQueryParams) => {
+    const searchParams = new URLSearchParams();
+    if (params?.category) searchParams.append("category", params.category);
+    if (params?.search) searchParams.append("search", params.search);
+    if (params?.sort) searchParams.append("sort", params.sort);
+    if (params?.page) searchParams.append("page", params.page.toString());
+    if (params?.pageSize) searchParams.append("pageSize", params.pageSize.toString());
+
+    const queryString = searchParams.toString();
+    const endpoint = `/products${queryString ? `?${queryString}` : ""}`;
+    return apiClient.get<PagedResult<Product>>(endpoint);
+  },
+
+  getProduct: (id: string) => apiClient.get<Product>(`/products/${id}`),
+};
+

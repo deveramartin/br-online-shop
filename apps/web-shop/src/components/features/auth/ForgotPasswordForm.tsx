@@ -37,7 +37,7 @@ export function ForgotPasswordForm() {
 
   return (
     <section className="w-full max-w-md">
-      <Card className="shadow-sm">
+      <Card className="border border-border/70 shadow-xl rounded-2xl bg-surface-card overflow-hidden">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold text-[var(--primary)] mb-2">Reset Password</CardTitle>
           <CardDescription className="text-sm text-[var(--muted)]">

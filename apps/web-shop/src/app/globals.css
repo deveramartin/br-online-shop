@@ -3,19 +3,27 @@
 :root {
   --background: #fcf9f8;
   --foreground: #1c1b1b;
-  --primary: #5d2d8f;
-  --primary-dark: #451077;
+  --primary: #451077;
+  --primary-dark: #2b0052;
   --primary-foreground: #ffffff;
+  --primary-container: #5d2d8f;
+  --on-primary-container: #cfa1ff;
   --secondary: #7748a7;
   --secondary-light: #9363c4;
   --secondary-foreground: #ffffff;
+  --secondary-container: #cb98fe;
+  --on-secondary-container: #582887;
   --surface: #fcf9f8;
   --surface-low: #f6f3f2;
   --surface-container: #f0eded;
   --surface-card: #ffffff;
   --muted: #4b4451;
   --muted-foreground: #7d7482;
+  --accent: #efdbff;
+  --accent-foreground: #451077;
   --border: #cdc3d2;
+  --input: #cdc3d2;
+  --ring: #451077;
   --radius: 0.5rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
@@ -24,10 +32,6 @@
   --error-container: #ffdad6;
   --on-error-container: #93000a;
   --primary-fixed: #efdbff;
-  --primary-container: #5d2d8f;
-  --on-primary-container: #cfa1ff;
-  --secondary-container: #cb98fe;
-  --on-secondary-container: #582887;
   --outline-variant: #cdc3d2;
   --surface-container-lowest: #ffffff;
   --surface-container-high: #eae7e7;
@@ -49,6 +53,10 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-surface-variant: var(--surface-variant);
   --color-error: var(--error);
   --color-error-container: var(--error-container);
@@ -65,6 +73,34 @@
   --radius-md: var(--radius);
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
+}
+
+@keyframes pageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-enter {
+  animation: pageEnter 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-left {
+  animation: slideLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 body {
