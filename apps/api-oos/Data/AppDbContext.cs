@@ -12,6 +12,11 @@ public class AppDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Address> Addresses => Set<Address>();
     public DbSet<Product> Products => Set<Product>();
+    public DbSet<Cart> Carts => Set<Cart>();
+    public DbSet<CartItem> CartItems => Set<CartItem>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<Payment> Payments => Set<Payment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,6 +32,10 @@ public class AppDbContext : DbContext
             e.HasMany(u => u.Addresses)
              .WithOne(a => a.User)
              .HasForeignKey(a => a.UserId)
+             .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(u => u.Cart)
+             .WithOne(c => c.User)
+             .HasForeignKey<Cart>(c => c.UserId)
              .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -54,5 +63,64 @@ public class AppDbContext : DbContext
                 v => System.Text.Json.JsonSerializer.Deserialize<List<string>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new List<string>()
             );
         });
+
+        modelBuilder.Entity<Cart>(e =>
+        {
+            e.HasKey(c => c.Id);
+            e.HasMany(c => c.Items)
+             .WithOne(i => i.Cart)
+             .HasForeignKey(i => i.CartId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<CartItem>(e =>
+        {
+            e.HasKey(ci => ci.Id);
+            e.HasOne(ci => ci.Product)
+             .WithMany()
+             .HasForeignKey(ci => ci.ProductId)
+             .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Order>(e =>
+        {
+            e.HasKey(o => o.Id);
+            e.HasIndex(o => o.OrderNumber).IsUnique();
+            e.Property(o => o.OrderNumber).IsRequired().HasMaxLength(50);
+            e.Property(o => o.Subtotal).HasPrecision(18, 2);
+            e.Property(o => o.ShippingFee).HasPrecision(18, 2);
+            e.Property(o => o.Tax).HasPrecision(18, 2);
+            e.Property(o => o.TotalAmount).HasPrecision(18, 2);
+            e.Property(o => o.Status).HasConversion<string>();
+            e.HasOne(o => o.User)
+             .WithMany(u => u.Orders)
+             .HasForeignKey(o => o.UserId)
+             .OnDelete(DeleteBehavior.Restrict);
+            e.HasMany(o => o.Items)
+             .WithOne(i => i.Order)
+             .HasForeignKey(i => i.OrderId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<OrderItem>(e =>
+        {
+            e.HasKey(oi => oi.Id);
+            e.Property(oi => oi.UnitPrice).HasPrecision(18, 2);
+            e.Property(oi => oi.ProductName).IsRequired().HasMaxLength(150);
+            e.Property(oi => oi.ProductSKU).IsRequired().HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Payment>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.Property(p => p.Amount).HasPrecision(18, 2);
+            e.Property(p => p.PaymentMethod).HasConversion<string>();
+            e.Property(p => p.Status).HasConversion<string>();
+            e.HasOne(p => p.Order)
+             .WithOne(o => o.Payment)
+             .HasForeignKey<Payment>(p => p.OrderId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }
+

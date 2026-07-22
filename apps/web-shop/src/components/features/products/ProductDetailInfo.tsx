@@ -20,21 +20,23 @@ const CATEGORY_NAMES: Record<number | string, string> = {
   Sweets: "Sweets",
 };
 
+import { useCart } from "@/hooks/useCart";
+
 export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
   const [openHeritage, setOpenHeritage] = useState(false);
   const [openIngredients, setOpenIngredients] = useState(false);
 
+  const { addToCart, loading } = useCart();
   const inStock = product.stock > 0;
   const categoryLabel = CATEGORY_NAMES[product.category] || "Artisanal";
 
   const handleAddToCart = () => {
     if (!inStock) return;
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2500);
+    addToCart(product.id, quantity);
   };
+
 
   return (
     <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-28">
@@ -108,13 +110,14 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
-            disabled={!inStock}
+            disabled={!inStock || loading}
             onClick={handleAddToCart}
             className="flex-1 bg-primary text-white font-bold py-4 rounded-full hover:bg-primary-dark shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <ShoppingBag className="w-5 h-5" />
-            {added ? "✓ Added to Cart" : inStock ? `Add ${quantity} to Cart` : "Out of Stock"}
+            {loading ? "Adding..." : inStock ? `Add ${quantity} to Cart` : "Out of Stock"}
           </button>
+
 
           <button
             onClick={() => setWishlisted(!wishlisted)}

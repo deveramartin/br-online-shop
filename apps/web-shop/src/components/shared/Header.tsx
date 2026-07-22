@@ -7,11 +7,14 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ShoppingBag, Search, User, Menu, X, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/hooks/useCart";
+import { CartSheet } from "@/components/features/cart/CartSheet";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { status } = useSession();
+  const { totalItems, openCart } = useCart();
 
   const isAuthenticated = status === "authenticated";
 
@@ -90,11 +93,18 @@ export function Header() {
             </Link>
           </Button>
 
-          <Button size="icon" aria-label="Shopping Cart" className="relative rounded-full bg-primary text-white hover:bg-primary-dark shadow-sm">
+          <Button
+            size="icon"
+            onClick={openCart}
+            aria-label="Shopping Cart"
+            className="relative rounded-full bg-primary text-white hover:bg-primary-dark shadow-sm"
+          >
             <ShoppingBag className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 bg-secondary-light text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-              0
-            </span>
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 bg-secondary-light text-white text-[10px] font-bold min-w-4 h-4 px-1 rounded-full flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
           </Button>
 
           {/* Hamburger Button for Mobile / Small Screens */}
@@ -109,6 +119,9 @@ export function Header() {
           </Button>
         </div>
       </div>
+
+      {/* Cart Drawer */}
+      <CartSheet />
 
       {/* Mobile Sidebar Navigation Drawer */}
       {mobileMenuOpen && (
@@ -214,3 +227,4 @@ export function Header() {
     </header>
   );
 }
+
