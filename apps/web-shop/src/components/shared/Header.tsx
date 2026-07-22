@@ -39,7 +39,6 @@ export function Header() {
     { href: "/products", label: "Shop Catalog" },
     { href: "/about", label: "About" },
     { href: "/faq", label: "FAQ" },
-    ...(!isAuthenticated ? [{ href: "/signin", label: "Sign In" }] : []),
   ];
 
   return (
@@ -172,7 +171,7 @@ export function Header() {
                 );
               })}
 
-              {isAuthenticated && (
+              {isAuthenticated ? (
                 <Link
                   href="/profile"
                   className={`flex items-center justify-between px-4 py-3.5 rounded-xl text-base font-bold transition-all ${
@@ -183,6 +182,18 @@ export function Header() {
                 >
                   <span>My Profile</span>
                   <ChevronRight className={`w-4 h-4 ${pathname === "/profile" ? "text-white" : "text-muted-foreground"}`} />
+                </Link>
+              ) : (
+                <Link
+                  href="/signin"
+                  className={`flex items-center justify-between px-4 py-3.5 rounded-xl text-base font-bold transition-all ${
+                    pathname === "/signin"
+                      ? "bg-primary text-white shadow-sm"
+                      : "text-foreground hover:bg-surface-low hover:text-primary"
+                  }`}
+                >
+                  <span>Sign In</span>
+                  <ChevronRight className={`w-4 h-4 ${pathname === "/signin" ? "text-white" : "text-muted-foreground"}`} />
                 </Link>
               )}
             </nav>
