@@ -95,7 +95,7 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
         />
       </button>
 
-      {/* Bento Thumbnail 3 (+4 Photos badge matching .design-ref) */}
+      {/* Bento Thumbnail 3 */}
       <button
         onClick={() => setSelectedImage(imageList[2])}
         className={cn(
