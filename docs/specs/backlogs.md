@@ -75,37 +75,37 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 **1.1 Backend project scaffolding**
 
-- [ ] Create .NET Web API solution (ASP.NET Core)
-- [ ] Set up project structure (Controllers, Services, Repositories, DTOs, Models, Middleware)
-- [ ] Configure Entity Framework Core + connection to SQL Server/PostgreSQL
-- [ ] Set up dependency injection container
-- [ ] Configure CORS policy for Next.js frontend origin
-- [ ] Set up Serilog or built-in logging
-- [ ] Configure environment-based appsettings (Development/Staging/Production)
-- [ ] Set up global exception handling middleware
-- [ ] Set up API versioning
-- [ ] Configure Swagger/OpenAPI documentation
+- [x] Create .NET Web API solution (ASP.NET Core)
+- [x] Set up project structure (Controllers, Services, Repositories, DTOs, Models, Middleware)
+- [x] Configure Entity Framework Core + connection to SQL Server/PostgreSQL
+- [x] Set up dependency injection container
+- [x] Configure CORS policy for Next.js frontend origin
+- [x] Set up Serilog or built-in logging
+- [x] Configure environment-based appsettings (Development/Staging/Production)
+- [x] Set up global exception handling middleware
+- [x] Set up API versioning
+- [x] Configure Swagger/OpenAPI documentation
 
 **1.2 Frontend project scaffolding**
 
-- [ ] Create Next.js 14+ project (App Router)
-- [ ] Install and configure Tailwind CSS
-- [ ] Install and configure shadcn/ui (init, components.json, theme tokens)
-- [ ] Set up folder structure (app/, components/, lib/, hooks/, types/, services/)
-- [ ] Configure ESLint + Prettier
-- [ ] Set up environment variables (.env.local, API base URL)
-- [ ] Configure Axios or fetch wrapper for API calls
-- [ ] Set up global layout (header, footer, providers)
-- [ ] Configure brand color palette in tailwind.config + shadcn theme (from logo)
-- [ ] Add logo asset and favicon
+- [x] Create Next.js 14+ project (App Router)
+- [x] Install and configure Tailwind CSS
+- [x] Install and configure shadcn/ui (init, components.json, theme tokens)
+- [x] Set up folder structure (app/, components/, lib/, hooks/, types/, services/)
+- [x] Configure ESLint + Prettier
+- [x] Set up environment variables (.env.local, API base URL)
+- [x] Configure Axios or fetch wrapper for API calls
+- [x] Set up global layout (header, footer, providers)
+- [x] Configure brand color palette in tailwind.config + shadcn theme (from logo)
+- [x] Add logo asset and favicon
 
 **1.3 DevOps / shared setup**
 
-- [ ] Set up Git repo + branching strategy (main/dev/feature branches)
-- [ ] Set up CI pipeline (build + lint checks) for both projects
-- [ ] Set up database migrations workflow
-- [ ] Decide hosting (e.g., Azure App Service / backend, Vercel / frontend)
-- [ ] Set up basic error monitoring (e.g., Sentry) for both apps
+- [x] Set up Git repo + branching strategy (main/dev/feature branches)
+- [x] Set up CI pipeline (build + lint checks) for both projects
+- [x] Set up database migrations workflow
+- [x] Decide hosting (e.g., Azure App Service / backend, Vercel / frontend)
+- [x] Set up basic error monitoring (e.g., Sentry) for both apps
 
 ---
 
