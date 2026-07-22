@@ -3,12 +3,16 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { ShoppingBag, Search, User, Menu, X, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { status } = useSession();
+
+  const isAuthenticated = status === "authenticated";
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -30,8 +34,7 @@ export function Header() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/products", label: "Shop Catalog" },
-    { href: "/profile", label: "My Profile" },
-    { href: "/signin", label: "Sign In" },
+    ...(!isAuthenticated ? [{ href: "/signin", label: "Sign In" }] : []),
   ];
 
   return (
@@ -76,12 +79,12 @@ export function Header() {
           </Button>
 
           <Button asChild variant="ghost" size="icon" aria-label="Account" className="rounded-full hidden sm:flex">
-            <Link href="/profile">
+            <Link href={isAuthenticated ? "/profile" : "/signin"}>
               <User className="w-5 h-5" />
             </Link>
           </Button>
 
-          <Button size="icon" aria-label="Shopping Cart" className="relative rounded-full bg-primary text-[#ffffff] hover:bg-primary-dark shadow-sm">
+          <Button size="icon" aria-label="Shopping Cart" className="relative rounded-full bg-primary text-white hover:bg-primary-dark shadow-sm">
             <ShoppingBag className="w-5 h-5" />
             <span className="absolute -top-1 -right-1 bg-secondary-light text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
               0
@@ -159,6 +162,20 @@ export function Header() {
                   </Link>
                 );
               })}
+
+              {isAuthenticated && (
+                <Link
+                  href="/profile"
+                  className={`flex items-center justify-between px-4 py-3.5 rounded-xl text-base font-bold transition-all ${
+                    pathname === "/profile"
+                      ? "bg-primary text-white shadow-sm"
+                      : "text-foreground hover:bg-surface-low hover:text-primary"
+                  }`}
+                >
+                  <span>My Profile</span>
+                  <ChevronRight className={`w-4 h-4 ${pathname === "/profile" ? "text-white" : "text-muted-foreground"}`} />
+                </Link>
+              )}
             </nav>
 
             {/* Sidebar Footer Action */}
