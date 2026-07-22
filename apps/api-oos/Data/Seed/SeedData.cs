@@ -1,7 +1,9 @@
 namespace ApiOos.Data.Seed;
 
 using ApiOos.Data;
+using ApiOos.Enums;
 using ApiOos.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 public static class SeedData

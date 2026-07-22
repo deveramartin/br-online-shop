@@ -3,8 +3,10 @@ namespace ApiOos.Tests.Services;
 using ApiOos.Data;
 using ApiOos.DTOs.Requests.Cart;
 using ApiOos.DTOs.Requests.Orders;
+using ApiOos.Enums;
 using ApiOos.Models;
 using ApiOos.Repositories;
+
 using ApiOos.Services;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;

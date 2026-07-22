@@ -1,5 +1,8 @@
 namespace ApiOos.Models;
 
+using ApiOos.Enums;
+
+
 public class Payment
 {
     public Guid Id { get; set; } = Guid.NewGuid();

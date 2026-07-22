@@ -1,6 +1,8 @@
 namespace ApiOos.DTOs.Requests;
 
+using ApiOos.Enums;
 using ApiOos.Models;
+
 
 public class ProductQueryParams
 {

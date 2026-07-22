@@ -3,11 +3,13 @@ namespace ApiOos.Services;
 using ApiOos.Data;
 using ApiOos.DTOs.Requests.Orders;
 using ApiOos.DTOs.Responses.Orders;
+using ApiOos.Enums;
 using ApiOos.Interfaces.Repositories;
 using ApiOos.Interfaces.Services;
 using ApiOos.Mappers;
 using ApiOos.Models;
 using Microsoft.EntityFrameworkCore;
+
 
 public class OrderService : IOrderService
 {
