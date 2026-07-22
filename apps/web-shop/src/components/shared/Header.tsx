@@ -110,8 +110,8 @@ export function Header() {
             onClick={() => setMobileMenuOpen(false)}
           />
 
-          {/* Sidebar Drawer Container */}
-          <div className="relative ml-auto w-full max-w-xs bg-surface-card h-full shadow-2xl flex flex-col z-10 border-l border-border/70 animate-page-enter">
+          {/* Sidebar Drawer Container (Smooth Slide Right Entrance) */}
+          <div className="relative mr-auto w-full max-w-xs bg-surface-card h-full shadow-2xl flex flex-col z-10 border-r border-border/70 animate-slide-right">
             {/* Sidebar Header */}
             <div className="p-6 border-b border-border/70 flex items-center justify-between bg-surface-low">
               <div className="flex items-center gap-3">
