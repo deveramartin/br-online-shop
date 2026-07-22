@@ -81,7 +81,7 @@ export function Header() {
             </Link>
           </Button>
 
-          <Button size="icon" aria-label="Shopping Cart" className="relative rounded-full bg-primary text-white hover:bg-primary-dark shadow-sm">
+          <Button size="icon" aria-label="Shopping Cart" className="relative rounded-full bg-primary text-[#ffffff] hover:bg-primary-dark shadow-sm">
             <ShoppingBag className="w-5 h-5" />
             <span className="absolute -top-1 -right-1 bg-secondary-light text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
               0
@@ -110,8 +110,8 @@ export function Header() {
             onClick={() => setMobileMenuOpen(false)}
           />
 
-          {/* Sidebar Drawer Container (Smooth Slide Right Entrance) */}
-          <div className="relative mr-auto w-full max-w-xs bg-surface-card h-full shadow-2xl flex flex-col z-10 border-r border-border/70 animate-slide-right">
+          {/* Sidebar Drawer Container (Smooth Slide Left Entrance) */}
+          <div className="relative ml-auto w-full max-w-xs bg-surface-card h-full shadow-2xl flex flex-col z-10 border-l border-border/70 animate-slide-left">
             {/* Sidebar Header */}
             <div className="p-6 border-b border-border/70 flex items-center justify-between bg-surface-low">
               <div className="flex items-center gap-3">
