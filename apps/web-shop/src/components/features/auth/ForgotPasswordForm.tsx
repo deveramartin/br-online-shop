@@ -6,18 +6,20 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forgotPasswordSchema, type ForgotPasswordFormData } from "@/lib/validators/auth";
 import { authApi } from "@/lib/api/api-client";
-import { FormField } from "@/components/ui/FormField";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 export function ForgotPasswordForm() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ForgotPasswordFormData>({
+  const form = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
   });
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
@@ -35,54 +37,64 @@ export function ForgotPasswordForm() {
 
   return (
     <section className="w-full max-w-md">
-      <div className="bg-white border border-[var(--border)] rounded-xl shadow-sm p-8 md:p-10">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[var(--primary)] mb-2">Reset Password</h1>
-          <p className="text-sm text-[var(--muted)]">
+      <Card className="shadow-sm">
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl font-bold text-[var(--primary)] mb-2">Reset Password</CardTitle>
+          <CardDescription className="text-sm text-[var(--muted)]">
             Enter your account&apos;s email address and we&apos;ll send you password reset instructions.
-          </p>
-        </div>
+          </CardDescription>
+        </CardHeader>
 
-        {isSuccess ? (
-          <div className="text-center space-y-4">
-            <div className="p-4 rounded-lg bg-[var(--surface-container)] text-[var(--primary)] text-sm font-medium">
-              If an account exists with that email address, password reset instructions have been sent.
-            </div>
-            <Link
-              href="/signin"
-              className="inline-block mt-4 text-sm font-semibold text-[var(--primary)] hover:underline"
-            >
-              ← Back to Sign in
-            </Link>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <FormField label="Email Address" error={errors.email?.message} htmlFor="forgot-email">
-              <input
-                id="forgot-email"
-                type="email"
-                placeholder="name@example.com"
-                className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)] transition-all text-base"
-                {...register("email")}
-              />
-            </FormField>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-[var(--primary)] text-white font-semibold py-3.5 rounded-full hover:bg-[var(--primary-dark)] active:scale-[0.98] transition-all shadow-md mt-4 cursor-pointer disabled:opacity-50"
-            >
-              {isLoading ? "Sending..." : "Send Reset Instructions"}
-            </button>
-
-            <div className="text-center pt-4">
-              <Link href="/signin" className="text-sm font-semibold text-[var(--primary)] hover:underline">
-                ← Back to Sign in
+        <CardContent>
+          {isSuccess ? (
+            <div className="text-center space-y-4">
+              <div className="p-4 rounded-lg bg-[var(--surface-container)] text-[var(--primary)] text-sm font-medium">
+                If an account exists with that email address, password reset instructions have been sent.
+              </div>
+              <Link
+                href="/signin"
+                className="inline-block mt-4 text-sm font-semibold text-[var(--primary)] hover:underline"
+              >
+                &larr; Back to Sign in
               </Link>
             </div>
-          </form>
+          ) : (
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Address</FormLabel>
+                      <FormControl>
+                        <Input id="forgot-email" type="email" placeholder="name@example.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] shadow-md mt-4 cursor-pointer"
+                >
+                  {isLoading ? "Sending..." : "Send Reset Instructions"}
+                </Button>
+              </form>
+            </Form>
+          )}
+        </CardContent>
+
+        {!isSuccess && (
+          <CardFooter className="justify-center border-t pt-6">
+            <Link href="/signin" className="text-sm font-semibold text-[var(--primary)] hover:underline">
+              &larr; Back to Sign in
+            </Link>
+          </CardFooter>
         )}
-      </div>
+      </Card>
     </section>
   );
 }

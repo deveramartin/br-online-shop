@@ -4,12 +4,16 @@ import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { User, MapPin, ScrollText, LogOut, Plus } from "lucide-react";
 import { profileSchema, type ProfileFormData, type AddressFormData } from "@/lib/validators/auth";
 import type { AddressDto, UserDto } from "@/types/auth";
 import { userApi } from "@/lib/api/api-client";
-import { FormField } from "@/components/ui/FormField";
 import { AddressCard } from "@/components/features/profile/AddressCard";
 import { AddressModal } from "@/components/features/profile/AddressModal";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type TabType = "personal" | "addresses" | "orders";
 
@@ -27,126 +31,108 @@ export function ProfilePage() {
   const [editingAddress, setEditingAddress] = useState<AddressDto | null>(null);
   const [isSavingAddress, setIsSavingAddress] = useState(false);
 
-  // Status feedback
-  const [profileSuccessMessage, setProfileSuccessMessage] = useState<string | null>(null);
-  const [profileErrorMessage, setProfileErrorMessage] = useState<string | null>(null);
-
+  // Profile form
   const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
+    register: registerProfile,
+    handleSubmit: handleSubmitProfile,
+    reset: resetProfile,
+    formState: { errors: profileErrors, isSubmitting: isSubmittingProfile },
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
   });
 
+  const [profileSuccessMessage, setProfileSuccessMessage] = useState<string | null>(null);
+  const [profileErrorMessage, setProfileErrorMessage] = useState<string | null>(null);
+
   useEffect(() => {
     if (!token) return;
 
-    async function loadData() {
-      setIsLoadingUser(true);
+    let isMounted = true;
+    async function fetchData() {
       try {
-        const [userData, addressData] = await Promise.all([
+        setIsLoadingUser(true);
+        const [meData, addrData] = await Promise.all([
           userApi.getMe(token),
           userApi.getAddresses(token),
         ]);
-        setUser(userData);
-        setAddresses(addressData);
-        reset({
-          fullName: userData.fullName,
-          email: userData.email,
-          phoneNumber: userData.phoneNumber || "",
-          preferredLanguage: userData.preferredLanguage || "en",
-        });
+        if (isMounted) {
+          setUser(meData);
+          setAddresses(addrData);
+          resetProfile({
+            fullName: meData.fullName,
+            phoneNumber: meData.phoneNumber || "",
+          });
+        }
       } catch (err) {
-        console.error("Failed to load profile:", err);
+        console.error("Failed to load profile data", err);
       } finally {
-        setIsLoadingUser(false);
+        if (isMounted) setIsLoadingUser(false);
       }
     }
 
-    loadData();
-  }, [token, reset]);
+    fetchData();
+    return () => {
+      isMounted = false;
+    };
+  }, [token, resetProfile]);
 
   const onProfileSubmit = async (data: ProfileFormData) => {
-    if (!token) return;
     setProfileSuccessMessage(null);
     setProfileErrorMessage(null);
-
     try {
-      const updated = await userApi.updateMe(
-        {
-          fullName: data.fullName,
-          phoneNumber: data.phoneNumber,
-          preferredLanguage: data.preferredLanguage,
-        },
-        token
-      );
+      const updated = await userApi.updateMe(data, token);
       setUser(updated);
       setProfileSuccessMessage("Profile updated successfully!");
-    } catch (err: unknown) {
-      const apiErr = err as { data?: { detail?: string } };
-      setProfileErrorMessage(apiErr?.data?.detail || "Failed to update profile.");
+    } catch (err) {
+      setProfileErrorMessage(err instanceof Error ? err.message : "Failed to update profile.");
     }
   };
 
-  // Address Handlers
   const handleOpenAddAddress = () => {
     setEditingAddress(null);
     setIsAddressModalOpen(true);
   };
 
-  const handleEditAddress = (addr: AddressDto) => {
-    setEditingAddress(addr);
+  const handleEditAddress = (address: AddressDto) => {
+    setEditingAddress(address);
     setIsAddressModalOpen(true);
   };
 
-  const handleDeleteAddress = async (id: string) => {
-    if (!token) return;
-    try {
-      await userApi.deleteAddress(id, token);
-      setAddresses((prev) => prev.filter((a) => a.id !== id));
-    } catch (err) {
-      console.error("Failed to delete address:", err);
-    }
-  };
-
   const handleSaveAddress = async (data: AddressFormData) => {
-    if (!token) return;
-    setIsSavingAddress(true);
     try {
+      setIsSavingAddress(true);
       if (editingAddress) {
         const updated = await userApi.updateAddress(editingAddress.id, data, token);
-        setAddresses((prev) =>
-          prev.map((a) => (a.id === updated.id ? updated : data.isDefault ? { ...a, isDefault: false } : a))
-        );
+        setAddresses((prev) => prev.map((a) => (a.id === updated.id ? updated : a)));
       } else {
         const created = await userApi.addAddress(data, token);
-        setAddresses((prev) => [
-          created,
-          ...prev.map((a) => (data.isDefault ? { ...a, isDefault: false } : a)),
-        ]);
+        setAddresses((prev) => [...prev, created]);
       }
-    } catch (err) {
-      console.error("Failed to save address:", err);
+
+      // Refresh address list to ensure defaults are correctly rendered
+      const refreshed = await userApi.getAddresses(token);
+      setAddresses(refreshed);
     } finally {
       setIsSavingAddress(false);
     }
   };
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[var(--foreground)]">Account Settings</h1>
-        <p className="text-[var(--muted)] mt-1">
-          Manage your profile, addresses, and track your artisan ube halaya orders.
-        </p>
-      </div>
+  const handleDeleteAddress = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this address?")) return;
+    try {
+      await userApi.deleteAddress(id, token);
+      setAddresses((prev) => prev.filter((a) => a.id !== id));
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to delete address.");
+    }
+  };
 
-      {/* Grid Layout */}
+  return (
+    <div className="max-w-[1280px] mx-auto px-6 py-12">
+      <h1 className="text-3xl font-extrabold text-[var(--primary)] mb-8">My Account</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        {/* Sidebar Nav */}
+        {/* Navigation Sidebar */}
         <aside className="md:col-span-3">
           <nav className="flex flex-col gap-1 bg-white p-2 rounded-xl border border-[var(--border)] shadow-sm">
             <button
@@ -157,7 +143,7 @@ export function ProfilePage() {
                   : "text-[var(--muted)] hover:bg-[var(--surface-low)]"
               }`}
             >
-              <span>👤</span> Personal Information
+              <User className="w-4 h-4" /> Personal Information
             </button>
             <button
               onClick={() => setActiveTab("addresses")}
@@ -167,7 +153,7 @@ export function ProfilePage() {
                   : "text-[var(--muted)] hover:bg-[var(--surface-low)]"
               }`}
             >
-              <span>📍</span> Saved Addresses
+              <MapPin className="w-4 h-4" /> Saved Addresses
             </button>
             <button
               onClick={() => setActiveTab("orders")}
@@ -177,14 +163,14 @@ export function ProfilePage() {
                   : "text-[var(--muted)] hover:bg-[var(--surface-low)]"
               }`}
             >
-              <span>📜</span> Order History
+              <ScrollText className="w-4 h-4" /> Order History
             </button>
             <div className="pt-4 mt-2 border-t border-[var(--border)]">
               <button
                 onClick={() => signOut({ callbackUrl: "/signin" })}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold text-[var(--error)] hover:bg-[var(--error-container)]/30 transition-all cursor-pointer"
               >
-                <span>🚪</span> Sign Out
+                <LogOut className="w-4 h-4" /> Sign Out
               </button>
             </div>
           </nav>
@@ -201,11 +187,11 @@ export function ProfilePage() {
                 <div className="space-y-8 animate-in fade-in duration-300">
                   {/* Header / Avatar */}
                   <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-[var(--border)]">
-                    <div className="relative">
-                      <div className="w-20 h-20 rounded-full bg-[var(--primary-fixed)] text-[var(--primary)] flex items-center justify-center text-2xl font-bold border-2 border-[var(--primary)]">
+                    <Avatar className="w-20 h-20 border-2 border-[var(--primary)] text-2xl font-bold bg-[var(--primary-fixed)] text-[var(--primary)]">
+                      <AvatarFallback>
                         {user?.fullName ? user.fullName.charAt(0).toUpperCase() : "U"}
-                      </div>
-                    </div>
+                      </AvatarFallback>
+                    </Avatar>
                     <div className="text-center sm:text-left">
                       <h2 className="text-xl font-bold text-gray-900">{user?.fullName}</h2>
                       <p className="text-sm text-[var(--muted)]">{user?.email}</p>
@@ -227,54 +213,51 @@ export function ProfilePage() {
                     </div>
                   )}
 
-                  <form onSubmit={handleSubmit(onProfileSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField label="Full Name" error={errors.fullName?.message} htmlFor="prof-name">
-                      <input
+                  <form onSubmit={handleSubmitProfile(onProfileSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="prof-name">Full Name</Label>
+                      <Input
                         id="prof-name"
                         type="text"
-                        className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-                        {...register("fullName")}
+                        {...registerProfile("fullName")}
                       />
-                    </FormField>
+                      {profileErrors.fullName && (
+                        <p className="text-xs text-[var(--error)]">{profileErrors.fullName.message}</p>
+                      )}
+                    </div>
 
-                    <FormField label="Email Address" htmlFor="prof-email">
-                      <input
+                    <div className="space-y-2">
+                      <Label htmlFor="prof-email">Email Address</Label>
+                      <Input
                         id="prof-email"
                         type="email"
                         disabled
                         value={user?.email || ""}
-                        className="w-full bg-gray-100 border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm text-gray-500 cursor-not-allowed"
+                        className="bg-gray-100 text-gray-500 cursor-not-allowed"
                       />
-                    </FormField>
+                    </div>
 
-                    <FormField label="Phone Number" error={errors.phoneNumber?.message} htmlFor="prof-phone">
-                      <input
+                    <div className="space-y-2">
+                      <Label htmlFor="prof-phone">Phone Number</Label>
+                      <Input
                         id="prof-phone"
                         type="tel"
                         placeholder="+63 917 123 4567"
-                        className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-                        {...register("phoneNumber")}
+                        {...registerProfile("phoneNumber")}
                       />
-                    </FormField>
-
-                    <FormField label="Preferred Language" htmlFor="prof-lang">
-                      <select
-                        id="prof-lang"
-                        className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-                        {...register("preferredLanguage")}
-                      >
-                        <option value="en">English</option>
-                        <option value="tl">Tagalog</option>
-                      </select>
-                    </FormField>
+                      {profileErrors.phoneNumber && (
+                        <p className="text-xs text-[var(--error)]">{profileErrors.phoneNumber.message}</p>
+                      )}
+                    </div>
 
                     <div className="md:col-span-2 pt-4">
-                      <button
+                      <Button
                         type="submit"
+                        disabled={isSubmittingProfile}
                         className="bg-[var(--primary)] text-white px-8 py-3 rounded-full font-semibold text-sm shadow-md hover:bg-[var(--primary-dark)] transition-all cursor-pointer"
                       >
-                        Save Changes
-                      </button>
+                        {isSubmittingProfile ? "Saving..." : "Save Changes"}
+                      </Button>
                     </div>
                   </form>
                 </div>
@@ -285,12 +268,12 @@ export function ProfilePage() {
                 <div className="space-y-6 animate-in fade-in duration-300">
                   <div className="flex justify-between items-center pb-4 border-b border-[var(--border)]">
                     <h2 className="text-xl font-bold text-gray-900">Your Addresses</h2>
-                    <button
+                    <Button
                       onClick={handleOpenAddAddress}
                       className="bg-[var(--primary)] text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-[var(--primary-dark)] transition-colors cursor-pointer flex items-center gap-1.5"
                     >
-                      <span>➕</span> Add New
-                    </button>
+                      <Plus className="w-4 h-4" /> Add New
+                    </Button>
                   </div>
 
                   {addresses.length === 0 ? (

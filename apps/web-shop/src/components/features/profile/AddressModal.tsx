@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addressSchema, type AddressFormData } from "@/lib/validators/auth";
 import type { AddressDto } from "@/types/auth";
-import { Modal } from "@/components/ui/Modal";
-import { FormField } from "@/components/ui/FormField";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface AddressModalProps {
   isOpen: boolean;
@@ -23,12 +25,7 @@ export function AddressModal({
   initialData,
   isLoading,
 }: AddressModalProps) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<AddressFormData>({
+  const form = useForm<AddressFormData>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
       label: "Home",
@@ -43,7 +40,7 @@ export function AddressModal({
 
   useEffect(() => {
     if (initialData) {
-      reset({
+      form.reset({
         label: initialData.label,
         street: initialData.street,
         city: initialData.city,
@@ -53,7 +50,7 @@ export function AddressModal({
         isDefault: initialData.isDefault,
       });
     } else {
-      reset({
+      form.reset({
         label: "Home",
         street: "",
         city: "",
@@ -63,112 +60,148 @@ export function AddressModal({
         isDefault: false,
       });
     }
-  }, [initialData, reset, isOpen]);
+  }, [initialData, form, isOpen]);
 
-  const handleFormSubmit: SubmitHandler<AddressFormData> = async (data) => {
+  const handleFormSubmit = async (data: AddressFormData) => {
     await onSubmit(data);
     onClose();
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={initialData ? "Edit Address" : "Add New Address"}
-    >
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-        <FormField label="Label" error={errors.label?.message} htmlFor="addr-label">
-          <input
-            id="addr-label"
-            type="text"
-            placeholder="e.g. Home, Office"
-            className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-            {...register("label")}
-          />
-        </FormField>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-bold text-[var(--primary)]">
+            {initialData ? "Edit Address" : "Add New Address"}
+          </DialogTitle>
+        </DialogHeader>
 
-        <FormField label="Street Address" error={errors.street?.message} htmlFor="addr-street">
-          <input
-            id="addr-street"
-            type="text"
-            placeholder="123 Purple Lane, Brgy. San Jose"
-            className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-            {...register("street")}
-          />
-        </FormField>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="City" error={errors.city?.message} htmlFor="addr-city">
-            <input
-              id="addr-city"
-              type="text"
-              placeholder="Quezon City"
-              className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-              {...register("city")}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="label"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Label</FormLabel>
+                  <FormControl>
+                    <Input id="addr-label" type="text" placeholder="e.g. Home, Office" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </FormField>
 
-          <FormField label="Province / State" error={errors.province?.message} htmlFor="addr-province">
-            <input
-              id="addr-province"
-              type="text"
-              placeholder="Metro Manila"
-              className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-              {...register("province")}
+            <FormField
+              control={form.control}
+              name="street"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Street Address</FormLabel>
+                  <FormControl>
+                    <Input id="addr-street" type="text" placeholder="123 Purple Lane, Brgy. San Jose" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </FormField>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="Postal Code" error={errors.postalCode?.message} htmlFor="addr-postal">
-            <input
-              id="addr-postal"
-              type="text"
-              placeholder="1100"
-              className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-              {...register("postalCode")}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>City</FormLabel>
+                    <FormControl>
+                      <Input id="addr-city" type="text" placeholder="Quezon City" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="province"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Province / State</FormLabel>
+                    <FormControl>
+                      <Input id="addr-province" type="text" placeholder="Metro Manila" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="postalCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Postal Code</FormLabel>
+                    <FormControl>
+                      <Input id="addr-postal" type="text" placeholder="1100" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Country</FormLabel>
+                    <FormControl>
+                      <Input id="addr-country" type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="isDefault"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center space-x-2 space-y-0 pt-2">
+                  <FormControl>
+                    <input
+                      id="addr-default"
+                      type="checkbox"
+                      checked={field.value}
+                      onChange={field.onChange}
+                      className="w-4 h-4 rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer"
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor="addr-default" className="text-sm font-medium text-gray-700 cursor-pointer">
+                    Set as default shipping address
+                  </FormLabel>
+                </FormItem>
+              )}
             />
-          </FormField>
 
-          <FormField label="Country" error={errors.country?.message} htmlFor="addr-country">
-            <input
-              id="addr-country"
-              type="text"
-              className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20"
-              {...register("country")}
-            />
-          </FormField>
-        </div>
-
-        <div className="flex items-center gap-2 pt-2">
-          <input
-            id="addr-default"
-            type="checkbox"
-            className="w-4 h-4 rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer"
-            {...register("isDefault")}
-          />
-          <label htmlFor="addr-default" className="text-sm font-medium text-gray-700 cursor-pointer">
-            Set as default shipping address
-          </label>
-        </div>
-
-        <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border)]">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2.5 rounded-full border border-[var(--border)] text-sm font-medium hover:bg-gray-50 cursor-pointer"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="px-6 py-2.5 rounded-full bg-[var(--primary)] text-white text-sm font-semibold hover:bg-[var(--primary-dark)] transition-colors cursor-pointer disabled:opacity-50"
-          >
-            {isLoading ? "Saving..." : initialData ? "Save Changes" : "Add Address"}
-          </button>
-        </div>
-      </form>
-    </Modal>
+            <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border)]">
+              <Button type="button" variant="outline" onClick={onClose} className="rounded-full">
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] rounded-full px-6"
+              >
+                {isLoading ? "Saving..." : initialData ? "Save Changes" : "Add Address"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

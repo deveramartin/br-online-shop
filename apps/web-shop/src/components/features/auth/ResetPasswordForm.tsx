@@ -7,7 +7,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resetPasswordSchema, type ResetPasswordFormData } from "@/lib/validators/auth";
 import { authApi } from "@/lib/api/api-client";
-import { FormField } from "@/components/ui/FormField";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 export function ResetPasswordForm() {
   const router = useRouter();
@@ -18,12 +21,12 @@ export function ResetPasswordForm() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ResetPasswordFormData>({
+  const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
@@ -49,59 +52,73 @@ export function ResetPasswordForm() {
 
   return (
     <section className="w-full max-w-md">
-      <div className="bg-white border border-[var(--border)] rounded-xl shadow-sm p-8 md:p-10">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[var(--primary)] mb-2">Set New Password</h1>
-          <p className="text-sm text-[var(--muted)]">Please enter a new password for your account.</p>
-        </div>
+      <Card className="shadow-sm">
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl font-bold text-[var(--primary)] mb-2">Set New Password</CardTitle>
+          <CardDescription className="text-sm text-[var(--muted)]">
+            Please enter a new password for your account.
+          </CardDescription>
+        </CardHeader>
 
-        {serverError && (
-          <div className="mb-6 p-4 rounded-lg bg-[var(--error-container)] text-[var(--on-error-container)] text-sm">
-            {serverError}
-          </div>
-        )}
-
-        {isSuccess ? (
-          <div className="text-center space-y-4">
-            <div className="p-4 rounded-lg bg-[var(--surface-container)] text-[var(--primary)] text-sm font-medium">
-              Password has been reset successfully! Redirecting you to sign in...
+        <CardContent>
+          {serverError && (
+            <div className="mb-6 p-4 rounded-lg bg-[var(--error-container)] text-[var(--on-error-container)] text-sm">
+              {serverError}
             </div>
-            <Link href="/signin" className="inline-block mt-4 text-sm font-semibold text-[var(--primary)] hover:underline">
-              Click here if not redirected automatically
-            </Link>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <FormField label="New Password" error={errors.password?.message} htmlFor="reset-password">
-              <input
-                id="reset-password"
-                type="password"
-                placeholder="••••••••"
-                className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)] transition-all text-base"
-                {...register("password")}
-              />
-            </FormField>
+          )}
 
-            <FormField label="Confirm New Password" error={errors.confirmPassword?.message} htmlFor="reset-confirm">
-              <input
-                id="reset-confirm"
-                type="password"
-                placeholder="••••••••"
-                className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)] transition-all text-base"
-                {...register("confirmPassword")}
-              />
-            </FormField>
+          {isSuccess ? (
+            <div className="text-center space-y-4">
+              <div className="p-4 rounded-lg bg-[var(--surface-container)] text-[var(--primary)] text-sm font-medium">
+                Password has been reset successfully! Redirecting you to sign in...
+              </div>
+              <Link href="/signin" className="inline-block mt-4 text-sm font-semibold text-[var(--primary)] hover:underline">
+                Click here if not redirected automatically
+              </Link>
+            </div>
+          ) : (
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>New Password</FormLabel>
+                      <FormControl>
+                        <Input id="reset-password" type="password" placeholder="••••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-[var(--primary)] text-white font-semibold py-3.5 rounded-full hover:bg-[var(--primary-dark)] active:scale-[0.98] transition-all shadow-md mt-4 cursor-pointer disabled:opacity-50"
-            >
-              {isLoading ? "Resetting Password..." : "Update Password"}
-            </button>
-          </form>
-        )}
-      </div>
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm New Password</FormLabel>
+                      <FormControl>
+                        <Input id="reset-confirm" type="password" placeholder="••••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] shadow-md mt-4 cursor-pointer"
+                >
+                  {isLoading ? "Resetting Password..." : "Update Password"}
+                </Button>
+              </form>
+            </Form>
+          )}
+        </CardContent>
+      </Card>
     </section>
   );
 }

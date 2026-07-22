@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
         if (!string.IsNullOrEmpty(connectionString))
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(connectionString));
+                options.UseSqlite(connectionString));
         }
         return services;
     }

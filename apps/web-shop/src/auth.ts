@@ -55,14 +55,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async authorized({ auth, request }) {
       const { pathname } = request.nextUrl;
-      const publicPaths = ["/signin", "/signup", "/forgot-password", "/reset-password"];
-      const isPublicPath = publicPaths.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+      const authGuestOnlyPaths = ["/signin", "/signup", "/forgot-password", "/reset-password"];
+      const isAuthGuestOnlyPath = authGuestOnlyPaths.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+
+      const publicPaths = ["/", "/catalog", "/about", "/contact", "/terms", "/privacy", "/faq"];
+      const isPublicPath = publicPaths.some((p) => pathname === p || (p !== "/" && pathname.startsWith(`${p}/`)));
+
       const isApiAuthPath = pathname.startsWith("/api/auth");
 
-      if (isPublicPath || isApiAuthPath) {
-        if (auth?.user && isPublicPath) {
-          return Response.redirect(new URL("/", request.url));
-        }
+      if (auth?.user && isAuthGuestOnlyPath) {
+        return Response.redirect(new URL("/", request.url));
+      }
+
+      if (isPublicPath || isAuthGuestOnlyPath || isApiAuthPath) {
         return true;
       }
 

@@ -8,19 +8,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { registerSchema, type RegisterFormData } from "@/lib/validators/auth";
 import { authApi } from "@/lib/api/api-client";
-import { FormField } from "@/components/ui/FormField";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 export function SignupForm() {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
+  const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      terms: false,
+    },
   });
 
   const onSubmit = async (data: RegisterFormData) => {
@@ -60,102 +66,138 @@ export function SignupForm() {
 
   return (
     <section className="w-full max-w-lg">
-      <div className="bg-white border border-[var(--border)] rounded-xl shadow-sm p-8 md:p-10">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[var(--primary)] mb-2">Bren Raphael&apos;s</h1>
-          <p className="text-sm text-[var(--muted)]">
+      <Card className="shadow-sm">
+        <CardHeader className="flex flex-col items-center text-center">
+          <img
+            src="/logo.jpeg"
+            alt="Bren Raphael's Logo"
+            className="w-16 h-16 rounded-full object-cover shadow-sm mb-4"
+          />
+          <CardTitle className="text-3xl font-bold text-[var(--primary)] mb-2">Bren Raphael&apos;s</CardTitle>
+          <CardDescription className="text-sm text-[var(--muted)]">
             Join our family and experience traditional Filipino sweets.
-          </p>
-        </div>
+          </CardDescription>
+        </CardHeader>
 
-        {serverError && (
-          <div className="mb-6 p-4 rounded-lg bg-[var(--error-container)] text-[var(--on-error-container)] text-sm">
-            {serverError}
-          </div>
-        )}
+        <CardContent>
+          {serverError && (
+            <div className="mb-6 p-4 rounded-lg bg-[var(--error-container)] text-[var(--on-error-container)] text-sm">
+              {serverError}
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <FormField label="Full Name" error={errors.fullName?.message} htmlFor="signup-name">
-            <input
-              id="signup-name"
-              type="text"
-              placeholder="John Doe"
-              className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)] transition-all text-base"
-              {...register("fullName")}
-            />
-          </FormField>
-
-          <FormField label="Email Address" error={errors.email?.message} htmlFor="signup-email">
-            <input
-              id="signup-email"
-              type="email"
-              placeholder="name@example.com"
-              className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)] transition-all text-base"
-              {...register("email")}
-            />
-          </FormField>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label="Password" error={errors.password?.message} htmlFor="signup-password">
-              <input
-                id="signup-password"
-                type="password"
-                placeholder="••••••••"
-                className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)] transition-all text-base"
-                {...register("password")}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input id="signup-name" type="text" placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </FormField>
 
-            <FormField label="Confirm Password" error={errors.confirmPassword?.message} htmlFor="signup-confirm">
-              <input
-                id="signup-confirm"
-                type="password"
-                placeholder="••••••••"
-                className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)] transition-all text-base"
-                {...register("confirmPassword")}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email Address</FormLabel>
+                    <FormControl>
+                      <Input id="signup-email" type="email" placeholder="name@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </FormField>
-          </div>
 
-          <div className="flex items-start gap-3 py-2">
-            <input
-              id="terms"
-              type="checkbox"
-              className="mt-1 w-4 h-4 rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer"
-              {...register("terms")}
-            />
-            <label htmlFor="terms" className="text-xs text-[var(--muted)] leading-tight cursor-pointer">
-              I agree to the{" "}
-              <a href="#" className="text-[var(--primary)] hover:underline">
-                Terms of Service
-              </a>{" "}
-              and{" "}
-              <a href="#" className="text-[var(--primary)] hover:underline">
-                Privacy Policy
-              </a>
-              .
-            </label>
-          </div>
-          {errors.terms && <p className="text-xs text-[var(--error)]">{errors.terms.message}</p>}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input id="signup-password" type="password" placeholder="••••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-[var(--primary)] text-white font-semibold py-3.5 rounded-full hover:bg-[var(--primary-dark)] active:scale-[0.98] transition-all shadow-md mt-4 cursor-pointer disabled:opacity-50"
-          >
-            {isLoading ? "Creating Account..." : "Create Account"}
-          </button>
-        </form>
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <Input id="signup-confirm" type="password" placeholder="••••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-        <div className="mt-8 pt-6 border-t border-[var(--border)] text-center">
+              <FormField
+                control={form.control}
+                name="terms"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-2">
+                    <FormControl>
+                      <input
+                        id="terms"
+                        type="checkbox"
+                        checked={field.value}
+                        onChange={field.onChange}
+                        className="mt-1 w-4 h-4 rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer"
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel htmlFor="terms" className="text-xs text-[var(--muted)] leading-tight cursor-pointer">
+                        I agree to the{" "}
+                        <Link href="/terms" className="text-[var(--primary)] hover:underline">
+                          Terms of Service
+                        </Link>{" "}
+                        and{" "}
+                        <Link href="/privacy" className="text-[var(--primary)] hover:underline">
+                          Privacy Policy
+                        </Link>
+                        .
+                      </FormLabel>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] shadow-md mt-4 cursor-pointer"
+              >
+                {isLoading ? "Creating Account..." : "Create Account"}
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+
+        <CardFooter className="justify-center border-t pt-6">
           <p className="text-sm text-[var(--muted)]">
             Already have an account?{" "}
             <Link href="/signin" className="text-[var(--primary)] font-semibold hover:underline">
               Log in
             </Link>
           </p>
-        </div>
-      </div>
+        </CardFooter>
+      </Card>
     </section>
   );
 }

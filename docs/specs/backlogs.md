@@ -165,10 +165,10 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 **3.2 Landing page**
 
-- [ ] Frontend: Hero section component
-- [ ] Frontend: Featured products section (shadcn Card grid)
-- [ ] Frontend: Testimonials/trust badges section
-- [ ] Frontend: Newsletter signup form (P1 — connect to backend or 3rd party like Mailchimp)
+- [x] Frontend: Hero section component
+- [x] Frontend: Featured products section (shadcn Card grid)
+- [x] Frontend: Testimonials/trust badges section
+- [x] Frontend: Newsletter signup form (P1 — connect to backend or 3rd party like Mailchimp)
 
 **3.3 Product catalog page**
 
