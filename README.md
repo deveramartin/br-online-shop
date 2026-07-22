@@ -1,6 +1,6 @@
 <div align="center">
 
-# E-Commerce Website Monorepo (`br-online-shop`)
+# Bren Raphael's Ube Jam & Halaya Shop
 
 > Premium Artisanal E-Commerce Platform & Order Management System built with .NET 10 & Next.js 16
 
