@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OOS",
-  description: "Order & Ops",
+  title: "OOS — Order & Operations",
+  description: "Order & Operations System Management Portal",
 };
 
 const THIS_SYSTEM_CODE = "OOS";
@@ -49,9 +49,9 @@ export default async function RootLayout({
             {children}
           </>
         ) : (
-          <div style={{ padding: 40, fontFamily: "monospace" }}>
-            <h1>Access Denied</h1>
-            <p>
+          <div className="p-10 font-mono">
+            <h1 className="text-xl font-bold text-red-600">Access Denied</h1>
+            <p className="mt-2">
               You are logged in as {session.user?.name}, but you don&apos;t have access to {THIS_SYSTEM_CODE}.
             </p>
           </div>
