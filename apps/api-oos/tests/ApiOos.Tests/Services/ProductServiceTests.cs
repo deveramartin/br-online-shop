@@ -32,12 +32,12 @@ public class ProductServiceTests
         var sampleProduct = new Product
         {
             Id = Guid.NewGuid(),
-            Name = "Test Hoodie",
+            Name = "Classic Ube Halaya",
             Description = "Test Desc",
-            Price = 50.00m,
+            Price = 350.00m,
             Stock = 10,
-            Category = ProductCategory.Apparel,
-            SKU = "TEST-001",
+            Category = ProductCategory.Jams,
+            SKU = "UBE-001",
             IsActive = true
         };
 
@@ -51,8 +51,8 @@ public class ProductServiceTests
 
         result.Should().NotBeNull();
         result.Data.Should().HaveCount(1);
-        result.Data[0].Name.Should().Be("Test Hoodie");
-        result.Data[0].Category.Should().Be(ProductCategory.Apparel);
+        result.Data[0].Name.Should().Be("Classic Ube Halaya");
+        result.Data[0].Category.Should().Be(ProductCategory.Jams);
     }
 
     [Fact]
@@ -62,10 +62,10 @@ public class ProductServiceTests
         var sampleProduct = new Product
         {
             Id = productId,
-            Name = "Test Shoe",
-            Price = 100m,
-            Category = ProductCategory.Footwear,
-            SKU = "SHOE-001"
+            Name = "Ube Crinkle Cookies",
+            Price = 220m,
+            Category = ProductCategory.Pastries,
+            SKU = "UBE-002"
         };
 
         var fakeRepo = new FakeProductRepository { ReturnProduct = sampleProduct };
@@ -75,7 +75,7 @@ public class ProductServiceTests
 
         result.Should().NotBeNull();
         result!.Id.Should().Be(productId);
-        result.Name.Should().Be("Test Shoe");
+        result.Name.Should().Be("Ube Crinkle Cookies");
     }
 
     [Fact]

@@ -31,7 +31,7 @@ public class ProductsControllerTests
     public async Task GetProducts_ReturnsOkWithPagedResult()
     {
         var dto = new ProductDto(
-            Guid.NewGuid(), "Shirt", "Desc", 20m, new List<string>(), 5, ProductCategory.Apparel, "SHIRT-1", true
+            Guid.NewGuid(), "Ube Jam", "Desc", 350m, new List<string>(), 5, ProductCategory.Jams, "UBE-1", true
         );
         var paged = new PagedResult<ProductDto>(new List<ProductDto> { dto }, 1, 12, 1, 1);
 
@@ -51,7 +51,7 @@ public class ProductsControllerTests
     {
         var id = Guid.NewGuid();
         var dto = new ProductDto(
-            id, "Bag", "Desc", 50m, new List<string>(), 10, ProductCategory.Accessories, "BAG-1", true
+            id, "Ube Cookie", "Desc", 220m, new List<string>(), 10, ProductCategory.Pastries, "UBE-2", true
         );
 
         var fakeService = new FakeProductService { ReturnDto = dto };

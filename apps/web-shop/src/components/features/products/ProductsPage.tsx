@@ -1,17 +1,15 @@
 "use client";
 
 import { useProducts } from "@/hooks/useProducts";
-import { ProductFilterBar } from "./ProductFilterBar";
 import { ProductGrid } from "./ProductGrid";
-import { Button } from "@/components/ui/button";
 
 export function ProductsPage() {
-  const { products, pagination, loading, error, params, setParams } = useProducts();
+  const { products, loading, error } = useProducts({ pageSize: 12 });
 
   return (
     <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header matching .design-ref */}
+      <div className="max-w-7xl mx-auto space-y-10">
+        {/* Boutique Header */}
         <header className="space-y-3">
           <h1 className="text-4xl sm:text-5xl font-extrabold text-primary tracking-tight">
             Our Artisan Collection
@@ -20,9 +18,6 @@ export function ProductsPage() {
             Discover the authentic taste of Tarlac. Each jar is slow-cooked to perfection using heirloom recipes and premium purple yams.
           </p>
         </header>
-
-        {/* Filter & Sort Bar */}
-        <ProductFilterBar params={params} onChange={setParams} />
 
         {/* Error Alert */}
         {error && (
@@ -33,33 +28,6 @@ export function ProductsPage() {
 
         {/* Product Grid */}
         <ProductGrid products={products} loading={loading} />
-
-        {/* Pagination Controls */}
-        {pagination && pagination.totalPages > 1 && (
-          <div className="flex items-center justify-center gap-3 pt-6">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page <= 1}
-              onClick={() => setParams({ ...params, page: pagination.page - 1 })}
-              className="rounded-xl border-border"
-            >
-              Previous
-            </Button>
-            <span className="text-xs text-muted font-medium">
-              Page {pagination.page} of {pagination.totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={pagination.page >= pagination.totalPages}
-              onClick={() => setParams({ ...params, page: pagination.page + 1 })}
-              className="rounded-xl border-border"
-            >
-              Next
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );

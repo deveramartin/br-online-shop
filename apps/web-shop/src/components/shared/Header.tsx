@@ -28,7 +28,7 @@ export function Header() {
           <Link href="/" className="hover:text-[var(--primary)] transition-colors">
             Home
           </Link>
-          <Link href="/catalog" className="hover:text-[var(--primary)] transition-colors">
+          <Link href="/products" className="hover:text-[var(--primary)] transition-colors">
             Shop Catalog
           </Link>
           <Link href="/about" className="hover:text-[var(--primary)] transition-colors">

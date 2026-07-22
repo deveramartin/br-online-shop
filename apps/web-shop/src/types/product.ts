@@ -1,9 +1,8 @@
 export enum ProductCategory {
-  Apparel = "Apparel",
-  Accessories = "Accessories",
-  Collectibles = "Collectibles",
-  Footwear = "Footwear",
-  Equipment = "Equipment",
+  Jams = "Jams",
+  Pastries = "Pastries",
+  GiftSets = "GiftSets",
+  Sweets = "Sweets",
 }
 
 export interface Product {
