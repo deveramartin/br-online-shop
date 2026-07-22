@@ -9,17 +9,17 @@ export function ProductsPage() {
   const { products, pagination, loading, error, params, setParams } = useProducts();
 
   return (
-    <div className="min-h-screen bg-neutral-50/50 dark:bg-neutral-950/50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fcf9f8] dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 dark:text-white tracking-tight">
-            Product Catalog
+        {/* Header matching .design-ref */}
+        <header className="space-y-3">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-[#451077] dark:text-purple-300 tracking-tight">
+            Our Artisan Collection
           </h1>
-          <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-            Explore our handcrafted collection of premium heritage goods and signature lifestyle products.
+          <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
+            Discover the authentic taste of Tarlac. Each jar is slow-cooked to perfection using heirloom recipes and premium purple yams.
           </p>
-        </div>
+        </header>
 
         {/* Filter & Sort Bar */}
         <ProductFilterBar params={params} onChange={setParams} />
@@ -42,6 +42,7 @@ export function ProductsPage() {
               size="sm"
               disabled={pagination.page <= 1}
               onClick={() => setParams({ ...params, page: pagination.page - 1 })}
+              className="rounded-xl border-neutral-300 dark:border-neutral-800"
             >
               Previous
             </Button>
@@ -53,6 +54,7 @@ export function ProductsPage() {
               size="sm"
               disabled={pagination.page >= pagination.totalPages}
               onClick={() => setParams({ ...params, page: pagination.page + 1 })}
+              className="rounded-xl border-neutral-300 dark:border-neutral-800"
             >
               Next
             </Button>

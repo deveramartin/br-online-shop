@@ -7,6 +7,7 @@ import { ProductDetailInfo } from "./ProductDetailInfo";
 import { RelatedProducts } from "./RelatedProducts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
 
 interface ProductDetailPageProps {
   id: string;
@@ -18,7 +19,7 @@ export function ProductDetailPage({ id }: ProductDetailPageProps) {
   if (loading) {
     return (
       <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
-        <Skeleton className="h-6 w-32" />
+        <Skeleton className="h-6 w-48" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <Skeleton className="w-full aspect-square rounded-2xl" />
           <div className="space-y-4">
@@ -40,7 +41,7 @@ export function ProductDetailPage({ id }: ProductDetailPageProps) {
         <p className="mt-2 text-sm text-neutral-500 max-w-md">
           {error || "The requested product could not be located."}
         </p>
-        <Button asChild className="mt-6 bg-purple-600 hover:bg-purple-700">
+        <Button asChild className="mt-6 bg-[#451077] hover:bg-[#5d2d8f] text-white">
           <Link href="/products">&larr; Return to Catalog</Link>
         </Button>
       </div>
@@ -48,15 +49,18 @@ export function ProductDetailPage({ id }: ProductDetailPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50/50 dark:bg-neutral-950/50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-12">
-        {/* Breadcrumb / Back Link */}
-        <Link
-          href="/products"
-          className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-        >
-          &larr; Back to Catalog
-        </Link>
+    <div className="min-h-screen bg-[#fcf9f8] dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-10">
+        {/* Breadcrumb Navigation matching .design-ref */}
+        <nav className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+          <Link href="/products" className="hover:text-[#451077] transition-colors">
+            Shop
+          </Link>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span className="text-neutral-400">{product.category}</span>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span className="text-neutral-900 dark:text-white font-bold">{product.name}</span>
+        </nav>
 
         {/* Product Details Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">

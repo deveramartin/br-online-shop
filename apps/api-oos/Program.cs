@@ -50,7 +50,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApiOos.Data.AppDbContext>();
-    await dbContext.Database.EnsureCreatedAsync();
+    await dbContext.Database.MigrateAsync();
     await ApiOos.Data.Seed.SeedData.InitializeAsync(dbContext);
 }
 

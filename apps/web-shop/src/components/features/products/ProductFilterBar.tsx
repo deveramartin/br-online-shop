@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Search } from "lucide-react";
 import { ProductCategory, type ProductQueryParams } from "@/types/product";
 
 interface ProductFilterBarProps {
@@ -43,7 +44,7 @@ export function ProductFilterBar({ params, onChange }: ProductFilterBarProps) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between bg-white dark:bg-neutral-900 p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-sm">
+    <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between bg-white dark:bg-neutral-900 p-4 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 shadow-sm">
       {/* Category Pills */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
         {categories.map((cat) => {
@@ -52,9 +53,9 @@ export function ProductFilterBar({ params, onChange }: ProductFilterBarProps) {
             <button
               key={cat}
               onClick={() => handleCategoryClick(cat)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
+              className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
                 isActive
-                  ? "bg-purple-600 text-white shadow-md shadow-purple-500/20"
+                  ? "bg-[#451077] text-white shadow-md shadow-purple-900/20"
                   : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
               }`}
             >
@@ -69,26 +70,19 @@ export function ProductFilterBar({ params, onChange }: ProductFilterBarProps) {
         <div className="relative flex-1 md:w-64">
           <Input
             type="text"
-            placeholder="Search products..."
+            placeholder="Search catalog..."
             value={params.search || ""}
             onChange={handleSearchChange}
-            className="pl-9 text-sm"
+            className="pl-9 text-sm rounded-xl border-neutral-200 dark:border-neutral-800 focus-visible:ring-[#451077]"
           />
-          <svg
-            className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
         </div>
 
         <Select value={params.sort || "featured"} onValueChange={handleSortChange}>
-          <SelectTrigger className="w-[180px] text-sm">
+          <SelectTrigger className="w-[180px] text-sm rounded-xl border-neutral-200 dark:border-neutral-800">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="rounded-xl">
             <SelectItem value="featured">Sort: Featured</SelectItem>
             <SelectItem value="price_asc">Price: Low to High</SelectItem>
             <SelectItem value="price_desc">Price: High to Low</SelectItem>
