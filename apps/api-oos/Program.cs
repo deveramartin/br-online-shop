@@ -1,8 +1,12 @@
 using ApiOos.Extensions;
+using ApiOos.Helpers;
 using ApiOos.Middleware;
 using Serilog;
 
+EnvLoader.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()
@@ -16,6 +20,7 @@ builder.Host.UseSerilog();
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddDomainServices();
 builder.Services.AddAuthServices(builder.Configuration);
 builder.Services.AddCorsPolicy(builder.Configuration);
 builder.Services.AddSwaggerServices();

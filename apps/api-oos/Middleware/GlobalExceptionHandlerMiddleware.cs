@@ -31,12 +31,24 @@ public class GlobalExceptionHandlerMiddleware
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/problem+json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+        var statusCode = exception is ApiOos.Exceptions.AppException appEx 
+            ? appEx.StatusCode 
+            : (int)HttpStatusCode.InternalServerError;
+
+        context.Response.StatusCode = statusCode;
 
         var problemDetails = new ProblemDetails
         {
-            Status = context.Response.StatusCode,
-            Title = "An unexpected error occurred",
+            Status = statusCode,
+            Title = statusCode switch
+            {
+                400 => "Bad Request",
+                401 => "Unauthorized",
+                404 => "Not Found",
+                409 => "Conflict",
+                _ => "An unexpected error occurred"
+            },
             Detail = exception.Message,
             Instance = context.Request.Path
         };

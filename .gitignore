@@ -16,9 +16,12 @@ next-env.d.ts
 .env*
 !.env.example
 
-# .NET
+# .NET & SQLite
 bin/
 obj/
+*.db
+*.db-shm
+*.db-wal
 *.user
 *.suo
 .vs/

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ShoppingBag, Search, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function Header() {
   return (
@@ -7,9 +8,11 @@ export function Header() {
       <div className="max-w-[1280px] mx-auto px-6 h-20 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] flex items-center justify-center font-bold text-xl shadow-sm transition-transform group-hover:scale-105">
-            BR
-          </div>
+          <img
+            src="/logo.jpeg"
+            alt="Bren Raphael's Ube Jam & Halaya Logo"
+            className="w-10 h-10 rounded-full object-cover shadow-sm transition-transform group-hover:scale-105"
+          />
           <div>
             <span className="font-bold text-lg leading-tight tracking-tight block text-[var(--primary-dark)]">
               Bren Raphael&apos;s
@@ -37,29 +40,23 @@ export function Header() {
         </nav>
 
         {/* Actions */}
-        <div className="flex items-center gap-4">
-          <button
-            aria-label="Search"
-            className="p-2 rounded-full hover:bg-[var(--surface-low)] text-[var(--foreground)] transition-colors cursor-pointer"
-          >
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" aria-label="Search" className="rounded-full">
             <Search className="w-5 h-5" />
-          </button>
-          <Link
-            href="/signin"
-            aria-label="Account"
-            className="p-2 rounded-full hover:bg-[var(--surface-low)] text-[var(--foreground)] transition-colors"
-          >
-            <User className="w-5 h-5" />
-          </Link>
-          <button
-            aria-label="Shopping Cart"
-            className="relative p-2 rounded-full bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] transition-colors cursor-pointer"
-          >
+          </Button>
+
+          <Button asChild variant="ghost" size="icon" aria-label="Account" className="rounded-full">
+            <Link href="/profile">
+              <User className="w-5 h-5" />
+            </Link>
+          </Button>
+
+          <Button size="icon" aria-label="Shopping Cart" className="relative rounded-full bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)]">
             <ShoppingBag className="w-5 h-5" />
             <span className="absolute -top-1 -right-1 bg-[var(--secondary-light)] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
               0
             </span>
-          </button>
+          </Button>
         </div>
       </div>
     </header>

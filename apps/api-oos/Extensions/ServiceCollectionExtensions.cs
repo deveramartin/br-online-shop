@@ -16,8 +16,17 @@ public static class ServiceCollectionExtensions
         if (!string.IsNullOrEmpty(connectionString))
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(connectionString));
+                options.UseSqlite(connectionString));
         }
+        return services;
+    }
+
+    public static IServiceCollection AddDomainServices(this IServiceCollection services)
+    {
+        services.AddScoped<ApiOos.Helpers.JwtTokenHelper>();
+        services.AddScoped<ApiOos.Interfaces.Repositories.IUserRepository, ApiOos.Repositories.UserRepository>();
+        services.AddScoped<ApiOos.Interfaces.Services.IAuthService, ApiOos.Services.AuthService>();
+        services.AddScoped<ApiOos.Interfaces.Services.IUserService, ApiOos.Services.UserService>();
         return services;
     }
 

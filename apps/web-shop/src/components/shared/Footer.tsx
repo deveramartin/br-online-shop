@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   return (
@@ -6,9 +7,11 @@ export function Footer() {
       <div className="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[var(--primary)] text-white flex items-center justify-center font-bold text-sm">
-              BR
-            </div>
+            <img
+              src="/logo.jpeg"
+              alt="Bren Raphael's Logo"
+              className="w-8 h-8 rounded-full object-cover"
+            />
             <span className="font-bold text-base text-[var(--primary-dark)]">
               Bren Raphael&apos;s
             </span>
