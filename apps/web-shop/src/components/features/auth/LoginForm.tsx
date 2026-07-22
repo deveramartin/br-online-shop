@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import { Eye, EyeOff } from "lucide-react";
 import { loginSchema, type LoginFormData } from "@/lib/validators/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ export function LoginForm() {
 
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -64,15 +66,15 @@ export function LoginForm() {
             height={64}
             className="w-16 h-16 rounded-full object-cover shadow-sm mb-4"
           />
-          <CardTitle className="text-3xl font-bold text-[var(--primary)] mb-2">Bren Raphael&apos;s</CardTitle>
-          <CardDescription className="text-sm text-[var(--muted)]">
+          <CardTitle className="text-3xl font-bold text-primary mb-2">Bren Raphael&apos;s</CardTitle>
+          <CardDescription className="text-sm text-muted">
             Welcome back! Please login to your account.
           </CardDescription>
         </CardHeader>
 
         <CardContent>
           {serverError && (
-            <div className="mb-6 p-4 rounded-lg bg-[var(--error-container)] text-[var(--on-error-container)] text-sm">
+            <div className="mb-6 p-4 rounded-lg bg-error-container text-on-error-container text-sm">
               {serverError}
             </div>
           )}
@@ -102,13 +104,29 @@ export function LoginForm() {
                       <FormLabel>Password</FormLabel>
                       <Link
                         href="/forgot-password"
-                        className="text-xs font-semibold text-[var(--primary)] hover:underline"
+                        className="text-xs font-semibold text-primary hover:underline"
                       >
                         Forgot Password?
                       </Link>
                     </div>
                     <FormControl>
-                      <Input id="login-password" type="password" placeholder="••••••••" {...field} />
+                      <div className="relative">
+                        <Input
+                          id="login-password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          className="pr-10"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-1"
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -118,7 +136,7 @@ export function LoginForm() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] shadow-md mt-4 cursor-pointer"
+                className="w-full bg-primary text-white hover:bg-primary-dark shadow-md mt-4 cursor-pointer"
               >
                 {isLoading ? "Signing in..." : "Login"}
               </Button>
@@ -126,10 +144,10 @@ export function LoginForm() {
           </Form>
         </CardContent>
 
-        <CardFooter className="justify-center border-t pt-6">
-          <p className="text-sm text-[var(--muted)]">
+        <CardFooter className="justify-center border-t border-border/50 pt-6">
+          <p className="text-sm text-muted">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-[var(--primary)] font-semibold hover:underline">
+            <Link href="/signup" className="text-primary font-semibold hover:underline">
               Sign up
             </Link>
           </p>
