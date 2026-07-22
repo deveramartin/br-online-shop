@@ -22,7 +22,7 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
   return (
     <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-4 gap-4">
       {/* Main Feature Image */}
-      <div className="md:col-span-4 rounded-xl overflow-hidden shadow-sm border border-outline-variant/30 relative aspect-[4/3] bg-surface-container">
+      <div className="md:col-span-4 rounded-2xl overflow-hidden shadow-sm border border-border/70 relative aspect-[4/3] bg-surface-container">
         <Image
           src={selectedImage}
           alt={name}
@@ -47,7 +47,7 @@ export function ProductImageGallery({ images, name }: ProductImageGalleryProps) 
               idx === 0 ? "md:col-span-1" : idx === 1 ? "md:col-span-1" : "md:col-span-2",
               isSelected
                 ? "border-primary ring-2 ring-primary/20 scale-[1.02]"
-                : "border-outline-variant/30 hover:border-primary/50 opacity-90"
+                : "border-border/70 hover:border-primary/50 opacity-90"
             )}
           >
             <Image

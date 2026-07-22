@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag, Heart, Star, Truck, Leaf, Minus, Plus } from "lucide-react";
+import { ShoppingBag, Heart, Star, Truck, Leaf, Minus, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import type { Product } from "@/types/product";
 
 interface ProductDetailInfoProps {
@@ -25,6 +25,8 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
+  const [openHeritage, setOpenHeritage] = useState(false);
+  const [openIngredients, setOpenIngredients] = useState(false);
 
   const inStock = product.stock > 0;
   const categoryLabel = CATEGORY_NAMES[product.category] || "Artisanal";
@@ -36,127 +38,149 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Badges matching .design-ref */}
-      <div className="flex items-center gap-2">
-        <Badge variant="secondary" className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-          {categoryLabel}
-        </Badge>
-        <Badge variant="secondary" className="bg-primary/10 text-primary border-none text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-          Artisanal
-        </Badge>
-        {inStock ? (
-          <Badge variant="outline" className="text-xs text-emerald-700 border-emerald-500/30 bg-emerald-50 rounded-full">
-            In Stock ({product.stock})
-          </Badge>
-        ) : (
-          <Badge variant="destructive" className="text-xs rounded-full">
-            Sold Out
-          </Badge>
-        )}
-      </div>
-
-      {/* Title & Ratings matching .design-ref */}
+    <div className="lg:col-span-5 space-y-stack-md sticky top-32">
       <div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+        {/* Badges */}
+        <div className="flex gap-2 mb-2">
+          <Badge className="bg-secondary/15 text-secondary hover:bg-secondary/20 border-none px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">
+            {categoryLabel}
+          </Badge>
+          <Badge className="bg-primary/15 text-primary hover:bg-primary/20 border-none px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">
+            Artisanal
+          </Badge>
+        </div>
+
+        {/* Title */}
+        <h1 className="font-h1-mobile md:font-h1 text-h1-mobile md:text-h1 text-on-surface mb-2">
           {product.name}
         </h1>
-        <div className="flex items-center gap-4 mt-2">
-          <span className="text-3xl font-extrabold text-primary">
+
+        {/* Price & Rating */}
+        <div className="flex items-center gap-4">
+          <p className="text-primary font-h2 text-h2 font-semibold">
             ₱{product.price.toFixed(2)}
-          </span>
-          <div className="flex items-center gap-1 text-amber-500">
+          </p>
+          <div className="flex items-center text-secondary">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
+              <Star key={i} className="w-4 h-4 fill-secondary text-secondary" />
             ))}
-            <span className="ml-1 text-xs text-muted-foreground font-medium">
+            <span className="ml-2 text-on-surface-variant font-label-md text-label-md">
               (124 Reviews)
             </span>
           </div>
         </div>
       </div>
 
-      <hr className="border-border/60" />
+      <div className="h-px bg-border/70 w-full"></div>
 
       {/* Description */}
-      <p className="text-base text-muted leading-relaxed">
+      <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
         {product.description}
       </p>
 
-      {/* Quantity & Actions matching .design-ref */}
-      <div className="space-y-4 pt-2">
+      {/* Quantity & Actions */}
+      <div className="space-y-4 pt-4">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-semibold text-foreground">Quantity:</span>
-          <div className="flex items-center border border-border rounded-xl overflow-hidden bg-surface-card h-11">
-            <Button
-              variant="ghost"
-              size="icon"
-              disabled={quantity <= 1 || !inStock}
+          <span className="font-label-md text-label-md text-on-surface-variant">Quantity:</span>
+          <div className="flex items-center border border-border rounded-xl overflow-hidden h-12">
+            <button
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="h-full px-3 text-primary rounded-none hover:bg-surface-low"
+              disabled={quantity <= 1 || !inStock}
+              className="px-4 hover:bg-surface-container-low transition-colors text-primary border-r border-border disabled:opacity-40"
             >
               <Minus className="w-4 h-4" />
-            </Button>
-            <span className="w-12 text-center text-base font-bold text-foreground">
-              {quantity}
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              disabled={quantity >= product.stock || !inStock}
+            </button>
+            <input
+              type="text"
+              readOnly
+              value={quantity}
+              className="w-12 text-center border-none bg-transparent focus:ring-0 font-body-md text-body-md text-on-surface font-semibold"
+            />
+            <button
               onClick={() => setQuantity((q) => Math.min(product.stock, q + 1))}
-              className="h-full px-3 text-primary rounded-none hover:bg-surface-low"
+              disabled={quantity >= product.stock || !inStock}
+              className="px-4 hover:bg-surface-container-low transition-colors text-primary border-l border-border disabled:opacity-40"
             >
               <Plus className="w-4 h-4" />
-            </Button>
+            </button>
           </div>
         </div>
 
-        {/* Buttons matching .design-ref */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          <Button
-            size="lg"
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-4">
+          <button
             disabled={!inStock}
             onClick={handleAddToCart}
-            className="flex-1 bg-primary hover:bg-primary-dark text-primary-foreground font-bold py-6 rounded-full shadow-lg shadow-purple-950/15 transition-all flex items-center justify-center gap-2"
+            className="flex-1 bg-primary text-white font-label-md text-label-md py-4 rounded-full hover:shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <ShoppingBag className="w-5 h-5" />
-            {added ? "✓ Added to Cart" : inStock ? `Add ${quantity} to Cart` : "Sold Out"}
-          </Button>
+            {added ? "✓ Added to Cart" : inStock ? `Add ${quantity} to Cart` : "Out of Stock"}
+          </button>
 
-          <Button
-            size="lg"
-            variant="outline"
+          <button
             onClick={() => setWishlisted(!wishlisted)}
-            className="flex-1 border-primary text-primary hover:bg-primary/5 font-bold py-6 rounded-full transition-all flex items-center justify-center gap-2"
+            className="flex-1 bg-white border border-primary text-primary font-label-md text-label-md py-4 rounded-full hover:bg-primary/5 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
           >
             <Heart className={`w-5 h-5 ${wishlisted ? "fill-primary" : ""}`} />
             {wishlisted ? "Wishlisted" : "Wishlist"}
-          </Button>
+          </button>
         </div>
 
         {added && (
-          <p className="text-xs text-primary font-semibold text-center sm:text-left">
+          <p className="text-xs text-primary font-semibold text-center sm:text-left pt-1">
             Item added! (Full cart drawer coming in Epic 4)
           </p>
         )}
       </div>
 
-      {/* Info Cards matching .design-ref */}
-      <div className="grid grid-cols-2 gap-4 pt-4">
-        <div className="p-4 rounded-2xl border border-border/80 bg-surface-card flex items-center gap-3">
-          <Truck className="w-7 h-7 text-secondary shrink-0" />
+      {/* Info Cards */}
+      <div className="grid grid-cols-2 gap-4 mt-8">
+        <div className="p-4 rounded-2xl border border-border/70 bg-surface-card flex items-center gap-3">
+          <Truck className="w-8 h-8 text-secondary shrink-0" />
           <div>
-            <p className="text-xs font-bold text-foreground">Fast Delivery</p>
-            <p className="text-[11px] text-muted-foreground">Metro Manila 24h</p>
+            <p className="font-label-md text-label-md font-bold">Fast Delivery</p>
+            <p className="text-[12px] text-on-surface-variant">Metro Manila 24h</p>
           </div>
         </div>
-        <div className="p-4 rounded-2xl border border-border/80 bg-surface-card flex items-center gap-3">
-          <Leaf className="w-7 h-7 text-secondary shrink-0" />
+        <div className="p-4 rounded-2xl border border-border/70 bg-surface-card flex items-center gap-3">
+          <Leaf className="w-8 h-8 text-secondary shrink-0" />
           <div>
-            <p className="text-xs font-bold text-foreground">Organic</p>
-            <p className="text-[11px] text-muted-foreground">No Preservatives</p>
+            <p className="font-label-md text-label-md font-bold">Organic</p>
+            <p className="text-[12px] text-on-surface-variant">No Preservatives</p>
           </div>
+        </div>
+      </div>
+
+      {/* Accordions */}
+      <div className="pt-8 space-y-2">
+        <div className="border-b border-border/70 pb-4">
+          <button
+            onClick={() => setOpenHeritage(!openHeritage)}
+            className="w-full flex justify-between items-center text-left"
+          >
+            <span className="font-label-md text-label-md font-bold text-on-surface">Product Heritage</span>
+            {openHeritage ? <ChevronUp className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+          </button>
+          {openHeritage && (
+            <div className="pt-3 text-on-surface-variant font-body-md text-body-md animate-fade-in">
+              Our recipe dates back to 1952, passed down through the Raphael family. We use a proprietary slow-churning process that takes over 4 hours for every batch to ensure the signature consistency.
+            </div>
+          )}
+        </div>
+
+        <div className="border-b border-border/70 pb-4 pt-2">
+          <button
+            onClick={() => setOpenIngredients(!openIngredients)}
+            className="w-full flex justify-between items-center text-left"
+          >
+            <span className="font-label-md text-label-md font-bold text-on-surface">Ingredients &amp; Nutritional Info</span>
+            {openIngredients ? <ChevronUp className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+          </button>
+          {openIngredients && (
+            <div className="pt-3 text-on-surface-variant font-body-md text-body-md animate-fade-in">
+              Fresh Purple Yam, Condensed Milk, Evaporated Milk, Butter, Cane Sugar, and a touch of Vanilla. All-natural, gluten-free, and contains dairy.
+            </div>
+          )}
         </div>
       </div>
     </div>
