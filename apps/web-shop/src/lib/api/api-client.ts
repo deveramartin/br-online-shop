@@ -77,3 +77,40 @@ export const apiClient = {
   delete: <T>(endpoint: string, options?: ApiOptions) =>
     request<T>(endpoint, { ...options, method: "DELETE" }),
 };
+
+import type { AddressDto, AuthResponse, UserDto } from "@/types/auth";
+
+export const authApi = {
+  register: (data: { fullName: string; email: string; password: string }) =>
+    apiClient.post<AuthResponse>("/auth/register", data),
+
+  forgotPassword: (email: string) =>
+    apiClient.post<{ message: string }>("/auth/forgot-password", { email }),
+
+  resetPassword: (data: { token: string; newPassword: string }) =>
+    apiClient.post<{ message: string }>("/auth/reset-password", data),
+};
+
+export const userApi = {
+  getMe: (token: string) =>
+    apiClient.get<UserDto>("/users/me", { token }),
+
+  updateMe: (data: { fullName: string; phoneNumber?: string; preferredLanguage?: string }, token: string) =>
+    apiClient.put<UserDto>("/users/me", data, { token }),
+
+  changePassword: (data: { currentPassword: string; newPassword: string }, token: string) =>
+    apiClient.put<{ message: string }>("/users/me/password", data, { token }),
+
+  getAddresses: (token: string) =>
+    apiClient.get<AddressDto[]>("/users/me/addresses", { token }),
+
+  addAddress: (data: Omit<AddressDto, "id">, token: string) =>
+    apiClient.post<AddressDto>("/users/me/addresses", data, { token }),
+
+  updateAddress: (id: string, data: Omit<AddressDto, "id">, token: string) =>
+    apiClient.put<AddressDto>(`/users/me/addresses/${id}`, data, { token }),
+
+  deleteAddress: (id: string, token: string) =>
+    apiClient.delete(`/users/me/addresses/${id}`, { token }),
+};
+

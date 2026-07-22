@@ -6,7 +6,11 @@
   "scripts": {
     "dev:web": "turbo run dev --filter=web-shop",
     "dev:oos": "turbo run dev --filter=web-oos",
+    "dev:api": "dotnet run --project apps/api-oos/ApiOos.csproj",
+    "dev:all": "concurrently -k -n api,web -c blue,magenta \"pnpm dev:api\" \"pnpm dev\"",
     "dev": "turbo run dev",
+    "db:update": "dotnet ef database update --project apps/api-oos/ApiOos.csproj",
+    "db:migrate": "dotnet ef migrations add --project apps/api-oos/ApiOos.csproj --output-dir Data/Migrations",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check"

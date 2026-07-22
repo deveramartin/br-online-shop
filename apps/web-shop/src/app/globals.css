@@ -19,6 +19,18 @@
   --radius: 0.5rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
+  --surface-variant: #e5e2e1;
+  --error: #ba1a1a;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+  --primary-fixed: #efdbff;
+  --primary-container: #5d2d8f;
+  --on-primary-container: #cfa1ff;
+  --secondary-container: #cb98fe;
+  --on-secondary-container: #582887;
+  --outline-variant: #cdc3d2;
+  --surface-container-lowest: #ffffff;
+  --surface-container-high: #eae7e7;
 }
 
 @theme inline {
@@ -37,6 +49,18 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-surface-variant: var(--surface-variant);
+  --color-error: var(--error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-outline-variant: var(--outline-variant);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-high: var(--surface-container-high);
   --radius-sm: 0.25rem;
   --radius-md: var(--radius);
   --radius-lg: var(--radius-lg);

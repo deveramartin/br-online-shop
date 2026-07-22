@@ -21,6 +21,15 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection AddDomainServices(this IServiceCollection services)
+    {
+        services.AddScoped<ApiOos.Helpers.JwtTokenHelper>();
+        services.AddScoped<ApiOos.Interfaces.Repositories.IUserRepository, ApiOos.Repositories.UserRepository>();
+        services.AddScoped<ApiOos.Interfaces.Services.IAuthService, ApiOos.Services.AuthService>();
+        services.AddScoped<ApiOos.Interfaces.Services.IUserService, ApiOos.Services.UserService>();
+        return services;
+    }
+
     public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>() ?? new JwtSettings();

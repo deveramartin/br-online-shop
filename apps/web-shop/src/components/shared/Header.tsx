@@ -45,7 +45,7 @@ export function Header() {
             <Search className="w-5 h-5" />
           </button>
           <Link
-            href="/signin"
+            href="/profile"
             aria-label="Account"
             className="p-2 rounded-full hover:bg-[var(--surface-low)] text-[var(--foreground)] transition-colors"
           >

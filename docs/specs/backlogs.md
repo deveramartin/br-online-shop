@@ -113,43 +113,43 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 **2.1 User registration (Signup)**
 
-- [ ] Backend: `POST /api/auth/register` — validate email uniqueness, hash password (BCrypt/Identity)
-- [ ] Backend: Email format & password strength validation
+- [x] Backend: `POST /api/auth/register` — validate email uniqueness, hash password (BCrypt/Identity)
+- [x] Backend: Email format & password strength validation
 - [ ] Backend: Send verification email (optional P1)
-- [ ] Frontend: Signup page UI (shadcn Form, Input, Button, Checkbox for ToS)
-- [ ] Frontend: Client-side validation (Zod + react-hook-form)
-- [ ] Frontend: Handle API errors (email taken, weak password)
+- [x] Frontend: Signup page UI (shadcn Form, Input, Button, Checkbox for ToS)
+- [x] Backend: Client-side validation (Zod + react-hook-form)
+- [x] Frontend: Handle API errors (email taken, weak password)
 
 **2.2 User login**
 
-- [ ] Backend: `POST /api/auth/login` — validate credentials, issue JWT (access + refresh token)
-- [ ] Backend: Implement refresh token endpoint `POST /api/auth/refresh`
-- [ ] Backend: Implement ASP.NET Core Identity or custom auth service
-- [ ] Frontend: Login page UI
-- [ ] Frontend: Store tokens securely (httpOnly cookie preferred over localStorage)
-- [ ] Frontend: Auth context/provider + protected route middleware
+- [x] Backend: `POST /api/auth/login` — validate credentials, issue JWT (access + refresh token)
+- [x] Backend: Implement refresh token endpoint `POST /api/auth/refresh`
+- [x] Backend: Implement ASP.NET Core Identity or custom auth service
+- [x] Frontend: Login page UI
+- [x] Frontend: Store tokens securely (httpOnly cookie preferred over localStorage)
+- [x] Frontend: Auth context/provider + protected route middleware
 
 **2.3 Forgot / reset password**
 
-- [ ] Backend: `POST /api/auth/forgot-password` — generate reset token, send email
-- [ ] Backend: `POST /api/auth/reset-password` — validate token, update password
-- [ ] Frontend: Forgot password page (email input)
-- [ ] Frontend: Reset password page (new password + confirm)
+- [x] Backend: `POST /api/auth/forgot-password` — generate reset token, send email
+- [x] Backend: `POST /api/auth/reset-password` — validate token, update password
+- [x] Frontend: Forgot password page (email input)
+- [x] Frontend: Reset password page (new password + confirm)
 
 **2.4 Profile settings**
 
-- [ ] Backend: `GET /api/users/me`, `PUT /api/users/me` — update name, email, phone, avatar
-- [ ] Backend: `PUT /api/users/me/password` — change password (requires current password)
-- [ ] Backend: Manage saved addresses (`GET/POST/PUT/DELETE /api/users/me/addresses`)
-- [ ] Backend: Manage saved payment methods (tokenized, via payment provider vault)
-- [ ] Frontend: Profile page with tabbed sections (shadcn Tabs): Personal Info, Addresses, Payment Methods, Order History
-- [ ] Frontend: Avatar upload component
-- [ ] Frontend: Address form (add/edit/delete, set default)
+- [x] Backend: `GET /api/users/me`, `PUT /api/users/me` — update name, email, phone, avatar
+- [x] Backend: `PUT /api/users/me/password` — change password (requires current password)
+- [x] Backend: Manage saved addresses (`GET/POST/PUT/DELETE /api/users/me/addresses`)
+- [ ] Backend: Manage saved payment methods (tokenized, via payment provider vault) (Deferred)
+- [x] Frontend: Profile page with tabbed sections (shadcn Tabs): Personal Info, Addresses, Payment Methods, Order History
+- [x] Frontend: Avatar upload component
+- [x] Frontend: Address form (add/edit/delete, set default)
 
 **2.5 Logout & session handling**
 
-- [ ] Backend: Token invalidation / refresh token revocation endpoint
-- [ ] Frontend: Logout action clears auth state + redirects
+- [x] Backend: Token invalidation / refresh token revocation endpoint
+- [x] Frontend: Logout action clears auth state + redirects
 
 ---
 
