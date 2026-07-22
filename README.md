@@ -44,3 +44,8 @@ docker-compose up -d
 ### 4. Run Development Servers
 - Frontend: `pnpm dev:web`
 - Backend: `dotnet run` inside `apps/api-oos`
+
+## Verification & Tooling
+- Run linter across workspace: `pnpm run lint`
+- Run type checker: `pnpm run type-check`
+
