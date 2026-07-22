@@ -9,43 +9,67 @@ interface ProductImageGalleryProps {
   name: string;
 }
 
+const DEFAULT_GALLERY_FALLBACK = "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80";
+
 export function ProductImageGallery({ images, name }: ProductImageGalleryProps) {
-  const imageList = images.length > 0 ? images : ["https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80"];
+  const imageList =
+    images && images.length > 0
+      ? images
+      : [DEFAULT_GALLERY_FALLBACK];
+
   const [selectedImage, setSelectedImage] = useState(imageList[0]);
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+
+  const handleImageError = (imgUrl: string) => {
+    setFailedImages((prev) => ({ ...prev, [imgUrl]: true }));
+    if (selectedImage === imgUrl) {
+      setSelectedImage(DEFAULT_GALLERY_FALLBACK);
+    }
+  };
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Main Large Image */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 shadow-md">
+    <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-4 gap-4">
+      {/* Main Feature Image */}
+      <div className="md:col-span-4 rounded-xl overflow-hidden shadow-sm border border-outline-variant/30 relative aspect-[4/3] bg-surface-container">
         <Image
-          src={selectedImage}
+          src={failedImages[selectedImage] ? DEFAULT_GALLERY_FALLBACK : selectedImage}
           alt={name}
           fill
           priority
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover object-center transition-all duration-300"
+          sizes="(max-width: 1024px) 100vw, 60vw"
+          className="w-full h-full object-cover"
+          onError={() => handleImageError(selectedImage)}
         />
       </div>
 
-      {/* Thumbnails list if > 1 image */}
-      {imageList.length > 1 && (
-        <div className="flex items-center gap-3 overflow-x-auto pb-2">
-          {imageList.map((img, idx) => (
-            <button
-              key={idx}
-              onClick={() => setSelectedImage(img)}
-              className={cn(
-                "relative aspect-square w-20 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-purple-500",
-                selectedImage === img
-                  ? "border-purple-600 ring-2 ring-purple-600/30 scale-105"
-                  : "border-transparent opacity-70 hover:opacity-100"
-              )}
-            >
-              <Image src={img} alt={`${name} thumbnail ${idx + 1}`} fill sizes="80px" className="object-cover object-center" />
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Thumbnails grid */}
+      {imageList.map((img, idx) => {
+        const isSelected = selectedImage === img;
+        const currentSrc = failedImages[img] ? DEFAULT_GALLERY_FALLBACK : img;
+
+        return (
+          <button
+            key={idx}
+            onClick={() => setSelectedImage(img)}
+            className={cn(
+              "relative aspect-[4/3] rounded-xl overflow-hidden border transition-all text-left focus:outline-none",
+              idx === 0 ? "md:col-span-1" : idx === 1 ? "md:col-span-1" : "md:col-span-2",
+              isSelected
+                ? "border-primary ring-2 ring-primary/20 scale-[1.02]"
+                : "border-outline-variant/30 hover:border-primary/50 opacity-90"
+            )}
+          >
+            <Image
+              src={currentSrc}
+              alt={`${name} preview ${idx + 1}`}
+              fill
+              sizes="200px"
+              className="w-full h-full object-cover"
+              onError={() => handleImageError(img)}
+            />
+          </button>
+        );
+      })}
     </div>
   );
 }

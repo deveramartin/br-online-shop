@@ -1,73 +1,87 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import type { Product } from "@/types/product";
 
 interface ProductCardProps {
   product: Product;
 }
 
+const FALLBACK_IMAGES: Record<string, string> = {
+  "Classic Ube Halaya": "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80",
+  "Ube Crinkle Cookies": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80",
+  "Chunky Ube Jam": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80",
+  "Assorted Ube Box": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80",
+  "Ube Halaya w/ Cheese": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=800&q=80",
+  "Golden Ube Tarts": "https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=800&q=80",
+  "Ube Macapuno Mix": "https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=800&q=80",
+  "Creamy Ube Pastillas": "https://images.unsplash.com/photo-1582293041079-7814c2f12063?auto=format&fit=crop&w=800&q=80",
+};
+
+const DEFAULT_FALLBACK = "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80";
+
 export function ProductCard({ product }: ProductCardProps) {
-  const primaryImage = product.images?.[0] || "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80";
+  const initialImg = product.images?.[0] || FALLBACK_IMAGES[product.name] || DEFAULT_FALLBACK;
+  const [imgSrc, setImgSrc] = useState(initialImg);
 
   return (
     <Link href={`/products/${product.id}`} className="group block h-full">
-      <Card className="h-full overflow-hidden border border-border/70 bg-surface-card transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-secondary-container flex flex-col justify-between">
-        <div>
-          {/* Image & Badges */}
-          <div className="relative aspect-square w-full overflow-hidden bg-surface-container">
-            <Image
-              src={primaryImage}
-              alt={product.name}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-              className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-              <Badge variant="default" className="text-[11px] uppercase tracking-wider px-2.5 py-0.5 font-semibold shadow-sm">
-                {product.category}
+      <Card className="product-card-hover group flex flex-col h-full bg-surface-container-lowest border border-outline-variant/50 rounded-xl overflow-hidden shadow-none hover:shadow-xl transition-all duration-300">
+        <div className="relative aspect-square bg-surface-container overflow-hidden">
+          <Image
+            src={imgSrc}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            onError={() => {
+              const fallback = FALLBACK_IMAGES[product.name] || DEFAULT_FALLBACK;
+              if (imgSrc !== fallback) {
+                setImgSrc(fallback);
+              }
+            }}
+          />
+          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+            <Badge className="bg-primary text-white font-label-sm text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border-none">
+              {product.category}
+            </Badge>
+          </div>
+          {product.stock <= 0 && (
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center">
+              <Badge variant="destructive" className="font-label-sm text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                Out of Stock
               </Badge>
             </div>
-            {product.stock <= 0 && (
-              <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center">
-                <Badge variant="destructive" className="text-xs font-bold uppercase tracking-wider px-3 py-1">
-                  Sold Out
-                </Badge>
-              </div>
-            )}
-          </div>
-
-          <CardContent className="p-5 space-y-2">
-            <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
-              {product.name}
-            </h3>
-            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-              {product.description}
-            </p>
-          </CardContent>
+          )}
         </div>
 
-        <CardFooter className="px-5 pb-5 pt-2 flex items-center justify-between border-t border-border/50 mt-auto">
-          <div>
-            <span className="text-xs text-muted-foreground font-medium block">Price</span>
-            <span className="text-xl font-extrabold text-primary">
+        <CardContent className="p-5 flex flex-col flex-grow">
+          <h3 className="font-h3 text-h3 text-on-surface mb-1 group-hover:text-primary transition-colors line-clamp-1">
+            {product.name}
+          </h3>
+          <p className="text-on-surface-variant font-body-md text-body-md mb-4 flex-grow line-clamp-2">
+            {product.description}
+          </p>
+
+          <div className="flex items-center justify-between mt-auto pt-2">
+            <span className="text-primary font-bold text-lg">
               ₱{product.price.toFixed(2)}
             </span>
+            <Button
+              size="icon"
+              className="bg-primary text-white p-2 h-9 w-9 rounded-full hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 shadow-sm"
+              aria-label="Add to Cart"
+            >
+              <ShoppingCart className="w-4 h-4" />
+            </Button>
           </div>
-
-          <Button
-            size="icon"
-            className="rounded-full bg-primary hover:bg-primary-dark text-primary-foreground shadow-md transition-transform active:scale-95"
-            aria-label="View Product"
-          >
-            <ShoppingBag className="w-4 h-4" />
-          </Button>
-        </CardFooter>
+        </CardContent>
       </Card>
     </Link>
   );
