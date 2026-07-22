@@ -62,10 +62,22 @@ export function useOrders() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchOrders();
-    }
-  }, [isAuthenticated, fetchOrders]);
+    if (!isAuthenticated || !token) return;
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    ordersApi.getUserOrders(token)
+      .then((data) => { if (!cancelled) setOrders(data); })
+      .catch((err: unknown) => {
+        if (!cancelled) {
+          const msg = err instanceof Error ? err.message : "Failed to load orders";
+          setError(msg);
+        }
+      })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   return {
     orders,
