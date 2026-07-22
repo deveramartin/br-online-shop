@@ -34,6 +34,8 @@ export function Header() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/products", label: "Shop Catalog" },
+    { href: "/about", label: "About" },
+    { href: "/faq", label: "FAQ" },
     ...(!isAuthenticated ? [{ href: "/signin", label: "Sign In" }] : []),
   ];
 
