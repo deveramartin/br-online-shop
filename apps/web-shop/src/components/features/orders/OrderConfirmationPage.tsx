@@ -16,19 +16,16 @@ export function OrderConfirmationPage() {
   const token = (session as { accessToken?: string })?.accessToken;
 
   const [order, setOrder] = useState<OrderDto | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!!(orderId && token));
 
   useEffect(() => {
-    if (orderId && token) {
-      ordersApi.getOrderById(orderId, token)
-        .then((res) => {
-          setOrder(res);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+    if (!orderId || !token) return;
+    let cancelled = false;
+    ordersApi.getOrderById(orderId, token)
+      .then((res) => { if (!cancelled) setOrder(res); })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, [orderId, token]);
 
   if (loading) {
