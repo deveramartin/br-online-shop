@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
-import { signupSchema, type SignupFormData } from "@/lib/validators/auth";
+import { registerSchema, type RegisterFormData } from "@/lib/validators/auth";
 import { authApi } from "@/lib/api/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,8 +21,8 @@ export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const form = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema),
+  const form = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       fullName: "",
       email: "",
@@ -32,7 +32,7 @@ export function SignupForm() {
     },
   });
 
-  const onSubmit = async (data: SignupFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     setServerError(null);
 
