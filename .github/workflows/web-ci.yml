@@ -1,0 +1,41 @@
+name: Web CI
+
+on:
+  push:
+    paths:
+      - 'apps/web-shop/**'
+      - 'packages/**'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/web-ci.yml'
+  pull_request:
+    paths:
+      - 'apps/web-shop/**'
+      - 'packages/**'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/web-ci.yml'
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9.15.4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint and Typecheck
+        run: pnpm turbo run lint type-check --filter=web-shop
+
+      - name: Build Web App
+        run: pnpm turbo run build --filter=web-shop

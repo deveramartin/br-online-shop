@@ -1,0 +1,9 @@
+# Global owners
+*       @team-leads
+
+# Frontend
+/apps/web-shop/ @frontend-team
+/packages/      @frontend-team
+
+# Backend
+/apps/api-oos/  @backend-team

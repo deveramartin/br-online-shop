@@ -1,0 +1,37 @@
+# Design references
+.design-ref/
+
+# Node / Next.js
+node_modules/
+.next/
+.turbo/
+out/
+build/
+coverage/
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment files
+.env*
+!.env.example
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.pubxml
+*.publishsettings
+
+# Certs / keys
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

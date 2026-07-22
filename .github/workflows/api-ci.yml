@@ -1,0 +1,27 @@
+name: API CI
+
+on:
+  push:
+    paths:
+      - 'apps/api-oos/**'
+      - '.github/workflows/api-ci.yml'
+  pull_request:
+    paths:
+      - 'apps/api-oos/**'
+      - '.github/workflows/api-ci.yml'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore apps/api-oos/
+
+      - name: Build API Solution
+        run: dotnet build apps/api-oos/ --no-restore --configuration Release

@@ -1,0 +1,330 @@
+# E-Commerce Website — Project Backlog
+
+**Stack:** .NET Web API (backend) · Next.js + Tailwind + shadcn/ui (frontend)
+
+Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priority: P0 = MVP-critical, P1 = important, P2 = nice-to-have.
+
+---
+
+## EPIC 0: Monorepo Structure & Tooling (P0)
+
+**0.1 Repository layout**
+
+- [x] Create root repo with the following top-level structure:
+  ```
+  /repo-root
+    /apps
+      /api-oos          → .NET Web API solution
+      /web-shop          → Next.js frontend app + Typescript (use the current oos/ frontend app and convert it to this Next.js app)
+    /packages
+      /shared-types → shared TypeScript types/interfaces (e.g., DTOs mirrored from backend)
+      /ui           → (optional, P2) shared shadcn/ui component wrappers if ever split into multiple frontends
+      /config       → shared eslint/prettier/tsconfig base configs
+    /docs           → architecture docs, API contracts, ADRs
+    /scripts        → dev/setup/deploy helper scripts
+    /.github
+      /workflows    → CI/CD pipeline definitions
+    docker-compose.yml
+    .editorconfig
+    .gitignore
+    README.md
+    LICENSE.md
+  ```
+- [x] Decide and document naming convention for `apps/api` vs `apps/web` folders
+- [x] Add root `README.md` with setup instructions for both apps (prereqs: .NET SDK version, Node version, package manager)
+
+**0.2 Root-level tooling**
+
+- [x] Add root `.gitignore` covering both .NET (`bin/`, `obj/`) and Node (`node_modules/`, `.next/`) artifacts
+- [x] Add `.editorconfig` for consistent formatting across C# and TS/TSX files
+- [x] Set up root `package.json` with workspaces (npm/pnpm/yarn workspaces) scoped to `apps/web` and `packages/*` only (the .NET API is not part of the JS workspace, just lives alongside it)
+- [x] Evaluate and decide: plain npm/pnpm workspaces vs. Turborepo/Nx for the frontend side (Turborepo recommended if repo will grow — enables cached builds/lint/test across `apps/web` and `packages/*`)
+- [x] If Turborepo chosen: add `turbo.json` with pipeline definitions (`build`, `lint`, `dev`, `test`)
+- [x] Configure root scripts to run backend and frontend concurrently in dev (e.g., `concurrently` or a `Makefile`/shell script: `dev:api`, `dev:web`, `dev` = both)
+
+**0.3 Local development environment**
+
+- [x] Create `docker-compose.yml` for local dependencies (SQL Server/PostgreSQL, and optionally the API + web if containerized)
+- [x] Add `.env.example` files for both `apps/api` and `apps/web` documenting required environment variables
+- [x] Document local setup steps in README: clone → install deps → copy env files → run DB migrations → `npm run dev` / `dotnet run`
+
+**0.4 Shared type/contract strategy**
+
+- [x] Decide approach for keeping frontend types in sync with backend DTOs:
+  - Option A: Manually maintained TypeScript interfaces in `packages/shared-types`
+  - Option B: Auto-generate TS types from OpenAPI/Swagger spec (e.g., `openapi-typescript`) as part of build/CI
+- [x] Set up chosen approach and document the workflow for updating types when backend DTOs change
+
+**0.5 CI/CD pipeline structure**
+
+- [x] Set up path-based CI triggers so backend changes only run backend pipeline and frontend changes only run frontend pipeline (avoids unnecessary builds)
+- [x] `.github/workflows/api-ci.yml` — restore, build, test .NET solution
+- [x] `.github/workflows/web-ci.yml` — install, lint, type-check, build Next.js app
+- [x] Add branch protection rules requiring CI pass before merge to `main`
+
+**0.6 Code ownership & contribution rules**
+
+- [x] Add `CODEOWNERS` file mapping `/apps/api` and `/apps/web` to relevant reviewers
+- [x] Add root `CONTRIBUTING.md` with branch naming convention, commit message convention (e.g., Conventional Commits), and PR template
+- [x] Add PR template (`.github/PULL_REQUEST_TEMPLATE.md`)
+
+---
+
+## EPIC 1: Project Setup & Infrastructure (P0)
+
+**1.1 Backend project scaffolding**
+
+- [ ] Create .NET Web API solution (ASP.NET Core)
+- [ ] Set up project structure (Controllers, Services, Repositories, DTOs, Models, Middleware)
+- [ ] Configure Entity Framework Core + connection to SQL Server/PostgreSQL
+- [ ] Set up dependency injection container
+- [ ] Configure CORS policy for Next.js frontend origin
+- [ ] Set up Serilog or built-in logging
+- [ ] Configure environment-based appsettings (Development/Staging/Production)
+- [ ] Set up global exception handling middleware
+- [ ] Set up API versioning
+- [ ] Configure Swagger/OpenAPI documentation
+
+**1.2 Frontend project scaffolding**
+
+- [ ] Create Next.js 14+ project (App Router)
+- [ ] Install and configure Tailwind CSS
+- [ ] Install and configure shadcn/ui (init, components.json, theme tokens)
+- [ ] Set up folder structure (app/, components/, lib/, hooks/, types/, services/)
+- [ ] Configure ESLint + Prettier
+- [ ] Set up environment variables (.env.local, API base URL)
+- [ ] Configure Axios or fetch wrapper for API calls
+- [ ] Set up global layout (header, footer, providers)
+- [ ] Configure brand color palette in tailwind.config + shadcn theme (from logo)
+- [ ] Add logo asset and favicon
+
+**1.3 DevOps / shared setup**
+
+- [ ] Set up Git repo + branching strategy (main/dev/feature branches)
+- [ ] Set up CI pipeline (build + lint checks) for both projects
+- [ ] Set up database migrations workflow
+- [ ] Decide hosting (e.g., Azure App Service / backend, Vercel / frontend)
+- [ ] Set up basic error monitoring (e.g., Sentry) for both apps
+
+---
+
+## EPIC 2: Authentication & User Accounts (P0)
+
+**2.1 User registration (Signup)**
+
+- [ ] Backend: `POST /api/auth/register` — validate email uniqueness, hash password (BCrypt/Identity)
+- [ ] Backend: Email format & password strength validation
+- [ ] Backend: Send verification email (optional P1)
+- [ ] Frontend: Signup page UI (shadcn Form, Input, Button, Checkbox for ToS)
+- [ ] Frontend: Client-side validation (Zod + react-hook-form)
+- [ ] Frontend: Handle API errors (email taken, weak password)
+
+**2.2 User login**
+
+- [ ] Backend: `POST /api/auth/login` — validate credentials, issue JWT (access + refresh token)
+- [ ] Backend: Implement refresh token endpoint `POST /api/auth/refresh`
+- [ ] Backend: Implement ASP.NET Core Identity or custom auth service
+- [ ] Frontend: Login page UI
+- [ ] Frontend: Store tokens securely (httpOnly cookie preferred over localStorage)
+- [ ] Frontend: Auth context/provider + protected route middleware
+
+**2.3 Forgot / reset password**
+
+- [ ] Backend: `POST /api/auth/forgot-password` — generate reset token, send email
+- [ ] Backend: `POST /api/auth/reset-password` — validate token, update password
+- [ ] Frontend: Forgot password page (email input)
+- [ ] Frontend: Reset password page (new password + confirm)
+
+**2.4 Profile settings**
+
+- [ ] Backend: `GET /api/users/me`, `PUT /api/users/me` — update name, email, phone, avatar
+- [ ] Backend: `PUT /api/users/me/password` — change password (requires current password)
+- [ ] Backend: Manage saved addresses (`GET/POST/PUT/DELETE /api/users/me/addresses`)
+- [ ] Backend: Manage saved payment methods (tokenized, via payment provider vault)
+- [ ] Frontend: Profile page with tabbed sections (shadcn Tabs): Personal Info, Addresses, Payment Methods, Order History
+- [ ] Frontend: Avatar upload component
+- [ ] Frontend: Address form (add/edit/delete, set default)
+
+**2.5 Logout & session handling**
+
+- [ ] Backend: Token invalidation / refresh token revocation endpoint
+- [ ] Frontend: Logout action clears auth state + redirects
+
+---
+
+## EPIC 3: Product Catalog (P0)
+
+**3.1 Product data model**
+
+- [ ] Backend: Product entity (id, name, description, price, images[], stock, category, SKU, active status)
+- [ ] Backend: Database seed script for 4–10 initial products
+- [ ] Backend: `GET /api/products` — list all products (with pagination-ready structure even if small)
+- [ ] Backend: `GET /api/products/{id}` — single product detail
+- [ ] Backend: (P1) `GET /api/products?category=&sort=&search=` — filter/sort/search support
+
+**3.2 Landing page**
+
+- [ ] Frontend: Hero section component
+- [ ] Frontend: Featured products section (shadcn Card grid)
+- [ ] Frontend: Testimonials/trust badges section
+- [ ] Frontend: Newsletter signup form (P1 — connect to backend or 3rd party like Mailchimp)
+
+**3.3 Product catalog page**
+
+- [ ] Frontend: Product grid page using shadcn Card components
+- [ ] Frontend: (P1) Sort/filter UI bar
+- [ ] Frontend: Loading skeletons (shadcn Skeleton) while fetching
+
+**3.4 Product detail page**
+
+- [ ] Frontend: Image gallery component (carousel or thumbnail switcher)
+- [ ] Frontend: Quantity selector
+- [ ] Frontend: Add to Cart button with stock validation
+- [ ] Frontend: Related products section
+- [ ] Backend: Stock/inventory check endpoint before add-to-cart confirmation
+
+---
+
+## EPIC 4: Cart & Checkout (P0)
+
+**4.1 Shopping cart**
+
+- [ ] Backend: Decide cart strategy — server-persisted cart (`Cart`, `CartItem` tables tied to user or session/guest ID) vs. client-only cart with server validation at checkout. Recommend server-persisted for logged-in users, local state for guests.
+- [ ] Backend: `GET /api/cart`, `POST /api/cart/items`, `PUT /api/cart/items/{id}`, `DELETE /api/cart/items/{id}`
+- [ ] Frontend: Cart state management (Zustand/Context) synced with backend when logged in
+- [ ] Frontend: Cart drawer/sheet (shadcn Sheet component) accessible from header
+- [ ] Frontend: Cart page — item list, qty controls, remove, subtotal
+- [ ] Frontend: Empty cart state design
+- [ ] Frontend: Cart item count badge on header icon
+
+**4.2 Checkout flow**
+
+- [ ] Backend: `POST /api/orders/checkout` — validate cart, calculate totals (subtotal, tax, shipping)
+- [ ] Backend: Address validation logic
+- [ ] Frontend: Step 1 — Shipping info form (or select saved address)
+- [ ] Frontend: Step 2 — Order review screen
+- [ ] Frontend: Multi-step checkout UI with progress indicator (shadcn Tabs or custom stepper)
+
+**4.3 Payment integration**
+
+- [ ] Backend: Integrate payment provider (Stripe/PayPal) — create payment intent endpoint
+- [ ] Backend: Webhook endpoint to confirm payment status
+- [ ] Backend: Store transaction records (`Payment` entity: order id, status, provider ref)
+- [ ] Frontend: Payment form UI (Stripe Elements or provider SDK styled to match shadcn inputs)
+- [ ] Frontend: Handle payment errors (declined card, etc.)
+- [ ] Frontend: Trust/security badges near payment form
+
+**4.4 Order confirmation & history**
+
+- [ ] Backend: `POST /api/orders` — create order record after successful payment
+- [ ] Backend: `GET /api/orders` (user's orders), `GET /api/orders/{id}`
+- [ ] Backend: Order status enum (Pending, Processing, Shipped, Delivered, Cancelled)
+- [ ] Backend: Send order confirmation email
+- [ ] Frontend: Order confirmation page (order number, summary, estimated delivery)
+- [ ] Frontend: Order history list in profile (status badges)
+- [ ] Frontend: Order detail view page
+
+---
+
+## EPIC 5: Customer Support (P1)
+
+**5.1 Live chat widget**
+
+- [ ] Decide approach: (a) build custom chat with SignalR (.NET) for real-time messaging, or (b) integrate 3rd-party widget (Intercom/Tawk.to/Crisp) for faster MVP. Recommend 3rd-party for MVP unless live agent infra is ready.
+- [ ] Backend (if custom): SignalR hub for chat, `ChatMessage` entity, conversation persistence
+- [ ] Backend (if custom): Basic auto-responder / FAQ bot logic (optional AI integration later)
+- [ ] Frontend: Floating chat bubble component (fixed position)
+- [ ] Frontend: Chat panel UI (shadcn Sheet/Dialog) — message bubbles, input, avatar
+- [ ] Frontend: Unread message indicator
+
+**5.2 Contact page**
+
+- [ ] Backend: `POST /api/contact` — store/forward message via email (SendGrid/SMTP)
+- [ ] Frontend: Contact form (shadcn Form) — name, email, subject, message
+- [ ] Frontend: Company details + map embed
+
+**5.3 FAQ page**
+
+- [ ] Backend: (P2) FAQ entity if content needs to be dynamic/CMS-editable; otherwise hardcode in frontend
+- [ ] Frontend: Accordion-based FAQ UI (shadcn Accordion), grouped by category
+
+---
+
+## EPIC 6: Careers / Application Page (P1)
+
+**6.1 Job application system**
+
+- [ ] Backend: `JobPosting` entity (title, description, active status) — optional if positions are static
+- [ ] Backend: `POST /api/applications` — submit application (name, email, phone, position, resume file, cover letter)
+- [ ] Backend: File upload handling for resume (store in Azure Blob/S3, validate file type/size)
+- [ ] Backend: Notification email to HR/company on new application
+- [ ] Frontend: Careers page listing open positions
+- [ ] Frontend: Application form with resume upload (shadcn Input type=file + progress indicator)
+- [ ] Frontend: Submission success confirmation
+
+---
+
+## EPIC 7: Static & Legal Pages (P1)
+
+- [ ] Frontend: About Us page (static content)
+- [ ] Frontend: Terms of Service page
+- [ ] Frontend: Privacy Policy page
+- [ ] Frontend: Return & Refund Policy page
+- [ ] Frontend: 404 Not Found page
+- [ ] Backend: (Optional) CMS-lite endpoint if legal content should be editable without redeploy
+
+---
+
+## EPIC 8: Global UI/UX & Cross-Cutting Concerns (P0–P1)
+
+- [ ] Frontend: Sticky header (logo, nav, search icon, cart icon w/ badge, account icon) — P0
+- [ ] Frontend: Footer (links, social icons, newsletter, copyright) — P0
+- [ ] Frontend: Toast notification system (shadcn Toast/Sonner) for cart/order/form actions — P0
+- [ ] Frontend: Global loading states (skeletons) and error boundaries — P0
+- [ ] Frontend: Responsive breakpoints audit across all pages (mobile/tablet/desktop) — P0
+- [ ] Frontend: Hamburger nav menu for mobile — P0
+- [ ] Backend: Rate limiting on auth/contact/application endpoints — P1
+- [ ] Backend: Input validation (FluentValidation) across all endpoints — P0
+- [ ] Backend: API response standardization (consistent envelope, error format) — P0
+- [ ] Both: Accessibility pass (WCAG AA contrast, keyboard nav, alt text) — P1
+- [ ] Both: SEO basics (meta tags, sitemap, robots.txt, Open Graph tags) — P1
+
+---
+
+## EPIC 9: Testing & QA (P1)
+
+- [ ] Backend: Unit tests for services (xUnit/NUnit)
+- [ ] Backend: Integration tests for critical endpoints (auth, checkout, orders)
+- [ ] Frontend: Component tests (Jest/React Testing Library) for cart, forms
+- [ ] Frontend: E2E tests for critical flows (Playwright/Cypress) — signup → browse → cart → checkout
+- [ ] Manual QA pass on mobile devices/browsers
+
+---
+
+## EPIC 10: Deployment & Launch (P0)
+
+- [ ] Set up production database + run migrations
+- [ ] Configure production environment variables/secrets (API keys, JWT secret, payment keys)
+- [ ] Deploy backend (Azure App Service / AWS / etc.)
+- [ ] Deploy frontend (Vercel or similar)
+- [ ] Configure custom domain + SSL
+- [ ] Set up backups for database
+- [ ] Final cross-browser/device smoke test
+- [ ] Soft launch / go live
+
+---
+
+## Suggested Sprint Grouping (if working in 2-week sprints)
+
+| Sprint | Focus                                                                      |
+| ------ | -------------------------------------------------------------------------- |
+| 1      | Epic 0 (monorepo structure), Epic 1 (setup), Epic 2.1–2.2 (register/login) |
+| 2      | Epic 2.3–2.5 (profile, password), Epic 3.1–3.2 (product data, landing)     |
+| 3      | Epic 3.3–3.4 (catalog, product detail), Epic 4.1 (cart)                    |
+| 4      | Epic 4.2–4.3 (checkout, payment)                                           |
+| 5      | Epic 4.4 (orders), Epic 8 (global UI polish)                               |
+| 6      | Epic 5 (support/FAQ/contact), Epic 6 (careers)                             |
+| 7      | Epic 7 (legal pages), Epic 9 (testing)                                     |
+| 8      | Epic 10 (deployment), bug fixes, buffer                                    |
+
+_(Adjust based on team size — this assumes 1–2 full-stack devs.)_
