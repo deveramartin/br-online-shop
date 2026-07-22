@@ -11,8 +11,10 @@ interface CartItemRowProps {
   onRemove: (id: string) => void;
 }
 
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80";
+
 export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowProps) {
-  const imageUrl = item.images?.[0] || "/placeholder-ube.jpg";
+  const imageUrl = item.images?.[0] || DEFAULT_IMAGE;
 
   return (
     <div className="flex items-center gap-4 py-4 border-b border-border/60 last:border-b-0">
@@ -22,6 +24,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
           alt={item.productName}
           fill
           className="object-cover"
+          unoptimized={imageUrl.startsWith("http")}
         />
       </div>
 

@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import type { CartItemDto } from "@/types/cart";
 import type { ShippingAddressRequest } from "@/types/order";
 
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=800&q=80";
+
+
 interface OrderReviewStepProps {
   items: CartItemDto[];
   shippingAddress: ShippingAddressRequest;
@@ -60,10 +63,11 @@ export function OrderReviewStep({
             <div key={item.id} className="py-3 flex items-center gap-3">
               <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-surface-low shrink-0 border border-border/40">
                 <Image
-                  src={item.images?.[0] || "/placeholder-ube.jpg"}
+                  src={item.images?.[0] || DEFAULT_IMAGE}
                   alt={item.productName}
                   fill
                   className="object-cover"
+                  unoptimized={(item.images?.[0] || DEFAULT_IMAGE).startsWith("http")}
                 />
               </div>
 
