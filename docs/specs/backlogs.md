@@ -264,13 +264,13 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 **6.1 Job application system**
 
-- [ ] Backend: `JobPosting` entity (title, description, active status) — optional if positions are static
-- [ ] Backend: `POST /api/applications` — submit application (name, email, phone, position, resume file, cover letter)
-- [ ] Backend: File upload handling for resume (store in Azure Blob/S3, validate file type/size)
-- [ ] Backend: Notification email to HR/company on new application
-- [ ] Frontend: Careers page listing open positions
-- [ ] Frontend: Application form with resume upload (shadcn Input type=file + progress indicator)
-- [ ] Frontend: Submission success confirmation
+- [x] Backend: `JobPosting` entity (title, description, active status) — optional if positions are static
+- [x] Backend: `POST /api/applications` — submit application (name, email, phone, position, resume file, cover letter)
+- [x] Backend: File upload handling for resume (store in Azure Blob/S3, validate file type/size)
+- [x] Backend: Notification email to HR/company on new application
+- [x] Frontend: Careers page listing open positions
+- [x] Frontend: Application form with resume upload (shadcn Input type=file + progress indicator)
+- [x] Frontend: Submission success confirmation
 
 ---
 

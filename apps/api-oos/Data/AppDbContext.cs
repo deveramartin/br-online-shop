@@ -21,6 +21,8 @@ public class AppDbContext : DbContext
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<ContactInquiry> ContactInquiries => Set<ContactInquiry>();
     public DbSet<ProductReview> ProductReviews => Set<ProductReview>();
+    public DbSet<JobPosting> JobPostings => Set<JobPosting>();
+    public DbSet<JobApplication> JobApplications => Set<JobApplication>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -152,6 +154,32 @@ public class AppDbContext : DbContext
              .OnDelete(DeleteBehavior.Cascade);
 
             e.HasIndex(r => new { r.UserId, r.ProductId }).IsUnique();
+        });
+
+        modelBuilder.Entity<JobPosting>(e =>
+        {
+            e.HasKey(j => j.Id);
+            e.Property(j => j.Title).IsRequired().HasMaxLength(150);
+            e.Property(j => j.Description).IsRequired().HasMaxLength(4000);
+            e.Property(j => j.Requirements).HasMaxLength(4000);
+            e.Property(j => j.Location).IsRequired().HasMaxLength(100);
+            e.Property(j => j.Department).IsRequired().HasMaxLength(100);
+            e.Property(j => j.Type).IsRequired().HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<JobApplication>(e =>
+        {
+            e.HasKey(a => a.Id);
+            e.Property(a => a.Name).IsRequired().HasMaxLength(100);
+            e.Property(a => a.Email).IsRequired().HasMaxLength(256);
+            e.Property(a => a.Phone).IsRequired().HasMaxLength(30);
+            e.Property(a => a.CoverLetter).HasMaxLength(4000);
+            e.Property(a => a.ResumeUrl).IsRequired().HasMaxLength(500);
+
+            e.HasOne(a => a.JobPosting)
+             .WithMany()
+             .HasForeignKey(a => a.JobPostingId)
+             .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

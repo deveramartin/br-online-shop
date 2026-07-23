@@ -42,6 +42,7 @@ export function Header() {
     { href: "/products", label: "Shop Catalog" },
     { href: "/about", label: "About" },
     { href: "/faq", label: "FAQ" },
+    { href: "/careers", label: "Careers" },
   ];
 
   return (

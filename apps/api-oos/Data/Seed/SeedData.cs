@@ -142,5 +142,48 @@ public static class SeedData
 
         await context.Products.AddRangeAsync(products);
         await context.SaveChangesAsync();
+
+        if (!await context.JobPostings.AnyAsync())
+        {
+            var jobs = new List<JobPosting>
+            {
+                new()
+                {
+                    Id = Guid.Parse("01111111-1111-1111-1111-111111111111"),
+                    Title = "Senior Full-Stack Engineer (Next.js & .NET)",
+                    Description = "We are looking for a Senior Full-Stack Engineer to lead the development of our e-commerce platform and operational systems. You will work with Next.js, Tailwind CSS, ASP.NET Core, and PostgreSQL.",
+                    Requirements = "• 5+ years of experience with C# and ASP.NET Core\n• Strong expertise in React and Next.js (App Router)\n• Experience with Entity Framework Core and database optimization\n• Passion for writing clean, maintainable, and testable code",
+                    Location = "Manila, Philippines (Hybrid)",
+                    Department = "Engineering",
+                    Type = "Full-time",
+                    IsActive = true
+                },
+                new()
+                {
+                    Id = Guid.Parse("02222222-2222-2222-2222-222222222222"),
+                    Title = "Digital Marketing Specialist",
+                    Description = "Join our marketing team to drive growth and brand awareness for our premium Ube products. You will run campaigns, analyze user engagement, and optimize conversion funnels.",
+                    Requirements = "• 3+ years of experience in e-commerce digital marketing\n• Proficient with Google Analytics, Meta Ads, and SEO best practices\n• Excellent copywriting and communication skills\n• Experience with email marketing platforms (e.g. Brevo/Mailchimp)",
+                    Location = "Remote (Asia/Manila timezones)",
+                    Department = "Marketing",
+                    Type = "Full-time",
+                    IsActive = true
+                },
+                new()
+                {
+                    Id = Guid.Parse("03333333-3333-3333-3333-333333333333"),
+                    Title = "Kitchen Operations Supervisor",
+                    Description = "Supervise the day-to-day operations of our production kitchen. You will ensure product quality, inventory accuracy, and adherence to health and safety regulations.",
+                    Requirements = "• 2+ years of supervisory experience in F&B or food manufacturing\n• Strong knowledge of food safety standards (HACCP is a plus)\n• Detail-oriented with strong organizational skills",
+                    Location = "Laguna, Philippines (On-site)",
+                    Department = "Operations",
+                    Type = "Full-time",
+                    IsActive = true
+                }
+            };
+
+            await context.JobPostings.AddRangeAsync(jobs);
+            await context.SaveChangesAsync();
+        }
     }
 }
