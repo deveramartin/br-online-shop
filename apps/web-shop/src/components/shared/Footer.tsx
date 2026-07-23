@@ -65,7 +65,7 @@ export function Footer() {
       </div>
 
       <div className="max-w-[1280px] mx-auto px-6 mt-12 pt-6 border-t border-border text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Bren Raphael&apos;s Ube Jam & Halaya Shop. All rights reserved.
+        © {new Date().getFullYear()}&nbsp;Bren Raphael&apos;s&nbsp;Ube Jam & Halaya Shop. All rights reserved.
       </div>
     </footer>
   );

@@ -8,7 +8,7 @@ import { profileSchema, type ProfileFormData, type AddressFormData } from "@/lib
 import type { AddressDto, UserDto } from "@/types/auth";
 import { userApi } from "@/lib/api/api-client";
 
-export type TabType = "personal" | "addresses" | "orders";
+export type TabType = "personal" | "addresses" | "orders" | "tickets";
 
 export function useProfilePage() {
   const { data: session } = useSession();
