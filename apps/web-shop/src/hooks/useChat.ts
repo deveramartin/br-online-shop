@@ -26,12 +26,13 @@ export function useChat() {
     isOpenRef.current = isOpen;
   }, [isOpen]);
 
-  const isAuthenticated = status === "authenticated" && Boolean(session?.user);
+  const token = (session as { accessToken?: string })?.accessToken;
+  const isAuthenticated = status === "authenticated" && Boolean(session?.user) && Boolean(token);
   const userId = session?.user?.id;
 
   // Initialize or retrieve ticketId
   const getOrCreateTicket = useCallback(async () => {
-    if (!userId) return null;
+    if (!userId || !token) return null;
 
     const storageKey = `br_chat_ticket_${userId}`;
     const existingTicket = localStorage.getItem(storageKey);
@@ -42,7 +43,11 @@ export function useChat() {
 
     try {
       setIsLoading(true);
-      const res = await apiClient.post<SupportTicketResponse>("/webhooks/support-ticket", {});
+      const res = await apiClient.post<SupportTicketResponse>(
+        "/webhooks/support-ticket",
+        {},
+        { token }
+      );
       if (res?.ticketId) {
         localStorage.setItem(storageKey, res.ticketId);
         setTicketId(res.ticketId);
@@ -54,7 +59,7 @@ export function useChat() {
       setIsLoading(false);
     }
     return null;
-  }, [userId]);
+  }, [userId, token]);
 
   // Fetch initial message history
   const fetchMessages = useCallback(async (activeTicketId: string) => {
