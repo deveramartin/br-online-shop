@@ -4,9 +4,11 @@ using ApiOos.DTOs.Requests.Auth;
 using ApiOos.DTOs.Responses.Auth;
 using ApiOos.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 [ApiController]
 [Route("api/auth")]
+[EnableRateLimiting("StrictRateLimit")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;

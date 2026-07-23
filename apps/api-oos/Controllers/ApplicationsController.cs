@@ -4,9 +4,11 @@ using ApiOos.DTOs.Requests;
 using ApiOos.DTOs.Responses;
 using ApiOos.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 [ApiController]
 [Route("api/applications")]
+[EnableRateLimiting("StrictRateLimit")]
 public class ApplicationsController : ControllerBase
 {
     private readonly IJobService _jobService;
