@@ -29,8 +29,8 @@ export function Footer() {
           </h4>
           <ul className="space-y-2 text-xs text-muted">
             <li><Link href="/products" className="hover:text-primary">All Products</Link></li>
-            <li><Link href="/about" className="hover:text-primary">Our Heritage Story</Link></li>
-            <li><Link href="/faq" className="hover:text-primary">FAQ</Link></li>
+            <li><Link href="/#about" className="hover:text-primary">Our Heritage Story</Link></li>
+            <li><Link href="/#faq" className="hover:text-primary">FAQ</Link></li>
             <li><Link href="/careers" className="hover:text-primary">Careers</Link></li>
           </ul>
         </div>
@@ -40,8 +40,8 @@ export function Footer() {
             Customer Service
           </h4>
           <ul className="space-y-2 text-xs text-muted">
-            <li><Link href="/faq" className="hover:text-primary">FAQ & Delivery</Link></li>
-            <li><Link href="/about" className="hover:text-primary">About Our Craft</Link></li>
+            <li><Link href="/#faq" className="hover:text-primary">FAQ & Delivery</Link></li>
+            <li><Link href="/#about" className="hover:text-primary">About Our Craft</Link></li>
           </ul>
         </div>
 

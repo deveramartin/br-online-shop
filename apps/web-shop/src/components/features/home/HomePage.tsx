@@ -5,6 +5,7 @@ import { HomeTrustBadges } from "./HomeTrustBadges";
 import { HomeSignatureCollection } from "./HomeSignatureCollection";
 import { HomeBrandStory } from "./HomeBrandStory";
 import { HomeTestimonials } from "./HomeTestimonials";
+import { HomeFaqSection } from "./HomeFaqSection";
 import { HomeNewsletter } from "./HomeNewsletter";
 
 export function HomePage() {
@@ -15,6 +16,7 @@ export function HomePage() {
       <HomeSignatureCollection />
       <HomeBrandStory />
       <HomeTestimonials />
+      <HomeFaqSection />
       <HomeNewsletter />
     </div>
   );
