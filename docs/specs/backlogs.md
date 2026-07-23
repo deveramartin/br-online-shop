@@ -232,23 +232,23 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 **5.1 Live chat widget**
 
-- [ ] Decide approach: (a) build custom chat with SignalR (.NET) for real-time messaging, or (b) integrate 3rd-party widget (Intercom/Tawk.to/Crisp) for faster MVP. Recommend 3rd-party for MVP unless live agent infra is ready.
-- [ ] Backend (if custom): SignalR hub for chat, `ChatMessage` entity, conversation persistence
+- [x] Decide approach: (a) build custom chat with SignalR (.NET) for real-time messaging, integrated with SentraCX CRM.
+- [x] Backend (if custom): SignalR hub for chat (in SentraCX api-crm) + support webhook ticket relay in api-oos
 - [ ] Backend (if custom): Basic auto-responder / FAQ bot logic (optional AI integration later)
-- [ ] Frontend: Floating chat bubble component (fixed position)
-- [ ] Frontend: Chat panel UI (shadcn Sheet/Dialog) — message bubbles, input, avatar
-- [ ] Frontend: Unread message indicator
+- [x] Frontend: Floating chat bubble component (fixed position)
+- [x] Frontend: Chat panel UI — message bubbles, input, status
+- [x] Frontend: Unread message indicator
 
 **5.2 Contact page**
 
-- [ ] Backend: `POST /api/contact` — store/forward message via email (SendGrid/SMTP)
-- [ ] Frontend: Contact form (shadcn Form) — name, email, subject, message
-- [ ] Frontend: Company details + map embed
+- [x] Backend: `POST /api/contact` — store/forward message via Brevo SMTP
+- [x] Frontend: Contact form — name, email, subject, message
+- [x] Frontend: Company details + map embed
 
 **5.3 FAQ page**
 
-- [ ] Backend: (P2) FAQ entity if content needs to be dynamic/CMS-editable; otherwise hardcode in frontend
-- [ ] Frontend: Accordion-based FAQ UI (shadcn Accordion), grouped by category
+- [x] Backend: (P2) FAQ entity if content needs to be dynamic/CMS-editable; otherwise hardcode in frontend
+- [x] Frontend: Accordion-based FAQ UI, grouped by category
 
 ---
 

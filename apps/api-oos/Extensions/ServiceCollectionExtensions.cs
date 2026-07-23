@@ -28,11 +28,25 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ApiOos.Interfaces.Repositories.IProductRepository, ApiOos.Repositories.ProductRepository>();
         services.AddScoped<ApiOos.Interfaces.Repositories.ICartRepository, ApiOos.Repositories.CartRepository>();
         services.AddScoped<ApiOos.Interfaces.Repositories.IOrderRepository, ApiOos.Repositories.OrderRepository>();
+        services.AddScoped<ApiOos.Interfaces.Repositories.IContactInquiryRepository, ApiOos.Repositories.ContactInquiryRepository>();
         services.AddScoped<ApiOos.Interfaces.Services.IAuthService, ApiOos.Services.AuthService>();
         services.AddScoped<ApiOos.Interfaces.Services.IUserService, ApiOos.Services.UserService>();
         services.AddScoped<ApiOos.Interfaces.Services.IProductService, ApiOos.Services.ProductService>();
         services.AddScoped<ApiOos.Interfaces.Services.ICartService, ApiOos.Services.CartService>();
         services.AddScoped<ApiOos.Interfaces.Services.IOrderService, ApiOos.Services.OrderService>();
+        services.AddScoped<ApiOos.Interfaces.Services.IContactService, ApiOos.Services.ContactService>();
+        services.AddScoped<ApiOos.Interfaces.Services.ISentraCxService, ApiOos.Services.SentraCxService>();
+
+        services.AddHttpClient("SentraCX", (sp, client) =>
+        {
+            var config = sp.GetRequiredService<IConfiguration>();
+            var crmUrl = config["SentraCX:ApiUrl"] ?? "https://localhost:7001";
+            client.BaseAddress = new Uri(crmUrl);
+        }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        });
+
         return services;
 
     }

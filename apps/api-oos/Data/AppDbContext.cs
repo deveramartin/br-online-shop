@@ -19,6 +19,7 @@ public class AppDbContext : DbContext
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<ContactInquiry> ContactInquiries => Set<ContactInquiry>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -122,6 +123,15 @@ public class AppDbContext : DbContext
              .WithOne(o => o.Payment)
              .HasForeignKey<Payment>(p => p.OrderId)
              .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ContactInquiry>(e =>
+        {
+            e.HasKey(c => c.Id);
+            e.Property(c => c.Name).IsRequired().HasMaxLength(100);
+            e.Property(c => c.Email).IsRequired().HasMaxLength(256);
+            e.Property(c => c.Subject).IsRequired().HasMaxLength(200);
+            e.Property(c => c.Message).IsRequired().HasMaxLength(4000);
         });
     }
 }
