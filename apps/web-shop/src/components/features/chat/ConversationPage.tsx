@@ -4,18 +4,11 @@ import { useEffect, useState, useRef, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import {
-  ArrowLeft,
-  MessageSquare,
-  Send,
-  Loader2,
-  AlertTriangle,
-  Ban,
-  ShieldCheck,
-  User,
-} from "lucide-react";
+import { ArrowLeft, Send, Loader2, Ban, ShieldCheck } from "lucide-react";
 import { useChat } from "@/hooks/useChat";
 import { ChatMessageBubble } from "./ChatMessageBubble";
+import { ConversationHeader } from "./ConversationHeader";
+import { CancelTicketModal } from "./CancelTicketModal";
 import { supportApi } from "@/lib/api/support-api";
 import type { TicketSummary } from "@/types/chat";
 
@@ -85,22 +78,6 @@ export function ConversationPage({ ticketId }: ConversationPageProps) {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Unclaimed":
-        return "bg-amber-100 text-amber-800 border-amber-200";
-      case "Claimed":
-      case "Ongoing":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "Completed":
-        return "bg-emerald-100 text-emerald-800 border-emerald-200";
-      case "Canceled":
-        return "bg-red-100 text-red-800 border-red-200";
-      default:
-        return "bg-slate-100 text-slate-700 border-slate-200";
-    }
-  };
-
   if (isLoadingTicket) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
@@ -135,34 +112,8 @@ export function ConversationPage({ ticketId }: ConversationPageProps) {
 
       {/* Main Conversation Container */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-[650px]">
-        {/* Ticket Header */}
-        <div className="bg-slate-900 text-white px-6 py-4 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <MessageSquare className="w-4 h-4 text-purple-300" />
-              <h1 className="text-base font-bold leading-tight">{ticket?.title || `Support Ticket #${ticketId.slice(0, 8)}`}</h1>
-            </div>
-            <p className="text-xs text-slate-400">
-              Ticket ID: <span className="font-mono text-purple-300">{ticketId}</span>
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span
-              className={`px-3 py-1 text-xs font-bold rounded-full border ${getStatusColor(
-                ticket?.status || "Unclaimed"
-              )}`}
-            >
-              {ticket?.status || "Unclaimed"}
-            </span>
-
-            <div className="text-right text-xs text-slate-300 hidden sm:block">
-              <span className="flex items-center gap-1">
-                <User className="w-3 h-3 text-purple-300" /> Agent: {ticket?.assignedToName || "Unassigned"}
-              </span>
-            </div>
-          </div>
-        </div>
+        {/* Ticket Header Sub-Component */}
+        <ConversationHeader ticket={ticket} ticketId={ticketId} />
 
         {/* Live SignalR Connection Banner */}
         <div className="bg-purple-50 px-6 py-2 border-b border-purple-100 flex items-center justify-between text-xs text-purple-900 font-medium">
@@ -236,36 +187,13 @@ export function ConversationPage({ ticketId }: ConversationPageProps) {
         )}
       </div>
 
-      {/* Cancel Confirmation Modal */}
-      {showCancelModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center">
-            <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4">
-              <AlertTriangle className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-extrabold text-slate-900">Cancel Support Ticket?</h3>
-            <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-              Are you sure you want to cancel this ticket? Once cancelled, staff will no longer process your inquiry and you will need to open a new ticket.
-            </p>
-            <div className="flex items-center justify-center gap-3 mt-6">
-              <button
-                onClick={() => setShowCancelModal(false)}
-                disabled={isCancelling}
-                className="px-4 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer"
-              >
-                Keep Ticket
-              </button>
-              <button
-                onClick={handleCancelTicket}
-                disabled={isCancelling}
-                className="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-sm transition-all cursor-pointer flex items-center gap-1.5"
-              >
-                {isCancelling ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Yes, Cancel Ticket"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Cancel Confirmation Modal Sub-Component */}
+      <CancelTicketModal
+        isOpen={showCancelModal}
+        isCancelling={isCancelling}
+        onClose={() => setShowCancelModal(false)}
+        onConfirm={handleCancelTicket}
+      />
     </div>
   );
 }

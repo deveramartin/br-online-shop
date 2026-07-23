@@ -1,7 +1,7 @@
 import { apiClient } from "@/lib/api/api-client";
 import type { BotReplyResponse, TicketSummary } from "@/types/chat";
 
-const CRM_BASE_URL = process.env.NEXT_PUBLIC_CRM_API_URL || "https://localhost:7001";
+const CRM_BASE_URL = process.env.NEXT_PUBLIC_CRM_API_URL || "http://localhost:5005";
 
 export const supportApi = {
   async getBotReply(userMessage: string, ticketId?: string, token?: string): Promise<BotReplyResponse> {

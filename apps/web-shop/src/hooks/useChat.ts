@@ -8,7 +8,7 @@ import { apiClient } from "@/lib/api/api-client";
 import { supportApi } from "@/lib/api/support-api";
 import type { ChatMessage, SupportTicketResponse, BotReplyResponse } from "@/types/chat";
 
-const CRM_BASE_URL = process.env.NEXT_PUBLIC_CRM_API_URL || "https://localhost:5005";
+const CRM_BASE_URL = process.env.NEXT_PUBLIC_CRM_API_URL || "http://localhost:5005";
 
 export type BotPhase = "BOT_GREETING" | "BOT_THINKING" | "BOT_RESPONDED" | "ESCALATE_PROMPT" | "LIVE_AGENT";
 

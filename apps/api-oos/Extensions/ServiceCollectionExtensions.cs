@@ -43,7 +43,7 @@ public static class ServiceCollectionExtensions
         services.AddHttpClient("SentraCX", (sp, client) =>
         {
             var config = sp.GetRequiredService<IConfiguration>();
-            var crmUrl = config["SentraCX:ApiUrl"] ?? "https://localhost:7001";
+            var crmUrl = config["SentraCX:ApiUrl"] ?? "http://localhost:5005";
             client.BaseAddress = new Uri(crmUrl);
         }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {
