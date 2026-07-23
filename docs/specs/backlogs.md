@@ -276,11 +276,11 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 ## EPIC 7: Static & Legal Pages (P1)
 
-- [ ] Frontend: About Us page (static content)
-- [ ] Frontend: Terms of Service page
-- [ ] Frontend: Privacy Policy page
-- [ ] Frontend: Return & Refund Policy page
-- [ ] Frontend: 404 Not Found page
+- [x] Frontend: About Us page (static content)
+- [x] Frontend: Terms of Service page
+- [x] Frontend: Privacy Policy page
+- [x] Frontend: Return & Refund Policy page
+- [x] Frontend: 404 Not Found page
 - [ ] Backend: (Optional) CMS-lite endpoint if legal content should be editable without redeploy
 
 ---
