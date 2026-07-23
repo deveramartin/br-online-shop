@@ -4,9 +4,11 @@ using ApiOos.DTOs.Requests;
 using ApiOos.DTOs.Responses;
 using ApiOos.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 [ApiController]
 [Route("api/contact")]
+[EnableRateLimiting("StrictRateLimit")]
 public class ContactController : ControllerBase
 {
     private readonly IContactService _contactService;

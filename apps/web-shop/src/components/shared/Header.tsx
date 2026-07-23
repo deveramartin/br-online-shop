@@ -13,10 +13,12 @@ import { CartSheet } from "@/components/features/cart/CartSheet";
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const { totalItems, openCart } = useCart();
 
-  const isAuthenticated = status === "authenticated";
+  const hasUser = Boolean((session as { user?: unknown })?.user);
+  const isAuthenticated = status === "authenticated" || hasUser;
+  const accountHref = status === "unauthenticated" && !hasUser ? "/signin" : "/profile";
 
   // Close mobile menu when route changes
   const [prevPathname, setPrevPathname] = useState(pathname);
@@ -87,7 +89,7 @@ export function Header() {
           </Button>
 
           <Button asChild variant="ghost" size="icon" aria-label="Account" className="rounded-full hidden sm:flex">
-            <Link href={isAuthenticated ? "/profile" : "/signin"}>
+            <Link href={accountHref}>
               <User className="w-5 h-5" />
             </Link>
           </Button>

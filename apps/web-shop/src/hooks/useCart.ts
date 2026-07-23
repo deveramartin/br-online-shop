@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -51,6 +52,7 @@ export function useCart() {
 
   const addToCart = async (productId: string, quantity = 1) => {
     if (!isAuthenticated || !token) {
+      toast.info("Please sign in to add items to your cart.");
       router.push("/signin");
       return;
     }
@@ -59,10 +61,12 @@ export function useCart() {
     try {
       const updatedCart = await cartApi.addItem({ productId, quantity }, token);
       setCart(updatedCart);
+      toast.success("Item added to cart!");
       openCart();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to add item to cart";
       setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -78,6 +82,7 @@ export function useCart() {
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to update item quantity";
       setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -90,9 +95,11 @@ export function useCart() {
     try {
       const updatedCart = await cartApi.removeItem(itemId, token);
       setCart(updatedCart);
+      toast.success("Item removed from cart");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to remove item";
       setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -111,9 +118,11 @@ export function useCart() {
         subtotal: 0,
         totalItems: 0,
       });
+      toast.success("Cart cleared");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to clear cart";
       setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

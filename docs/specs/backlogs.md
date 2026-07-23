@@ -287,17 +287,17 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 ## EPIC 8: Global UI/UX & Cross-Cutting Concerns (P0–P1)
 
-- [ ] Frontend: Sticky header (logo, nav, search icon, cart icon w/ badge, account icon) — P0
-- [ ] Frontend: Footer (links, social icons, newsletter, copyright) — P0
-- [ ] Frontend: Toast notification system (shadcn Toast/Sonner) for cart/order/form actions — P0
-- [ ] Frontend: Global loading states (skeletons) and error boundaries — P0
-- [ ] Frontend: Responsive breakpoints audit across all pages (mobile/tablet/desktop) — P0
-- [ ] Frontend: Hamburger nav menu for mobile — P0
-- [ ] Backend: Rate limiting on auth/contact/application endpoints — P1
-- [ ] Backend: Input validation (FluentValidation) across all endpoints — P0
-- [ ] Backend: API response standardization (consistent envelope, error format) — P0
-- [ ] Both: Accessibility pass (WCAG AA contrast, keyboard nav, alt text) — P1
-- [ ] Both: SEO basics (meta tags, sitemap, robots.txt, Open Graph tags) — P1
+- [x] Frontend: Sticky header (logo, nav, search icon, cart icon w/ badge, account icon) — P0
+- [x] Frontend: Footer (links, social icons, newsletter, copyright) — P0
+- [x] Frontend: Toast notification system (shadcn Toast/Sonner) for cart/order/form actions — P0
+- [x] Frontend: Global loading states (skeletons) and error boundaries — P0
+- [x] Frontend: Responsive breakpoints audit across all pages (mobile/tablet/desktop) — P0
+- [x] Frontend: Hamburger nav menu for mobile — P0
+- [x] Backend: Rate limiting on auth/contact/application endpoints — P1
+- [x] Backend: Input validation (FluentValidation) across all endpoints — P0
+- [x] Backend: API response standardization (consistent envelope, error format) — P0
+- [x] Both: Accessibility pass (WCAG AA contrast, keyboard nav, alt text) — P1
+- [x] Both: SEO basics (meta tags, sitemap, robots.txt, Open Graph tags) — P1
 
 ---
 

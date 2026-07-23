@@ -12,8 +12,24 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bren Raphael's Ube Jam & Halaya Shop",
+  title: {
+    default: "Bren Raphael's Ube Jam & Halaya Shop",
+    template: "%s | Bren Raphael's Ube Jam & Halaya",
+  },
   description: "Authentic artisanal Filipino Ube Jam & Halaya handcrafted with 100% real purple yam.",
+  openGraph: {
+    title: "Bren Raphael's Ube Jam & Halaya Shop",
+    description: "Authentic artisanal Filipino Ube Jam & Halaya handcrafted with 100% real purple yam.",
+    url: "https://brenraphaelubejam.com",
+    siteName: "Bren Raphael's Ube Jam & Halaya",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bren Raphael's Ube Jam & Halaya Shop",
+    description: "Authentic artisanal Filipino Ube Jam & Halaya handcrafted with 100% real purple yam.",
+  },
 };
 
 export default function RootLayout({
