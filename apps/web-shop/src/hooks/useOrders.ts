@@ -66,7 +66,6 @@ export function useOrders() {
     let cancelled = false;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setError(null);
     ordersApi.getUserOrders(token)
       .then((data) => { if (!cancelled) setOrders(data); })

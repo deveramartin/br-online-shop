@@ -21,7 +21,10 @@ export function useChat() {
 
   const connectionRef = useRef<signalR.HubConnection | null>(null);
   const isOpenRef = useRef(isOpen);
-  isOpenRef.current = isOpen;
+
+  useEffect(() => {
+    isOpenRef.current = isOpen;
+  }, [isOpen]);
 
   const isAuthenticated = status === "authenticated" && Boolean(session?.user);
   const userId = session?.user?.id;
@@ -70,6 +73,7 @@ export function useChat() {
   useEffect(() => {
     if (!ticketId || !isAuthenticated) return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchMessages(ticketId);
 
     const connection = createSignalRConnection();
