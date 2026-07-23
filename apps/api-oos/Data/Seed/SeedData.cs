@@ -12,8 +12,7 @@ public static class SeedData
     {
         if (await context.Products.AnyAsync())
         {
-            context.Products.RemoveRange(await context.Products.ToListAsync());
-            await context.SaveChangesAsync();
+            return;
         }
 
         var products = new List<Product>
