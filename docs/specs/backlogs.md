@@ -234,7 +234,7 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 - [x] Decide approach: (a) build custom chat with SignalR (.NET) for real-time messaging, integrated with SentraCX CRM.
 - [x] Backend (if custom): SignalR hub for chat (in SentraCX api-crm) + support webhook ticket relay in api-oos
-- [ ] Backend (if custom): Basic auto-responder / FAQ bot logic (optional AI integration later)
+- [ ] Backend (if custom): Basic auto-responder / FAQ bot logic (optional AI integration later) — **deferred to P2**
 - [x] Frontend: Floating chat bubble component (fixed position)
 - [x] Frontend: Chat panel UI — message bubbles, input, status
 - [x] Frontend: Unread message indicator
@@ -249,6 +249,14 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 - [x] Backend: (P2) FAQ entity if content needs to be dynamic/CMS-editable; otherwise hardcode in frontend
 - [x] Frontend: Accordion-based FAQ UI, grouped by category
+
+**5.4 Product reviews & ratings**
+
+- [x] Backend: `GET /api/reviews?productId=` — fetch all reviews for a product
+- [x] Backend: `POST /api/reviews` — submit a review (auth required, 1–5 stars, max 500 chars, one review per user per product)
+- [x] Frontend: Average star rating display on product detail page
+- [x] Frontend: Reviews list — star rating, comment, date
+- [x] Frontend: Submit review form (star selector + textarea + validation)
 
 ---
 
