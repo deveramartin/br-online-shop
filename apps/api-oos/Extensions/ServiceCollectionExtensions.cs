@@ -30,6 +30,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ApiOos.Interfaces.Repositories.IOrderRepository, ApiOos.Repositories.OrderRepository>();
         services.AddScoped<ApiOos.Interfaces.Repositories.IContactInquiryRepository, ApiOos.Repositories.ContactInquiryRepository>();
         services.AddScoped<ApiOos.Interfaces.Repositories.IReviewRepository, ApiOos.Repositories.ReviewRepository>();
+        services.AddScoped<ApiOos.Interfaces.Repositories.IJobPostingRepository, ApiOos.Repositories.JobPostingRepository>();
+        services.AddScoped<ApiOos.Interfaces.Repositories.IJobApplicationRepository, ApiOos.Repositories.JobApplicationRepository>();
         services.AddScoped<ApiOos.Interfaces.Services.IAuthService, ApiOos.Services.AuthService>();
         services.AddScoped<ApiOos.Interfaces.Services.IUserService, ApiOos.Services.UserService>();
         services.AddScoped<ApiOos.Interfaces.Services.IProductService, ApiOos.Services.ProductService>();
@@ -39,6 +41,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ApiOos.Interfaces.Services.ISentraCxService, ApiOos.Services.SentraCxService>();
         services.AddScoped<ApiOos.Interfaces.Services.IReviewService, ApiOos.Services.ReviewService>();
         services.AddScoped<ApiOos.Interfaces.Services.IAiAnalyticsService, ApiOos.Services.AiAnalyticsService>();
+        services.AddScoped<ApiOos.Interfaces.Services.IJobService, ApiOos.Services.JobService>();
 
         services.AddHttpClient("SentraCX", (sp, client) =>
         {

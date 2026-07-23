@@ -30,6 +30,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+app.UseStaticFiles();
 
 if (app.Environment.IsDevelopment())
 {
