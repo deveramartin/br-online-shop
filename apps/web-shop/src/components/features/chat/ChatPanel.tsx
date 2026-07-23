@@ -106,23 +106,7 @@ export function ChatPanel({
       </div>
 
       {/* Content Body */}
-      {!isAuthenticated ? (
-        <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
-          <div className="mb-3 rounded-full bg-purple-50 p-3 text-[#451077]">
-            <Lock className="h-6 w-6" />
-          </div>
-          <h4 className="mb-1 text-base font-semibold text-slate-900">Sign in required</h4>
-          <p className="mb-4 text-xs text-slate-500">
-            Please log in to your account to start a support chat session.
-          </p>
-          <Link
-            href="/signin"
-            className="w-full rounded-xl bg-[#451077] py-2.5 text-center text-xs font-medium text-white shadow-sm hover:bg-[#340c5a]"
-          >
-            Sign In to Chat
-          </Link>
-        </div>
-      ) : isLoading ? (
+      {isLoading ? (
         <div className="flex flex-1 items-center justify-center p-6">
           <Loader2 className="h-6 w-6 animate-spin text-[#451077]" />
         </div>
@@ -156,20 +140,34 @@ export function ChatPanel({
             {(botPhase === "ESCALATE_PROMPT" || botPhase === "BOT_RESPONDED") && (
               <div className="my-3 rounded-xl border border-purple-200 bg-purple-50/70 p-3.5 text-center shadow-2xs">
                 <p className="text-xs font-semibold text-purple-900 mb-2">
-                  Need more help? Connect to a human agent anytime.
+                  Need more help? Connect to a human agent.
                 </p>
-                <button
-                  onClick={() => escalateToLiveAgent()}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#451077] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#340c5a] transition-all cursor-pointer"
-                >
-                  <UserCheck className="h-3.5 w-3.5" />
-                  Connect to Live Agent
-                </button>
+                {isAuthenticated ? (
+                  <button
+                    onClick={() => escalateToLiveAgent()}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#451077] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#340c5a] transition-all cursor-pointer"
+                  >
+                    <UserCheck className="h-3.5 w-3.5" />
+                    Connect to Live Agent
+                  </button>
+                ) : (
+                  <div className="space-y-1.5">
+                    <p className="text-[11px] text-purple-700">Sign in required to talk to live staff.</p>
+                    <Link
+                      href="/signin"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#451077] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#340c5a]"
+                    >
+                      <Lock className="h-3.5 w-3.5" />
+                      Sign In to Connect
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
 
             <div ref={messagesEndRef} />
           </div>
+
 
           {/* Input Footer */}
           <form onSubmit={handleSubmit} className="border-t border-slate-100 bg-slate-50/50 p-3">

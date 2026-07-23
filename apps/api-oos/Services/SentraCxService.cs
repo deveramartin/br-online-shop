@@ -3,7 +3,6 @@ namespace ApiOos.Services;
 using System.Net.Http.Json;
 using System.Text.Json;
 using ApiOos.Interfaces.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 public class SentraCxService : ISentraCxService
@@ -23,7 +22,6 @@ public class SentraCxService : ISentraCxService
     {
         var client = _httpClientFactory.CreateClient("SentraCX");
 
-        // 1. Ensure customer profile is registered in SentraCX via customer-signup webhook
         try
         {
             var nameParts = userName.Split(' ', 2);
@@ -43,7 +41,6 @@ public class SentraCxService : ISentraCxService
             _logger.LogWarning(ex, "Failed to trigger SentraCX customer signup webhook (may already exist).");
         }
 
-        // 2. Create ticket in SentraCX
         var ticketBody = new
         {
             title = $"Support Chat - {userName}",
@@ -60,5 +57,30 @@ public class SentraCxService : ISentraCxService
         }
 
         throw new InvalidOperationException("Failed to extract ticket ID from SentraCX API response.");
+    }
+
+    public async Task<string> ProxyGetAsync(string path)
+    {
+        var client = _httpClientFactory.CreateClient("SentraCX");
+        var response = await client.GetAsync(path);
+        if (!response.IsSuccessStatusCode)
+        {
+            return "[]";
+        }
+        return await response.Content.ReadAsStringAsync();
+    }
+
+    public async Task<string> ProxyPostAsync(string path, object body)
+    {
+        var client = _httpClientFactory.CreateClient("SentraCX");
+        var response = await client.PostAsJsonAsync(path, body);
+        return await response.Content.ReadAsStringAsync();
+    }
+
+    public async Task<bool> ProxyDeleteAsync(string path)
+    {
+        var client = _httpClientFactory.CreateClient("SentraCX");
+        var response = await client.DeleteAsync(path);
+        return response.IsSuccessStatusCode;
     }
 }
