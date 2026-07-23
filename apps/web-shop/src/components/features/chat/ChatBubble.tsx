@@ -14,9 +14,12 @@ export function ChatBubble() {
     unreadCount,
     isConnected,
     isLoading,
+    isBotReplying,
+    botPhase,
     error,
     isAuthenticated,
     sendMessage,
+    escalateToLiveAgent,
   } = useChat();
 
   return (
@@ -43,8 +46,11 @@ export function ChatBubble() {
         onClose={() => setIsOpen(false)}
         messages={messages}
         sendMessage={sendMessage}
+        escalateToLiveAgent={escalateToLiveAgent}
         isConnected={isConnected}
         isLoading={isLoading}
+        isBotReplying={isBotReplying}
+        botPhase={botPhase}
         error={error}
         isAuthenticated={isAuthenticated}
       />

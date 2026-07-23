@@ -1,4 +1,4 @@
-import { User, MapPin, ScrollText, LogOut } from "lucide-react";
+import { User, MapPin, ScrollText, Headphones, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import type { TabType } from "@/hooks/useProfilePage";
 
@@ -40,6 +40,16 @@ export function ProfileSidebar({ activeTab, onTabChange }: ProfileSidebarProps) 
           }`}
         >
           <ScrollText className="w-4 h-4" /> Order History
+        </button>
+        <button
+          onClick={() => onTabChange("tickets")}
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+            activeTab === "tickets"
+              ? "bg-[var(--primary)] text-white"
+              : "text-[var(--muted)] hover:bg-[var(--surface-low)]"
+          }`}
+        >
+          <Headphones className="w-4 h-4" /> Support Tickets
         </button>
         <div className="pt-4 mt-2 border-t border-[var(--border)]">
           <button

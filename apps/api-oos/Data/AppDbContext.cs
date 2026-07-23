@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<ContactInquiry> ContactInquiries => Set<ContactInquiry>();
+    public DbSet<ProductReview> ProductReviews => Set<ProductReview>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -132,6 +133,25 @@ public class AppDbContext : DbContext
             e.Property(c => c.Email).IsRequired().HasMaxLength(256);
             e.Property(c => c.Subject).IsRequired().HasMaxLength(200);
             e.Property(c => c.Message).IsRequired().HasMaxLength(4000);
+        });
+
+        modelBuilder.Entity<ProductReview>(e =>
+        {
+            e.HasKey(r => r.Id);
+            e.Property(r => r.Rating).IsRequired();
+            e.Property(r => r.Comment).IsRequired().HasMaxLength(500);
+
+            e.HasOne(r => r.Product)
+             .WithMany()
+             .HasForeignKey(r => r.ProductId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasOne(r => r.User)
+             .WithMany()
+             .HasForeignKey(r => r.UserId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasIndex(r => new { r.UserId, r.ProductId }).IsUnique();
         });
     }
 }

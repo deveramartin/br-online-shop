@@ -5,6 +5,7 @@ import { useProduct } from "@/hooks/useProduct";
 import { ProductImageGallery } from "./ProductImageGallery";
 import { ProductDetailInfo } from "./ProductDetailInfo";
 import { RelatedProducts } from "./RelatedProducts";
+import { ProductReviewsSection } from "./ProductReviewsSection";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ArrowLeft, Loader2 } from "lucide-react";
@@ -89,6 +90,9 @@ export function ProductDetailPage({ id }: ProductDetailPageProps) {
 
       {/* Related Products Section */}
       <RelatedProducts category={product.category} currentProductId={product.id} />
+
+      {/* Customer Reviews & Ratings Section */}
+      <ProductReviewsSection productId={product.id} />
     </main>
   );
 }

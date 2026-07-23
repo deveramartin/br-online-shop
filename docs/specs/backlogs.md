@@ -234,7 +234,7 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 
 - [x] Decide approach: (a) build custom chat with SignalR (.NET) for real-time messaging, integrated with SentraCX CRM.
 - [x] Backend (if custom): SignalR hub for chat (in SentraCX api-crm) + support webhook ticket relay in api-oos
-- [ ] Backend (if custom): Basic auto-responder / FAQ bot logic (optional AI integration later) — **deferred to P2**
+- [x] Backend (if custom): Basic auto-responder / FAQ bot logic (integrated with SentraCX AI Analytics)
 - [x] Frontend: Floating chat bubble component (fixed position)
 - [x] Frontend: Chat panel UI — message bubbles, input, status
 - [x] Frontend: Unread message indicator

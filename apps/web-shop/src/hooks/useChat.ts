@@ -5,19 +5,24 @@ import { useSession } from "next-auth/react";
 import * as signalR from "@microsoft/signalr";
 import { createSignalRConnection } from "@/lib/signalr";
 import { apiClient } from "@/lib/api/api-client";
-import type { ChatMessage, SupportTicketResponse } from "@/types/chat";
+import { supportApi } from "@/lib/api/support-api";
+import type { ChatMessage, SupportTicketResponse, BotReplyResponse } from "@/types/chat";
 
-const CRM_BASE_URL = process.env.NEXT_PUBLIC_CRM_API_URL || "https://localhost:7001";
+const CRM_BASE_URL = process.env.NEXT_PUBLIC_CRM_API_URL || "https://localhost:5005";
 
-export function useChat() {
+export type BotPhase = "BOT_GREETING" | "BOT_THINKING" | "BOT_RESPONDED" | "ESCALATE_PROMPT" | "LIVE_AGENT";
+
+export function useChat(initialTicketId?: string) {
   const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
-  const [ticketId, setTicketId] = useState<string | null>(null);
+  const [ticketId, setTicketId] = useState<string | null>(initialTicketId || null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBotReplying, setIsBotReplying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [botPhase, setBotPhase] = useState<BotPhase>(initialTicketId ? "LIVE_AGENT" : "BOT_GREETING");
 
   const connectionRef = useRef<signalR.HubConnection | null>(null);
   const isOpenRef = useRef(isOpen);
@@ -30,9 +35,29 @@ export function useChat() {
   const isAuthenticated = status === "authenticated" && Boolean(session?.user) && Boolean(token);
   const userId = session?.user?.id;
 
+  // Initialize bot greeting if messages empty
+  useEffect(() => {
+    if (messages.length === 0 && !initialTicketId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMessages([
+        {
+          id: "bot-greeting",
+          senderId: "bot",
+          senderName: "SentraCX AI Assistant",
+          senderType: "bot",
+          content: "Hello! 👋 Welcome to Bren Raphael's Ube Jam & Halaya Shop support. How can I assist you today?",
+          isRead: true,
+          sentAt: new Date().toISOString(),
+        },
+      ]);
+    }
+  }, [messages.length, initialTicketId]);
+
   // Initialize or retrieve ticketId
   const getOrCreateTicket = useCallback(async () => {
     if (!userId || !token) return null;
+
+    if (ticketId) return ticketId;
 
     const storageKey = `br_chat_ticket_${userId}`;
     const existingTicket = localStorage.getItem(storageKey);
@@ -59,24 +84,27 @@ export function useChat() {
       setIsLoading(false);
     }
     return null;
-  }, [userId, token]);
+  }, [userId, token, ticketId]);
 
-  // Fetch initial message history
+  // Fetch initial message history from CRM
   const fetchMessages = useCallback(async (activeTicketId: string) => {
     try {
       const res = await fetch(`${CRM_BASE_URL}/api/v1/tickets/${activeTicketId}/messages`);
       if (res.ok) {
         const data: ChatMessage[] = await res.json();
-        setMessages(data);
+        if (data.length > 0) {
+          setMessages(data);
+          setBotPhase("LIVE_AGENT");
+        }
       }
     } catch (err) {
       console.error("Failed to load message history:", err);
     }
   }, []);
 
-  // Connect SignalR hub
+  // Connect SignalR hub ONLY when in LIVE_AGENT phase and ticketId exists
   useEffect(() => {
-    if (!ticketId || !isAuthenticated) return;
+    if (!ticketId || !isAuthenticated || botPhase !== "LIVE_AGENT") return;
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchMessages(ticketId);
@@ -113,7 +141,7 @@ export function useChat() {
       connectionRef.current = null;
       setIsConnected(false);
     };
-  }, [ticketId, isAuthenticated, userId, fetchMessages]);
+  }, [ticketId, isAuthenticated, userId, botPhase, fetchMessages]);
 
   const toggleOpen = useCallback(async () => {
     if (!isOpen && !ticketId && isAuthenticated) {
@@ -131,20 +159,88 @@ export function useChat() {
     }
   }, [isOpen, ticketId, isAuthenticated, getOrCreateTicket]);
 
+  const escalateToLiveAgent = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const activeTicketId = await getOrCreateTicket();
+      if (activeTicketId) {
+        setBotPhase("LIVE_AGENT");
+        // Add system message informing user
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `system-${Date.now()}`,
+            senderId: "system",
+            senderName: "System",
+            senderType: "agent",
+            content: "You have requested a live support representative. Connecting to SentraCX agent queue...",
+            isRead: true,
+            sentAt: new Date().toISOString(),
+          },
+        ]);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [getOrCreateTicket]);
+
   const sendMessage = useCallback(
     async (content: string) => {
-      if (!ticketId || !userId || !content.trim()) return;
+      const text = content.trim();
+      if (!text || !userId) return;
 
-      const connection = connectionRef.current;
-      if (connection && connection.state === signalR.HubConnectionState.Connected) {
-        try {
-          await connection.invoke("SendMessage", ticketId, userId, content.trim());
-        } catch (err) {
-          console.error("Failed to send message via SignalR:", err);
+      // 1. If in LIVE_AGENT phase -> send via SignalR
+      if (botPhase === "LIVE_AGENT") {
+        if (!ticketId) return;
+        const connection = connectionRef.current;
+        if (connection && connection.state === signalR.HubConnectionState.Connected) {
+          try {
+            await connection.invoke("SendMessage", ticketId, userId, text);
+          } catch (err) {
+            console.error("Failed to send message via SignalR:", err);
+          }
         }
+        return;
+      }
+
+      // 2. Otherwise in Bot phase -> handle via AI Analytics bot reply proxy
+      const userMsg: ChatMessage = {
+        id: `user-${Date.now()}`,
+        senderId: userId,
+        senderName: session?.user?.name || "You",
+        senderType: "user",
+        content: text,
+        isRead: true,
+        sentAt: new Date().toISOString(),
+      };
+
+      setMessages((prev) => [...prev, userMsg]);
+      setBotPhase("BOT_THINKING");
+      setIsBotReplying(true);
+
+      try {
+        const reply: BotReplyResponse = await supportApi.getBotReply(text, ticketId || undefined, token);
+        
+        const botMsg: ChatMessage = {
+          id: `bot-${Date.now()}`,
+          senderId: "bot",
+          senderName: "SentraCX AI Assistant",
+          senderType: "bot",
+          content: reply.reply,
+          isRead: true,
+          sentAt: new Date().toISOString(),
+        };
+
+        setMessages((prev) => [...prev, botMsg]);
+        setBotPhase(reply.shouldEscalate ? "ESCALATE_PROMPT" : "BOT_RESPONDED");
+      } catch (err) {
+        console.error("Bot reply error:", err);
+        setBotPhase("ESCALATE_PROMPT");
+      } finally {
+        setIsBotReplying(false);
       }
     },
-    [ticketId, userId]
+    [botPhase, ticketId, userId, session?.user?.name, token]
   );
 
   return {
@@ -155,8 +251,12 @@ export function useChat() {
     unreadCount,
     isConnected,
     isLoading,
+    isBotReplying,
+    botPhase,
     error,
     isAuthenticated,
     sendMessage,
+    escalateToLiveAgent,
+    ticketId,
   };
 }

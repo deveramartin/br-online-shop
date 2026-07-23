@@ -2,17 +2,21 @@
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import Link from "next/link";
-import { MessageSquare, Send, X, Loader2, Lock } from "lucide-react";
+import { MessageSquare, Send, X, Loader2, Lock, Bot, UserCheck } from "lucide-react";
 import { ChatMessageBubble } from "./ChatMessageBubble";
 import type { ChatMessage } from "@/types/chat";
+import type { BotPhase } from "@/hooks/useChat";
 
 interface ChatPanelProps {
   isOpen: boolean;
   onClose: () => void;
   messages: ChatMessage[];
   sendMessage: (content: string) => Promise<void>;
+  escalateToLiveAgent: () => Promise<void>;
   isConnected: boolean;
   isLoading: boolean;
+  isBotReplying?: boolean;
+  botPhase: BotPhase;
   error: string | null;
   isAuthenticated: boolean;
   userId?: string;
@@ -23,8 +27,11 @@ export function ChatPanel({
   onClose,
   messages,
   sendMessage,
+  escalateToLiveAgent,
   isConnected,
   isLoading,
+  isBotReplying,
+  botPhase,
   error,
   isAuthenticated,
   userId,
@@ -37,13 +44,13 @@ export function ChatPanel({
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, isOpen]);
+  }, [messages, isOpen, isBotReplying, botPhase]);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isSending) return;
+    if (!input.trim() || isSending || isBotReplying) return;
 
     const text = input.trim();
     setInput("");
@@ -55,23 +62,37 @@ export function ChatPanel({
     }
   };
 
+  const isLive = botPhase === "LIVE_AGENT";
+
   return (
-    <div className="fixed bottom-20 right-5 z-50 flex h-[520px] w-80 flex-col overflow-hidden rounded-2xl border border-purple-200/80 bg-white shadow-2xl transition-all sm:w-96">
+    <div className="fixed bottom-20 right-5 z-50 flex h-[530px] w-80 flex-col overflow-hidden rounded-2xl border border-purple-200/80 bg-white shadow-2xl transition-all sm:w-96">
       {/* Header */}
       <div className="flex items-center justify-between bg-[#451077] px-4 py-3 text-white">
         <div className="flex items-center space-x-2">
           <div className="relative">
-            <MessageSquare className="h-5 w-5 text-purple-200" />
+            {isLive ? (
+              <MessageSquare className="h-5 w-5 text-purple-200" />
+            ) : (
+              <Bot className="h-5 w-5 text-purple-200" />
+            )}
             <span
               className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#451077] ${
-                isConnected ? "bg-emerald-400" : "bg-amber-400"
+                isLive
+                  ? isConnected
+                    ? "bg-emerald-400"
+                    : "bg-amber-400"
+                  : "bg-blue-400"
               }`}
             />
           </div>
           <div>
-            <h3 className="text-sm font-semibold leading-tight">SentraCX Live Support</h3>
+            <h3 className="text-sm font-semibold leading-tight">SentraCX Support</h3>
             <p className="text-[11px] text-purple-200">
-              {isConnected ? "Connected to Support Agent" : "Connecting..."}
+              {isLive
+                ? isConnected
+                  ? "Connected to Live Agent"
+                  : "Connecting to Agent..."
+                : "AI Support Assistant"}
             </p>
           </div>
         </div>
@@ -92,7 +113,7 @@ export function ChatPanel({
           </div>
           <h4 className="mb-1 text-base font-semibold text-slate-900">Sign in required</h4>
           <p className="mb-4 text-xs text-slate-500">
-            Please log in to your account to start a live support chat session with our team.
+            Please log in to your account to start a support chat session.
           </p>
           <Link
             href="/signin"
@@ -114,20 +135,39 @@ export function ChatPanel({
                 {error}
               </div>
             )}
-            {messages.length === 0 ? (
-              <div className="flex h-full flex-col items-center justify-center text-center text-slate-400">
-                <MessageSquare className="mb-2 h-8 w-8 text-purple-200" />
-                <p className="text-xs">No messages yet. Send a message to start chatting with support!</p>
+
+            {messages.map((msg) => (
+              <ChatMessageBubble
+                key={msg.id}
+                message={msg}
+                isSelf={msg.senderId === userId}
+              />
+            ))}
+
+            {/* AI Bot Typing Indicator */}
+            {isBotReplying && (
+              <div className="flex items-center gap-2 text-xs text-purple-600 py-1">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                <span>AI Assistant is analyzing...</span>
               </div>
-            ) : (
-              messages.map((msg) => (
-                <ChatMessageBubble
-                  key={msg.id}
-                  message={msg}
-                  isSelf={msg.senderId === userId}
-                />
-              ))
             )}
+
+            {/* Escalation Prompt Card */}
+            {(botPhase === "ESCALATE_PROMPT" || botPhase === "BOT_RESPONDED") && (
+              <div className="my-3 rounded-xl border border-purple-200 bg-purple-50/70 p-3.5 text-center shadow-2xs">
+                <p className="text-xs font-semibold text-purple-900 mb-2">
+                  Need more help? Connect to a human agent anytime.
+                </p>
+                <button
+                  onClick={() => escalateToLiveAgent()}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#451077] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#340c5a] transition-all cursor-pointer"
+                >
+                  <UserCheck className="h-3.5 w-3.5" />
+                  Connect to Live Agent
+                </button>
+              </div>
+            )}
+
             <div ref={messagesEndRef} />
           </div>
 
@@ -138,12 +178,13 @@ export function ChatPanel({
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your message..."
-                className="flex-1 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:border-[#451077] focus:outline-none focus:ring-1 focus:ring-[#451077]"
+                placeholder={isLive ? "Type a message to agent..." : "Ask AI support assistant..."}
+                disabled={isBotReplying}
+                className="flex-1 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:border-[#451077] focus:outline-none focus:ring-1 focus:ring-[#451077] disabled:opacity-50"
               />
               <button
                 type="submit"
-                disabled={!input.trim() || isSending || !isConnected}
+                disabled={!input.trim() || isSending || isBotReplying}
                 className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#451077] text-white shadow-sm hover:bg-[#340c5a] disabled:opacity-50 disabled:hover:bg-[#451077]"
               >
                 {isSending ? (

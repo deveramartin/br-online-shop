@@ -29,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ApiOos.Interfaces.Repositories.ICartRepository, ApiOos.Repositories.CartRepository>();
         services.AddScoped<ApiOos.Interfaces.Repositories.IOrderRepository, ApiOos.Repositories.OrderRepository>();
         services.AddScoped<ApiOos.Interfaces.Repositories.IContactInquiryRepository, ApiOos.Repositories.ContactInquiryRepository>();
+        services.AddScoped<ApiOos.Interfaces.Repositories.IReviewRepository, ApiOos.Repositories.ReviewRepository>();
         services.AddScoped<ApiOos.Interfaces.Services.IAuthService, ApiOos.Services.AuthService>();
         services.AddScoped<ApiOos.Interfaces.Services.IUserService, ApiOos.Services.UserService>();
         services.AddScoped<ApiOos.Interfaces.Services.IProductService, ApiOos.Services.ProductService>();
@@ -36,12 +37,24 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ApiOos.Interfaces.Services.IOrderService, ApiOos.Services.OrderService>();
         services.AddScoped<ApiOos.Interfaces.Services.IContactService, ApiOos.Services.ContactService>();
         services.AddScoped<ApiOos.Interfaces.Services.ISentraCxService, ApiOos.Services.SentraCxService>();
+        services.AddScoped<ApiOos.Interfaces.Services.IReviewService, ApiOos.Services.ReviewService>();
+        services.AddScoped<ApiOos.Interfaces.Services.IAiAnalyticsService, ApiOos.Services.AiAnalyticsService>();
 
         services.AddHttpClient("SentraCX", (sp, client) =>
         {
             var config = sp.GetRequiredService<IConfiguration>();
             var crmUrl = config["SentraCX:ApiUrl"] ?? "https://localhost:7001";
             client.BaseAddress = new Uri(crmUrl);
+        }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        });
+
+        services.AddHttpClient("AiAnalytics", (sp, client) =>
+        {
+            var config = sp.GetRequiredService<IConfiguration>();
+            var aiUrl = config["AiAnalytics:ApiUrl"] ?? "http://localhost:4005";
+            client.BaseAddress = new Uri(aiUrl);
         }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
