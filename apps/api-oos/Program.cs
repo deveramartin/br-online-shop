@@ -1,6 +1,9 @@
 using ApiOos.Extensions;
 using ApiOos.Helpers;
 using ApiOos.Middleware;
+using ApiOos.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -22,6 +25,8 @@ builder.Host.UseSerilog();
 
 // Add services to the container
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddDomainServices();
 builder.Services.AddAuthServices(builder.Configuration);

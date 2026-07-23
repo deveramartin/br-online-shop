@@ -294,7 +294,7 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 - [x] Frontend: Responsive breakpoints audit across all pages (mobile/tablet/desktop) — P0
 - [x] Frontend: Hamburger nav menu for mobile — P0
 - [x] Backend: Rate limiting on auth/contact/application endpoints — P1
-- [ ] Backend: Input validation (FluentValidation) across all endpoints — P0
+- [x] Backend: Input validation (FluentValidation) across all endpoints — P0
 - [ ] Backend: API response standardization (consistent envelope, error format) — P0
 - [ ] Both: Accessibility pass (WCAG AA contrast, keyboard nav, alt text) — P1
 - [ ] Both: SEO basics (meta tags, sitemap, robots.txt, Open Graph tags) — P1
