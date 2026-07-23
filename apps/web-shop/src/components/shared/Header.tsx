@@ -16,8 +16,9 @@ export function Header() {
   const { data: session, status } = useSession();
   const { totalItems, openCart } = useCart();
 
-  const isAuthenticated = status === "authenticated" || Boolean(session?.user);
-  const accountHref = status === "unauthenticated" && !session?.user ? "/signin" : "/profile";
+  const hasUser = Boolean((session as { user?: unknown })?.user);
+  const isAuthenticated = status === "authenticated" || hasUser;
+  const accountHref = status === "unauthenticated" && !hasUser ? "/signin" : "/profile";
 
   // Close mobile menu when route changes
   const [prevPathname, setPrevPathname] = useState(pathname);
