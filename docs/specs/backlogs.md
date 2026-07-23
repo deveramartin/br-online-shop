@@ -290,7 +290,7 @@ Organized as Epics → User Stories → Tasks (Backend / Frontend split). Priori
 - [x] Frontend: Sticky header (logo, nav, search icon, cart icon w/ badge, account icon) — P0
 - [x] Frontend: Footer (links, social icons, newsletter, copyright) — P0
 - [x] Frontend: Toast notification system (shadcn Toast/Sonner) for cart/order/form actions — P0
-- [ ] Frontend: Global loading states (skeletons) and error boundaries — P0
+- [x] Frontend: Global loading states (skeletons) and error boundaries — P0
 - [ ] Frontend: Responsive breakpoints audit across all pages (mobile/tablet/desktop) — P0
 - [x] Frontend: Hamburger nav menu for mobile — P0
 - [ ] Backend: Rate limiting on auth/contact/application endpoints — P1
