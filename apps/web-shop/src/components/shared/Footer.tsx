@@ -37,11 +37,13 @@ export function Footer() {
 
         <div>
           <h4 className="font-semibold text-xs uppercase tracking-wider text-primary mb-3">
-            Customer Service
+            Customer Service & Legal
           </h4>
           <ul className="space-y-2 text-xs text-muted">
             <li><Link href="/#faq" className="hover:text-primary">FAQ & Delivery</Link></li>
-            <li><Link href="/#about" className="hover:text-primary">About Our Craft</Link></li>
+            <li><Link href="/returns" className="hover:text-primary">Return & Refund Policy</Link></li>
+            <li><Link href="/terms" className="hover:text-primary">Terms of Service</Link></li>
+            <li><Link href="/privacy" className="hover:text-primary">Privacy Policy</Link></li>
           </ul>
         </div>
 
@@ -65,8 +67,15 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="max-w-[1280px] mx-auto px-6 mt-12 pt-6 border-t border-border text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()}&nbsp;Bren Raphael&apos;s&nbsp;Ube Jam & Halaya Shop. All rights reserved.
+      <div className="max-w-[1280px] mx-auto px-6 mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+        <div>
+          © {new Date().getFullYear()}&nbsp;Bren Raphael&apos;s&nbsp;Ube Jam & Halaya Shop. All rights reserved.
+        </div>
+        <div className="flex gap-4">
+          <Link href="/terms" className="hover:text-primary">Terms</Link>
+          <Link href="/privacy" className="hover:text-primary">Privacy</Link>
+          <Link href="/returns" className="hover:text-primary">Refunds</Link>
+        </div>
       </div>
     </footer>
   );
