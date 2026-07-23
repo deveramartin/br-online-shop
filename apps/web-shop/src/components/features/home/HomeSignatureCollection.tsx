@@ -83,7 +83,7 @@ function ProductCard({ product }: { product: ProductItem }) {
       <CardFooter className="p-5 pt-0 flex items-center justify-between">
         <span className="font-extrabold text-[var(--primary)] text-xl">{product.price}</span>
         <Button asChild size="icon" className="bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] rounded-xl">
-          <Link href="/catalog">
+          <Link href="/products">
             <ShoppingBag className="w-4 h-4" />
           </Link>
         </Button>
@@ -104,7 +104,7 @@ export function HomeSignatureCollection() {
             </p>
           </div>
           <Link
-            href="/catalog"
+            href="/products"
             className="text-[var(--primary)] font-semibold flex items-center gap-1 group hover:underline"
           >
             View All Products <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
