@@ -9,12 +9,11 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { careersApi } from "@/lib/api/careers-api";
 import type { JobPosting } from "@/types/careers";
-import { Loader2, UploadCloud, FileText, CheckCircle2, AlertCircle, X } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { ApplicantFormFields } from "./ApplicantFormFields";
+import { ResumeUploadField } from "./ResumeUploadField";
 
 interface JobApplicationDialogProps {
   job: JobPosting | null;
@@ -43,13 +42,11 @@ export function JobApplicationDialog({ job, isOpen, onClose }: JobApplicationDia
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
 
-    // Validate size (5MB)
     if (selectedFile.size > 5 * 1024 * 1024) {
       setErrorMsg("File size exceeds 5MB limit.");
       return;
     }
 
-    // Validate extension
     const extension = selectedFile.name.split(".").pop()?.toLowerCase();
     if (!extension || !["pdf", "doc", "docx"].includes(extension)) {
       setErrorMsg("Only PDF, DOC, or DOCX formats are allowed.");
@@ -70,35 +67,16 @@ export function JobApplicationDialog({ job, isOpen, onClose }: JobApplicationDia
     e.preventDefault();
     setErrorMsg(null);
 
-    if (!name.trim()) {
-      setErrorMsg("Full Name is required.");
-      return;
-    }
-    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
-      setErrorMsg("A valid Email is required.");
-      return;
-    }
-    if (!phone.trim()) {
-      setErrorMsg("Phone Number is required.");
-      return;
-    }
-    if (!file) {
-      setErrorMsg("Please upload your resume.");
-      return;
-    }
+    if (!name.trim()) return setErrorMsg("Full Name is required.");
+    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) return setErrorMsg("A valid Email is required.");
+    if (!phone.trim()) return setErrorMsg("Phone Number is required.");
+    if (!file) return setErrorMsg("Please upload your resume.");
 
     setIsSubmitting(true);
     setUploadProgress(10);
 
-    // Simulated premium upload progress animation
     const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(interval);
-          return 90;
-        }
-        return prev + 15;
-      });
+      setUploadProgress((prev) => (prev >= 90 ? (clearInterval(interval), 90) : prev + 15));
     }, 150);
 
     try {
@@ -119,7 +97,6 @@ export function JobApplicationDialog({ job, isOpen, onClose }: JobApplicationDia
         setSubmitSuccess(true);
         setIsSubmitting(false);
       }, 300);
-
     } catch (err: unknown) {
       clearInterval(interval);
       setIsSubmitting(false);
@@ -178,119 +155,25 @@ export function JobApplicationDialog({ job, isOpen, onClose }: JobApplicationDia
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4 pt-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="applicant-name" className="text-xs font-bold text-slate-700">
-                    Full Name <span className="text-rose-500">*</span>
-                  </Label>
-                  <Input
-                    id="applicant-name"
-                    placeholder="e.g. Juan dela Cruz"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    disabled={isSubmitting}
-                    className="rounded-xl border-slate-200 text-slate-900"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="applicant-email" className="text-xs font-bold text-slate-700">
-                    Email Address <span className="text-rose-500">*</span>
-                  </Label>
-                  <Input
-                    id="applicant-email"
-                    type="email"
-                    placeholder="e.g. juan@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={isSubmitting}
-                    className="rounded-xl border-slate-200 text-slate-900"
-                  />
-                </div>
-              </div>
+              <ApplicantFormFields
+                name={name}
+                setName={setName}
+                email={email}
+                setEmail={setEmail}
+                phone={phone}
+                setPhone={setPhone}
+                coverLetter={coverLetter}
+                setCoverLetter={setCoverLetter}
+                isSubmitting={isSubmitting}
+              />
 
-              <div className="space-y-1.5">
-                <Label htmlFor="applicant-phone" className="text-xs font-bold text-slate-700">
-                  Phone Number <span className="text-rose-500">*</span>
-                </Label>
-                <Input
-                  id="applicant-phone"
-                  placeholder="e.g. +63 917 123 4567"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  disabled={isSubmitting}
-                  className="rounded-xl border-slate-200 text-slate-900"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="applicant-cover" className="text-xs font-bold text-slate-700">
-                  Cover Letter / Brief Intro
-                </Label>
-                <Textarea
-                  id="applicant-cover"
-                  placeholder="Tell us briefly why you are a great fit..."
-                  rows={3}
-                  value={coverLetter}
-                  onChange={(e) => setCoverLetter(e.target.value)}
-                  disabled={isSubmitting}
-                  className="rounded-xl border-slate-200 text-slate-900"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-xs font-bold text-slate-700">
-                  Resume / CV <span className="text-rose-500">*</span>
-                </Label>
-                
-                {file ? (
-                  <div className="flex items-center justify-between p-3.5 rounded-2xl border border-violet-100 bg-violet-50/50">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center text-violet-600">
-                        <FileText className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-slate-800 line-clamp-1">
-                          {file.name}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          {(file.size / 1024 / 1024).toFixed(2)} MB
-                        </p>
-                      </div>
-                    </div>
-                    {!isSubmitting && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={handleRemoveFile}
-                        className="w-8 h-8 rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50"
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
-                    )}
-                  </div>
-                ) : (
-                  <div
-                    onClick={() => !isSubmitting && fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center cursor-pointer hover:border-violet-500 hover:bg-violet-50/30 transition-all duration-300 group"
-                  >
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileChange}
-                      accept=".pdf,.doc,.docx"
-                      className="hidden"
-                    />
-                    <UploadCloud className="w-10 h-10 text-slate-400 mx-auto mb-3 group-hover:text-violet-500 transition-colors duration-300" />
-                    <p className="text-sm font-bold text-slate-800">
-                      Click to upload your resume
-                    </p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      Supports PDF, DOC, or DOCX up to 5MB
-                    </p>
-                  </div>
-                )}
-              </div>
+              <ResumeUploadField
+                file={file}
+                isSubmitting={isSubmitting}
+                fileInputRef={fileInputRef}
+                onFileChange={handleFileChange}
+                onRemoveFile={handleRemoveFile}
+              />
 
               {isSubmitting && (
                 <div className="space-y-1.5 pt-2">
